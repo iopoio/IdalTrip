@@ -17,7 +17,6 @@ export const tourApi = {
           _type: 'json',
           MobileOS: 'ETC',
           MobileApp: 'IdalTrip',
-          listYN: 'Y',
           arrange: 'A',
           eventStartDate: startDate,
           numOfRows: 20,
@@ -71,8 +70,7 @@ export const tourApi = {
           mapX: mapx,
           mapY: mapy,
           radius: radius,
-          contentTypeId: contentTypeId, // 12=Attraction, 39=Food
-          listYN: 'Y',
+          contentTypeId: contentTypeId,
           arrange: 'A',
           numOfRows: 20
         }
