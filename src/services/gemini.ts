@@ -28,47 +28,45 @@ export const geminiService = {
       lng: parseFloat(p.mapx),
     }));
 
-    const prompt = `당신은 한국 프리미엄 여행 코스 전문가입니다. 
-아래 정보를 바탕으로 아주 상세한 ${dayCount}일 여행 코스를 JSON으로 생성하세요.
+    const prompt = `한국 여행 코스 설계 전문가로서 ${dayCount}일 여행 코스를 JSON으로 생성하세요.
 
-## 입력 정보
-- 메인 축제: ${req.festivalTitle} (${req.festivalAddr})
+## 입력
+- 축제: ${req.festivalTitle} (${req.festivalAddr})
 - 이동수단: ${transportLabel}
-- 일정: ${dayCount}일
-- 방문 후보 장소: ${JSON.stringify(placeList)}
+- 일정: ${dayCount === 1 ? '당일치기' : dayCount + '일'}
+- 후보 장소: ${JSON.stringify(placeList)}
 
-## 설계 필수 규칙
-1. 코스 테마(theme)는 시안처럼 "미식 위주", "풍경 중심" 등으로 제시
-2. 총 소요 시간, 예상 비용(예: 24만원)을 포함
-3. schedule 내 장소들은 시간 순서대로 정렬
-4. 각 장소 사이의 move_time(이동 시간)과 distance(거리)를 ${transportLabel} 기준으로 현실적으로 추정
-5. image_url은 Unsplash의 키워드 검색 URL 사용 (예: https://source.unsplash.com/800x600/?restaurant,nature,view 등 테마에 맞게)
-6. type은 "festival", "attraction", "food", "coffee" 중 하나로 매칭
+## 규칙
+1. 축제를 반드시 포함하고 후보 장소 중 ${dayCount === 1 ? '3~4개' : dayCount === 2 ? '5~7개' : '8~10개'}를 선택
+2. 맛집은 하루 1~2개 배치 (점심/저녁)
+3. 시간은 "10:00 AM" 형식, 장소 간 이동시간 고려
+4. ${transportLabel} 기준 현실적 동선 (가까운 곳끼리)
+5. description은 15자 이내로 간결하게
+6. estimated_cost는 교통비+식비+입장료 항목별 근거를 간단히 포함 (예: "교통 2만+식비 3만+입장 1만 = 약 6만원")
+7. type은 "festival", "attraction", "food" 중 하나
+8. lat, lng는 후보 장소에서 가져오고 없으면 0
 
-## 응답 JSON 형식
+## JSON 형식 (JSON만 출력)
 {
-  "title": "코스명",
-  "theme": "코스 테마 설명",
-  "summary": "AI 추천 요약 (에디토리얼 스타일)",
-  "total_duration": "총 소요 시간",
-  "estimated_cost": "예상 비용(문자열)",
+  "title": "코스명 (10자 이내)",
+  "theme": "테마 (5자 이내, 예: 미식탐방)",
+  "summary": "추천 이유 한줄 (30자 이내)",
+  "total_duration": "약 6시간",
+  "estimated_cost": "교통 2만+식비 3만+입장 1만 = 약 6만원",
   "schedule": [
     {
-      "time": "12:30 PM",
+      "time": "10:00 AM",
       "place_name": "장소명",
-      "type": "food",
-      "stay_duration": "1시간 30분",
-      "description": "감성적인 장소 설명 (40자 내외)",
+      "type": "attraction",
+      "stay_duration": "1시간",
+      "description": "15자 이내 설명",
       "move_time": "15분",
-      "distance": "4.2km",
-      "image_url": "https://images.unsplash.com/photo-...?auto=format&fit=crop&q=80&w=800",
-      "lat": 0,
-      "lng": 0
+      "distance": "3km",
+      "lat": 35.23,
+      "lng": 128.87
     }
   ]
-}
-
-주의: JSON만 출력하고 다른 텍스트는 포함하지 마세요.`;
+}`;
 
     try {
       const response = await axios.post(BASE_URL, {

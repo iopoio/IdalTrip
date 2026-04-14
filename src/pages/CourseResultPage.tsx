@@ -60,11 +60,13 @@ const CourseResultPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* Left: Timeline - Multiple Day Support */}
             <div className="lg:col-span-7 flex flex-col gap-6">
-              {/* Day Selector - Mockup 1:1 */}
-              <div className="flex p-1.5 bg-surface-container-low rounded-2xl w-fit">
-                <button className="px-8 py-2.5 bg-white rounded-xl shadow-sm text-sm font-bold text-primary transition-all">Day 1</button>
-                <button className="px-8 py-2.5 text-sm font-medium text-slate-500 hover:text-slate-800 transition-all">Day 2</button>
-              </div>
+              {/* Day Selector — 당일이면 숨김 */}
+              {course.schedule.length > 5 && (
+                <div className="flex p-1.5 bg-surface-container-low rounded-2xl w-fit">
+                  <button className="px-8 py-2.5 bg-white rounded-xl shadow-sm text-sm font-bold text-primary transition-all">Day 1</button>
+                  <button className="px-8 py-2.5 text-sm font-medium text-slate-500 hover:text-slate-800 transition-all">Day 2</button>
+                </div>
+              )}
 
               {/* Timeline Cards - Editorial Style */}
               <div className="relative pl-8 space-y-8">

@@ -13,6 +13,7 @@ import {
 } from '../components/Icons';
 import { tourApi } from '../services/tourApi';
 import { geminiService } from '../services/gemini';
+import { formatKTODate, getFestivalStatus } from '../lib/utils';
 import type { Festival, Place } from '../types';
 
 const FestivalDetailPage = () => {
@@ -101,8 +102,10 @@ const FestivalDetailPage = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
               <div className="absolute bottom-8 left-8 text-white">
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="px-3 py-1 bg-primary text-white text-xs font-bold rounded-full uppercase tracking-wider">진행중</span>
-                  <span className="text-sm font-medium text-white/80">#전통축제 #추천스팟</span>
+                  <span className={`px-3 py-1 text-white text-xs font-bold rounded-full uppercase tracking-wider ${
+                    getFestivalStatus(festival.eventstartdate, festival.eventenddate) === '진행중' ? 'bg-primary' : 'bg-secondary'
+                  }`}>{getFestivalStatus(festival.eventstartdate, festival.eventenddate)}</span>
+                  <span className="text-sm font-medium text-white/80">{formatKTODate(festival.eventstartdate)} ~ {formatKTODate(festival.eventenddate)}</span>
                 </div>
                 <h1 className="text-5xl font-headline font-bold mb-2 tracking-tight">{festival.title}</h1>
                 <p className="text-lg text-white/90 font-light font-body">계절이 머무는 자리에 당신을 초대합니다.</p>
@@ -120,7 +123,7 @@ const FestivalDetailPage = () => {
                 <div className="grid grid-cols-2 gap-4 pt-4 border-t border-outline-variant/20">
                   <div className="flex flex-col">
                     <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">기간</span>
-                    <span className="font-semibold text-on-surface">{festival.eventstartdate} ~ {festival.eventenddate}</span>
+                    <span className="font-semibold text-on-surface">{formatKTODate(festival.eventstartdate)} ~ {formatKTODate(festival.eventenddate)}</span>
                   </div>
                   <div className="flex flex-col">
                     <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">장소</span>

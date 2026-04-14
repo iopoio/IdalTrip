@@ -35,3 +35,29 @@ export const formatDistance = (meters: number): string => {
   }
   return `${meters}m`;
 };
+
+/**
+ * Get festival status based on dates
+ * Returns: '진행중' | '예정' | '종료'
+ */
+export const getFestivalStatus = (startDate?: string, endDate?: string): string => {
+  if (!startDate) return '정보없음';
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const start = new Date(
+    parseInt(startDate.substring(0, 4)),
+    parseInt(startDate.substring(4, 6)) - 1,
+    parseInt(startDate.substring(6, 8))
+  );
+
+  const end = endDate ? new Date(
+    parseInt(endDate.substring(0, 4)),
+    parseInt(endDate.substring(4, 6)) - 1,
+    parseInt(endDate.substring(6, 8))
+  ) : start;
+
+  if (today < start) return '예정';
+  if (today > end) return '종료';
+  return '진행중';
+};

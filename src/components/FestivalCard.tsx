@@ -1,6 +1,6 @@
 import React from 'react';
 import { CalendarToday } from './Icons';
-import { formatKTODate } from '../lib/utils';
+import { formatKTODate, getFestivalStatus } from '../lib/utils';
 import type { Festival } from '../types';
 
 interface FestivalCardProps {
@@ -11,6 +11,7 @@ interface FestivalCardProps {
 const FestivalCard: React.FC<FestivalCardProps> = ({ festival, onClick }) => {
   // Extract region from address
   const region = festival.addr1?.split(' ')[0] || '전국';
+  const status = getFestivalStatus(festival.eventstartdate, festival.eventenddate);
   
   return (
     <div 
@@ -32,8 +33,10 @@ const FestivalCard: React.FC<FestivalCardProps> = ({ festival, onClick }) => {
              <CalendarToday className="w-16 h-16 text-primary opacity-20" />
           </div>
         )}
-        <div className="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur rounded-lg text-xs font-bold text-primary shadow-sm">
-          진행중
+        <div className={`absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur rounded-lg text-xs font-bold shadow-sm ${
+          status === '진행중' ? 'text-primary' : status === '예정' ? 'text-secondary' : 'text-slate-400'
+        }`}>
+          {status}
         </div>
       </div>
       
