@@ -12,8 +12,8 @@ function App() {
     <Router>
       <div className="min-h-screen bg-surface text-on-surface font-body selection:bg-primary/10">
         <Header />
-        
-        <main className="max-w-[1920px] mx-auto min-h-screen">
+
+        <main className="min-h-screen pt-20">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/festival/:id" element={<FestivalDetailPage />} />
