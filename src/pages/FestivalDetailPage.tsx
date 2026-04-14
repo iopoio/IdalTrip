@@ -240,7 +240,7 @@ const FestivalDetailPage = () => {
                       </div>
                       {duration === 'day' && <CheckCircle className="text-primary w-5 h-5" />}
                     </button>
-                    <button 
+                    <button
                       onClick={() => setDuration('1night')}
                       className={`w-full flex items-center justify-between p-4 rounded-xl border-2 transition-all text-left ${
                         duration === '1night' ? 'bg-surface-container-high border-primary/20' : 'bg-white border-slate-100 hover:border-primary/10'
@@ -251,6 +251,18 @@ const FestivalDetailPage = () => {
                         <span className="font-medium text-on-surface">1박 2일</span>
                       </div>
                       {duration === '1night' && <CheckCircle className="text-primary w-5 h-5" />}
+                    </button>
+                    <button
+                      onClick={() => setDuration('2night')}
+                      className={`w-full flex items-center justify-between p-4 rounded-xl border-2 transition-all text-left ${
+                        duration === '2night' ? 'bg-surface-container-high border-primary/20' : 'bg-white border-slate-100 hover:border-primary/10'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <WbSunny className="text-slate-400 w-5 h-5" />
+                        <span className="font-medium text-on-surface">2박 3일</span>
+                      </div>
+                      {duration === '2night' && <CheckCircle className="text-primary w-5 h-5" />}
                     </button>
                   </div>
                 </div>
@@ -269,8 +281,8 @@ const FestivalDetailPage = () => {
                     {generating ? <Loader2 className="animate-spin w-6 h-6" /> : <AutoAwesome className="w-6 h-6" />}
                     AI 코스 생성하기
                   </button>
-                  <p className="text-center text-[10px] text-slate-400 mt-4 leading-relaxed font-body uppercase tracking-wider">
-                    Powered by Gemini 1.5 Pro
+                  <p className="text-center text-[10px] text-slate-400 mt-4 leading-relaxed">
+                    선택한 스팟과 옵션을 바탕으로 최적의 동선을 설계합니다.
                   </p>
                 </div>
               </div>
