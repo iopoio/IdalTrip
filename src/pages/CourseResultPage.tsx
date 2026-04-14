@@ -117,7 +117,7 @@ const CourseResultPage = () => {
             {/* Right: Summary & Map - Mockup 1:1 */}
             <div className="lg:col-span-5 flex flex-col gap-6">
               {/* Map Preview */}
-              <div className="rounded-xl overflow-hidden bg-surface-container-high h-[320px] relative shadow-premium">
+              <div className="rounded-xl overflow-hidden bg-surface-container-high h-[320px] relative shadow-lg">
                 <img 
                   className="w-full h-full object-cover" 
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-WEUasDwmjkGJCzfxJrBWolVpr_AUTLmLzCYjgOehRTmhf35St-hZAx9RxjuAO17IX2saCUq_jBcYqfyJ-JyV9IfxVH4QELhTY3jX86FjKqmTeFVP446bJGCQ-SPI-U1szthge738tlbnV_7LtYUL9h3ITPmvnm2SuIL25FfSznfhzZCNdkOqlDuD_v6l4w3tgX8TvWIIH_akWyRWyEJHqYVMHV1UPUL_0J-yDIbzrT3fVMy2aCje5PMLu74Q0ToOshFsUR2v9n8"
