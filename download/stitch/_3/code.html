@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#59d5fb",
+                    "primary": "#ab3500",
+                    "on-error-container": "#93000a",
+                    "surface-variant": "#e2e2e2",
+                    "tertiary-fixed": "#b5ebff",
+                    "surface": "#f9f9f9",
+                    "on-tertiary-container": "#003744",
+                    "primary-container": "#ff6b35",
+                    "on-surface": "#1a1c1c",
+                    "error-container": "#ffdad6",
+                    "inverse-primary": "#ffb59d",
+                    "on-primary-fixed": "#390c00",
+                    "on-background": "#1a1c1c",
+                    "error": "#ba1a1a",
+                    "secondary-fixed": "#d6e3ff",
+                    "secondary-fixed-dim": "#a8c8ff",
+                    "surface-dim": "#dadada",
+                    "secondary": "#225ea9",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-surface": "#2f3131",
+                    "surface-tint": "#ab3500",
+                    "surface-bright": "#f9f9f9",
+                    "surface-container-high": "#e8e8e8",
+                    "on-secondary-fixed-variant": "#00468a",
+                    "primary-fixed": "#ffdbd0",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed": "#001f28",
+                    "on-secondary-container": "#004180",
+                    "on-primary": "#ffffff",
+                    "surface-container-low": "#f3f3f3",
+                    "primary-fixed-dim": "#ffb59d",
+                    "inverse-on-surface": "#f1f1f1",
+                    "surface-container-highest": "#e2e2e2",
+                    "on-tertiary-fixed-variant": "#004e60",
+                    "on-surface-variant": "#594139",
+                    "on-primary-fixed-variant": "#832600",
+                    "outline": "#8d7168",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-primary-container": "#5f1900",
+                    "background": "#f9f9f9",
+                    "surface-container": "#eeeeee",
+                    "tertiary-container": "#00a7cb",
+                    "secondary-container": "#7cafff",
+                    "tertiary": "#00677e",
+                    "on-secondary-fixed": "#001b3c",
+                    "outline-variant": "#e1bfb5"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans", "Pretendard"],
+                    "body": ["Pretendard"],
+                    "label": ["Pretendard"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Pretendard', sans-serif; }
+        .glass-nav { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary-fixed-dim">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm">
+<div class="flex justify-between items-center px-8 h-20 max-w-[1920px] mx-auto">
+<div class="flex items-center gap-12">
+<span class="text-2xl font-bold tracking-tight text-[#ff6b35] font-headline">IdalTrip</span>
+<div class="hidden md:flex gap-8">
+<a class="text-slate-600 dark:text-slate-300 hover:text-[#ff6b35] font-['Plus_Jakarta_Sans','Pretendard'] text-sm font-medium transition-colors duration-200" href="#">홈</a>
+<a class="text-[#ff6b35] font-bold border-b-2 border-[#ff6b35] pb-1 font-['Plus_Jakarta_Sans','Pretendard'] text-sm" href="#">축제 정보</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-[#ff6b35] font-['Plus_Jakarta_Sans','Pretendard'] text-sm font-medium transition-colors duration-200" href="#">AI 코스 추천</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-[#ff6b35] font-['Plus_Jakarta_Sans','Pretendard'] text-sm font-medium transition-colors duration-200" href="#">커뮤니티</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-5 py-2 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-200 rounded-full text-sm font-medium">로그인</button>
+<button class="px-6 py-2.5 bg-[#ff6b35] text-white rounded-full text-sm font-bold shadow-md hover:opacity-90 transition-all active:scale-95">시작하기</button>
+</div>
+</div>
+</nav>
+<main class="pt-32 pb-24 px-8 max-w-[1440px] mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+<!-- Main Content Area (Left) -->
+<div class="lg:col-span-8 space-y-12">
+<!-- Hero Section -->
+<section class="relative aspect-[21/9] rounded-xl overflow-hidden shadow-2xl group">
+<img alt="축제 메인 이미지" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="vibrant traditional korean festival with colorful lanterns and fireworks at night over a historic palace" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAME0NrGMaNm7wSw_2BwtiaeLBFUDLIORfPD4NF1MCr2jxf7XfHBzZBHNhQpSDn3ZvVUEqe4jDCBwqAGsMJ2gko9RXUpNMxFL8QESUP3mPIuyLaxXlacId2Kgm44xcLO1Gd1Vr1vCXvutYPYV4Tm9mSK9_Stmlf81ovKf3FIGbI-OvIiilyhgVZwu_SBiGE0Gy57vOGVkE0eUq_hzIhHpDeG7_DIueJRqydUVjir-iSP5A4-8TCf7iok1pm45lXfSRqNnWaOznuZdg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<div class="absolute bottom-8 left-8 text-white">
+<div class="flex items-center gap-2 mb-3">
+<span class="px-3 py-1 bg-primary text-white text-xs font-bold rounded-full">진행중</span>
+<span class="text-sm font-medium text-white/80">#전통축제 #야경명소</span>
+</div>
+<h1 class="text-5xl font-headline font-bold mb-2">경복궁 별빛야행 2024</h1>
+<p class="text-lg text-white/90 font-light">전통의 숨결과 현대의 빛이 만나는 특별한 밤</p>
+</div>
+</section>
+<!-- Detailed Description -->
+<section class="bg-surface-container-low rounded-xl p-8">
+<h2 class="text-2xl font-headline font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="description">description</span>
+                        축제 상세 정보
+                    </h2>
+<div class="space-y-4 text-on-surface-variant leading-relaxed">
+<p>경복궁 별빛야행은 은은한 별빛 아래 경복궁의 아름다움을 만끽할 수 있는 특별한 야간 관람 행사입니다. 전문 해설사와 함께하는 궁궐 산책과 함께 전통 국악 공연을 즐기며 깊어가는 밤의 정취를 느껴보세요.</p>
+<div class="grid grid-cols-2 gap-4 pt-4 border-t border-outline-variant/20">
+<div class="flex flex-col">
+<span class="text-label-sm text-slate-400">기간</span>
+<span class="font-medium">2024.04.15 ~ 2024.10.31</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-sm text-slate-400">장소</span>
+<span class="font-medium">서울특별시 종로구 경복궁 일대</span>
+</div>
+</div>
+</div>
+</section>
+<!-- AI Recommended Spots Grid -->
+<section>
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="text-2xl font-headline font-bold">AI 추천 주변 스팟</h2>
+<p class="text-sm text-slate-500 mt-1">축제와 함께 즐기기 좋은 주변 명소들을 AI가 엄선했습니다.</p>
+</div>
+<span class="text-primary text-sm font-bold cursor-pointer hover:underline">모두 선택</span>
+</div>
+<!-- Bento Grid for Spots -->
+<div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+<!-- Spot 1 (Large) -->
+<div class="col-span-2 relative group rounded-xl overflow-hidden bg-surface-container-highest h-[240px]">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="traditional korean teahouse interior with warm lighting and wooden furniture looking out at a zen garden" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyi8RQm3K5pW5k2XU0iXj54L6O-LmbRUvjuaJgthqxUxT7xGRGfyZ0-AolL1va3r1vZY5YnnkeqFn2JPJihXEkzg7ZnV40MpnAF2obHleGuUFCcXjIAuObGDUAI1khghTOE6fUksTFp8AW1f_hl92UpxT5gjAaO-A5YIybMWscN31FBpIGPTXqK4vsu6OunbJT-8oSBTU1OEs16JibR8AmW3yVWAyivbr5nS2UV3P8VR-ISynbaTYSwtKtyXOZF0FVJxUEeyUQZYc"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent p-6 flex flex-col justify-end">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-white font-bold text-xl mb-1">인사동 찻집 골목</h3>
+<p class="text-white/70 text-sm">도보 10분 · 힐링 코스</p>
+</div>
+<input checked="" class="w-6 h-6 rounded-lg border-2 border-white/50 bg-white/20 checked:bg-primary checked:border-primary focus:ring-primary transition-all cursor-pointer" type="checkbox"/>
+</div>
+</div>
+</div>
+<!-- Spot 2 -->
+<div class="relative group rounded-xl overflow-hidden bg-surface-container-highest h-[240px]">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="modern art gallery interior with white walls and creative installations" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyXfeLl7eVmjDsU3fsjDOiMD_6UbD8_mAXq9EHnD_ymxHkvosDJlDCKSe8xmN79poyvXIjvZTQI_yOpPLqcfXCR2HBuSyFIBKw571bpsmeLTvLZkcf6sxRAgO71uY0ZqKT8A3dQxo72gOpdZhxcqFO8LY2ldGfvcdFDZ4_7NLfk9k59e4V84xANK-r6Ell1egmczAxKVpbkxAdqy5y15UVkXnHNXQG5d0NsFAL82LTtvlfEBUh_bhJZWaz2qIg5yVXVNmjfnI4c1E"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent p-6 flex flex-col justify-end">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-white font-bold text-lg mb-1">국립현대미술관</h3>
+<p class="text-white/70 text-xs">도보 5분</p>
+</div>
+<input class="w-5 h-5 rounded-lg border-2 border-white/50 bg-white/20 checked:bg-primary checked:border-primary focus:ring-primary transition-all cursor-pointer" type="checkbox"/>
+</div>
+</div>
+</div>
+<!-- Spot 3 -->
+<div class="relative group rounded-xl overflow-hidden bg-surface-container-highest h-[240px]">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="street food market in korea with colorful signs and steam rising from spicy rice cakes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCitn3UJVhEStDO9l5I_wWgnEBipTl75V0n_Yq3H1_Y5elIpcopcEdtVAmmuAW8mzH0WNTTKpB3wlnpM7dQUPU9zSSxbeIJnuEkWbryisQ9CHNWrrn87GVVCmba3MK54_Na1P6cJrpfufuJc1CbTNbuecQ98sbDDyJgnk37Y8cymgQsQzdW_N2AI4Bo4tmIfVHMCfzGYMOxvktMLLdn8-lAVMZiY-98huYAF7yhIdFVuzj9CiRoAAYMhgJgbcswKhAL-PAZNpsU_PQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent p-6 flex flex-col justify-end">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-white font-bold text-lg mb-1">통인시장 도시락카페</h3>
+<p class="text-white/70 text-xs">도보 15분</p>
+</div>
+<input checked="" class="w-5 h-5 rounded-lg border-2 border-white/50 bg-white/20 checked:bg-primary checked:border-primary focus:ring-primary transition-all cursor-pointer" type="checkbox"/>
+</div>
+</div>
+</div>
+<!-- Spot 4 -->
+<div class="relative group rounded-xl overflow-hidden bg-surface-container-highest h-[240px]">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="stylish modern cafe interior with large windows and minimalist design" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_8dzvMqM9xI_hIcUhLOOHptQ7z-DSuFswnM7q58iaXyGbk3RrvUSlnES0wCCSSr5LTbVFKHnf3GIcoZO77aGC22vLtNQGrtXaNUKP96DCDVByyeiTJmacTiu8X4VtPEK74dXXfjobXaaEZxggU1VqZzE9LKPFmv6dXyHnkl0wI5Mb1dNNQM9RE2D8IqKF_HizYJwc01xal9xa4V1jHiK26Ma_QG_TTn_0FHfgFDhQ89uV2N66GhABwexeXf1JAvhjwl7GUAP2-ck"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent p-6 flex flex-col justify-end">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-white font-bold text-lg mb-1">삼청동 루프탑 카페</h3>
+<p class="text-white/70 text-xs">도보 12분</p>
+</div>
+<input class="w-5 h-5 rounded-lg border-2 border-white/50 bg-white/20 checked:bg-primary checked:border-primary focus:ring-primary transition-all cursor-pointer" type="checkbox"/>
+</div>
+</div>
+</div>
+<!-- Spot 5 -->
+<div class="relative group rounded-xl overflow-hidden bg-surface-container-highest h-[240px]">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="night view of a traditional hanok village with glowing windows and dark tiled roofs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwAMW5wYk9-Pefyw2o1DR_22k60snM9R_BOlOgzFIs0El1WdgSY07-XbL8zrbKj-hfChC6mnbZfDn_7lIyPjf69d7RDLEGdJSwsZm1PIdUNdgLVT6L3TLI6Z88XEKvbopVNrmpiRiKpVlUYROoJmizSAgoMVFxSzY7lTShk9u63ewEGX97o443YxUo4CkRw2duC3TMgsqQWBn0uMVybo6JZ9_B8q5qJX7gFFO0-gfLj7iJd12_qZvX-3gpAubLG_93N3dhGK_yAXg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent p-6 flex flex-col justify-end">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-white font-bold text-lg mb-1">북촌 한옥마을</h3>
+<p class="text-white/70 text-xs">도보 15분</p>
+</div>
+<input checked="" class="w-5 h-5 rounded-lg border-2 border-white/50 bg-white/20 checked:bg-primary checked:border-primary focus:ring-primary transition-all cursor-pointer" type="checkbox"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Sidebar (Right) -->
+<div class="lg:col-span-4">
+<aside class="sticky top-32 bg-surface-container-lowest rounded-xl p-8 shadow-sm border-t border-slate-50">
+<h2 class="text-xl font-bold mb-8 text-on-surface">여행 옵션 설정</h2>
+<div class="space-y-8">
+<!-- Origin Input -->
+<div>
+<label class="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-widest">출발지 입력</label>
+<div class="relative">
+<input class="w-full bg-surface-container-high border-none rounded-xl py-4 pl-12 pr-4 text-on-surface focus:ring-2 focus:ring-primary/20 transition-all" placeholder="서울역" type="text"/>
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" data-icon="location_on">location_on</span>
+</div>
+</div>
+<!-- Transportation Selection -->
+<div>
+<label class="block text-xs font-bold text-slate-400 mb-4 uppercase tracking-widest">이동수단 선택</label>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex flex-col items-center gap-2 p-4 rounded-xl bg-primary text-white transition-all shadow-md">
+<span class="material-symbols-outlined" data-icon="directions_car" data-weight="fill">directions_car</span>
+<span class="text-sm font-bold">자가용</span>
+</button>
+<button class="flex flex-col items-center gap-2 p-4 rounded-xl bg-surface-container-high text-slate-600 hover:bg-slate-200 transition-all">
+<span class="material-symbols-outlined" data-icon="directions_bus">directions_bus</span>
+<span class="text-sm font-medium">대중교통</span>
+</button>
+</div>
+</div>
+<!-- Schedule Selection -->
+<div>
+<label class="block text-xs font-bold text-slate-400 mb-4 uppercase tracking-widest">일정 선택</label>
+<div class="space-y-3">
+<button class="w-full flex items-center justify-between p-4 rounded-xl bg-surface-container-high border-2 border-transparent text-slate-700 hover:border-primary/20 transition-all text-left">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400" data-icon="today">today</span>
+<span class="font-medium">당일 여행</span>
+</div>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="check_circle" data-weight="fill">check_circle</span>
+</button>
+<button class="w-full flex items-center justify-between p-4 rounded-xl bg-white border-2 border-slate-100 text-slate-700 hover:border-primary/20 transition-all text-left">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400" data-icon="wb_sunny">wb_sunny</span>
+<span class="font-medium">1박 2일</span>
+</div>
+</button>
+</div>
+</div>
+<!-- Price Estimation (Added for context) -->
+<div class="pt-6 border-t border-slate-100">
+<div class="flex justify-between items-center mb-6">
+<span class="text-slate-500">예상 소요 시간</span>
+<span class="text-lg font-bold">약 6시간</span>
+</div>
+<!-- AI Course Generation Button -->
+<button class="w-full bg-primary-container hover:bg-primary text-white py-5 rounded-xl font-headline font-bold text-lg shadow-lg shadow-primary-container/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="auto_awesome" data-weight="fill">auto_awesome</span>
+                                AI 코스 생성하기
+                            </button>
+<p class="text-center text-[10px] text-slate-400 mt-4 leading-relaxed">
+                                선택한 스팟과 옵션을 바탕으로 최적의 동선을 설계합니다.
+                            </p>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 px-8 bg-slate-50 dark:bg-slate-950 flex flex-col items-center gap-6 border-t border-slate-100 dark:border-slate-800">
+<span class="text-lg font-bold text-slate-400">IdalTrip</span>
+<div class="flex gap-8">
+<a class="font-['Pretendard'] text-xs text-slate-500 hover:text-slate-600 hover:underline transition-all" href="#">이용약관</a>
+<a class="font-['Pretendard'] text-xs text-slate-500 hover:text-slate-600 hover:underline transition-all" href="#">개인정보처리방침</a>
+<a class="font-['Pretendard'] text-xs text-slate-500 hover:text-slate-600 hover:underline transition-all" href="#">고객센터</a>
+<a class="font-['Pretendard'] text-xs text-slate-500 hover:text-slate-600 hover:underline transition-all" href="#">광고문의</a>
+</div>
+<p class="font-['Pretendard'] text-xs text-slate-400">© 2024 IdalTrip. All rights reserved.</p>
+</footer>
+</body></html>

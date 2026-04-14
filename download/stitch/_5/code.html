@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IdalTrip - AI 코스 지도</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link as="style" crossorigin="" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#59d5fb",
+                    "primary": "#ab3500",
+                    "on-error-container": "#93000a",
+                    "surface-variant": "#e2e2e2",
+                    "tertiary-fixed": "#b5ebff",
+                    "surface": "#f9f9f9",
+                    "on-tertiary-container": "#003744",
+                    "primary-container": "#ff6b35",
+                    "on-surface": "#1a1c1c",
+                    "error-container": "#ffdad6",
+                    "inverse-primary": "#ffb59d",
+                    "on-primary-fixed": "#390c00",
+                    "on-background": "#1a1c1c",
+                    "error": "#ba1a1a",
+                    "secondary-fixed": "#d6e3ff",
+                    "secondary-fixed-dim": "#a8c8ff",
+                    "surface-dim": "#dadada",
+                    "secondary": "#225ea9",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-surface": "#2f3131",
+                    "surface-tint": "#ab3500",
+                    "surface-bright": "#f9f9f9",
+                    "surface-container-high": "#e8e8e8",
+                    "on-secondary-fixed-variant": "#00468a",
+                    "primary-fixed": "#ffdbd0",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed": "#001f28",
+                    "on-secondary-container": "#004180",
+                    "on-primary": "#ffffff",
+                    "surface-container-low": "#f3f3f3",
+                    "primary-fixed-dim": "#ffb59d",
+                    "inverse-on-surface": "#f1f1f1",
+                    "surface-container-highest": "#e2e2e2",
+                    "on-tertiary-fixed-variant": "#004e60",
+                    "on-surface-variant": "#594139",
+                    "on-primary-fixed-variant": "#832600",
+                    "outline": "#8d7168",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-primary-container": "#5f1900",
+                    "background": "#f9f9f9",
+                    "surface-container": "#eeeeee",
+                    "tertiary-container": "#00a7cb",
+                    "secondary-container": "#7cafff",
+                    "tertiary": "#00677e",
+                    "on-secondary-fixed": "#001b3c",
+                    "outline-variant": "#e1bfb5"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans", "Pretendard"],
+                    "body": ["Pretendard"],
+                    "label": ["Pretendard"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Pretendard', sans-serif; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background text-on-background overflow-hidden h-screen w-full">
+<!-- TopNavBar (Shared Component) -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm">
+<div class="flex justify-between items-center px-8 h-20 max-w-[1920px] mx-auto">
+<div class="flex items-center gap-12">
+<span class="text-2xl font-bold tracking-tight text-[#ff6b35] font-headline">IdalTrip</span>
+<div class="hidden md:flex items-center gap-8 font-['Plus_Jakarta_Sans','Pretendard'] text-sm font-medium">
+<a class="text-slate-600 dark:text-slate-300 hover:text-[#ff6b35] transition-colors duration-200" href="#">홈</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-[#ff6b35] transition-colors duration-200" href="#">축제 정보</a>
+<a class="text-[#ff6b35] font-bold border-b-2 border-[#ff6b35] pb-1" href="#">AI 코스 추천</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-[#ff6b35] transition-colors duration-200" href="#">커뮤니티</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-5 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 rounded-full transition-all">로그인</button>
+<button class="px-6 py-2.5 text-sm font-bold bg-[#ff6b35] text-white rounded-full hover:opacity-90 active:scale-95 transition-all">시작하기</button>
+</div>
+</div>
+</nav>
+<!-- Main Map Canvas -->
+<main class="relative h-screen w-full pt-20">
+<!-- Background Map (Simulated with Placeholder Image) -->
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full bg-surface-container" data-alt="high quality satellite map view of seoul city with digital glowing route lines connecting landmarks in orange and blue" data-location="Seoul" style="">
+<!-- Map UI Elements (Simulated) -->
+<div class="absolute inset-0 opacity-40 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+<!-- Markers -->
+<div class="absolute top-[35%] left-[45%] group cursor-pointer">
+<div class="relative">
+<div class="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-lg border-2 border-white transform transition-transform group-hover:scale-110">
+<span class="font-bold text-sm">1</span>
+</div>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-white rounded-lg shadow-xl text-xs font-bold whitespace-nowrap">남산타워 한복 축제</div>
+</div>
+</div>
+<div class="absolute top-[50%] left-[55%] group cursor-pointer">
+<div class="relative">
+<div class="w-10 h-10 bg-secondary text-on-secondary rounded-full flex items-center justify-center shadow-lg border-2 border-white transform transition-transform group-hover:scale-110">
+<span class="font-bold text-sm">2</span>
+</div>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-white rounded-lg shadow-xl text-xs font-bold whitespace-nowrap">명동 미식 투어</div>
+</div>
+</div>
+<div class="absolute top-[42%] left-[62%] group cursor-pointer">
+<div class="relative">
+<div class="w-10 h-10 bg-secondary text-on-secondary rounded-full flex items-center justify-center shadow-lg border-2 border-white transform transition-transform group-hover:scale-110">
+<span class="font-bold text-sm">3</span>
+</div>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-white rounded-lg shadow-xl text-xs font-bold whitespace-nowrap">동대문 디자인 플라자</div>
+</div>
+</div>
+<!-- Path SVG -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" preserveaspectratio="none" viewbox="0 0 100 100">
+<path d="M45 35 Q 50 45, 55 50 T 62 42" fill="none" stroke="#ff6b35" stroke-dasharray="2" stroke-width="0.5"></path>
+</svg>
+</div>
+</div>
+<!-- Upper Overlay: Controls -->
+<div class="absolute top-24 left-8 right-8 flex justify-between items-start pointer-events-none">
+<div class="flex flex-col gap-4 pointer-events-auto">
+<button class="flex items-center gap-2 px-6 py-3 glass-panel rounded-full shadow-lg text-slate-700 font-bold hover:bg-white transition-all active:scale-95 group">
+<span class="material-symbols-outlined text-primary group-hover:-translate-x-1 transition-transform">arrow_back</span>
+                    목록으로 돌아가기
+                </button>
+<div class="glass-panel p-6 rounded-xl shadow-xl w-80">
+<h2 class="text-xl font-bold mb-1 font-headline">서울의 가을 축제 코스</h2>
+<p class="text-slate-500 text-xs mb-4">AI가 추천하는 3개의 장소 (총 8.4km)</p>
+<div class="flex items-center gap-2 p-3 bg-surface-container-low rounded-lg">
+<span class="material-symbols-outlined text-slate-400">search</span>
+<input class="bg-transparent border-none text-sm w-full focus:ring-0 placeholder:text-slate-400" placeholder="주변 장소 검색..." type="text"/>
+</div>
+</div>
+</div>
+<!-- Map Tools -->
+<div class="flex flex-col gap-2 pointer-events-auto">
+<button class="w-12 h-12 glass-panel rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all"><span class="material-symbols-outlined">my_location</span></button>
+<button class="w-12 h-12 glass-panel rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all"><span class="material-symbols-outlined">add</span></button>
+<button class="w-12 h-12 glass-panel rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all"><span class="material-symbols-outlined">remove</span></button>
+</div>
+</div>
+<!-- Bottom Overlay: Place Cards Horizontal Scroll -->
+<div class="absolute bottom-12 left-0 w-full px-8 pointer-events-none">
+<div class="flex gap-6 overflow-x-auto hide-scrollbar pb-8 pointer-events-auto">
+<!-- Card 1 -->
+<div class="flex-shrink-0 w-[420px] glass-panel p-4 rounded-xl shadow-2xl flex gap-4 border border-white/20">
+<div class="w-32 h-32 rounded-lg overflow-hidden bg-slate-200 flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="N Seoul Tower landscape with autumn foliage colors and clear blue sky in the background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGQLHzuaoLFUZ3JAs_kM7ZMedcJcOz2mL4GmwUMZxnK52kFVElLNjHxUdsU_seZ5iuC36ok2SeBKQVWqPASgMQjOtD0ayplx6WD6ljPyf-ifVU8Z2G9nf3SME4ko3D8TnbIYzHZiQk5foliLjkMmZB7-xaLBgSvfTAU4sq-qX3aJRJw1gz9ZtF3ynpTmSkvBLyybZl6oi8AwsUwRoFVYQydFfI7U9iWSTPwo2pD3u2yd1hKmf4_JCqxgyNEY1ZF9x-1BzechP2c8o"/>
+</div>
+<div class="flex-1 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between">
+<span class="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold rounded-full">축제 명소</span>
+<span class="text-xs text-slate-400 font-medium">1.2km 전</span>
+</div>
+<h3 class="text-lg font-bold mt-1 text-on-surface">남산타워 한복 축제</h3>
+<p class="text-xs text-slate-500 line-clamp-1">형형색색의 한복을 입고 남산의 가을을 즐기세요.</p>
+</div>
+<div class="flex items-center gap-2 mt-3">
+<button class="flex-1 py-2.5 bg-[#225ea9] text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-all">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">near_me</span>
+                                카카오맵 네비
+                            </button>
+<button class="p-2.5 bg-surface-container-high rounded-lg hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined text-[20px] text-slate-600">bookmark</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="flex-shrink-0 w-[420px] glass-panel p-4 rounded-xl shadow-2xl flex gap-4 border border-white/20">
+<div class="w-32 h-32 rounded-lg overflow-hidden bg-slate-200 flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="vibrant street market in Myeongdong Seoul with colorful signs and street food stalls at night" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAde8onhudwxoDIFTkdzSZlL-6EKKbBqD7yab4Nq2WrAcqr608m-rRoNj06Z8udLeEPuai2awbtbkc9FFYl51EcJB7MYLdAaKY4nltgeDaz0ro-ZJlfKsVSU3lnmYuv7HAp1Spn1IonLlQNxWbGZJqFEebTkAOZFzXJWVQYbtpt9MIE-w-KTBb0yIvD1GmSFmWR2ER3and9OUoH-nt6Y6dRTj0P26AGBt3ClIi8G6GpWvxW_IcH9ApaRmAmjqUgLEyfiNZ6DPeb1M"/>
+</div>
+<div class="flex-1 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between">
+<span class="px-2 py-0.5 bg-secondary/10 text-secondary text-[10px] font-bold rounded-full">미식 투어</span>
+<span class="text-xs text-slate-400 font-medium">3.5km 전</span>
+</div>
+<h3 class="text-lg font-bold mt-1 text-on-surface">명동 미식 거리</h3>
+<p class="text-xs text-slate-500 line-clamp-1">길거리 음식부터 미슐랭 가이드 맛집까지 한곳에.</p>
+</div>
+<div class="flex items-center gap-2 mt-3">
+<button class="flex-1 py-2.5 bg-[#225ea9] text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-all">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">near_me</span>
+                                카카오맵 네비
+                            </button>
+<button class="p-2.5 bg-surface-container-high rounded-lg hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined text-[20px] text-slate-600">bookmark</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="flex-shrink-0 w-[420px] glass-panel p-4 rounded-xl shadow-2xl flex gap-4 border border-white/20 opacity-90">
+<div class="w-32 h-32 rounded-lg overflow-hidden bg-slate-200 flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="architectural curve of Dongdaemun Design Plaza in Seoul with its iconic futuristic silver exterior" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJHfuoOq5syC1OHZhQuMghrEppAMBxX4u04b2-85YrR6zQfDn8KTRP2YyTNUP8IVdnYUpSs3hDVTmAkloOULNh-JSdfPtSAw-27IR1bSSNVwbr-_REKbL4kAnWItsparfZneWNrYviWRWFyKNnFdE4kWdoeZ_0KObw3uTJT6FKl2TXL0TJKN0TonMjRdeWjYOJEtYhMglvr_CxN8c0wUzUxmJB6kuo9rK4OXyrdrHFiLxetSZg6VoDd4rFFoOk-R_24cckp8q3cUg"/>
+</div>
+<div class="flex-1 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between">
+<span class="px-2 py-0.5 bg-secondary/10 text-secondary text-[10px] font-bold rounded-full">디자인 &amp; 쇼핑</span>
+<span class="text-xs text-slate-400 font-medium">5.1km 전</span>
+</div>
+<h3 class="text-lg font-bold mt-1 text-on-surface">동대문 디자인 플라자</h3>
+<p class="text-xs text-slate-500 line-clamp-1">자하 하디드의 유작, 세계 최대 규모의 비정형 건축물.</p>
+</div>
+<div class="flex items-center gap-2 mt-3">
+<button class="flex-1 py-2.5 bg-[#225ea9] text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-all">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">near_me</span>
+                                카카오맵 네비
+                            </button>
+<button class="p-2.5 bg-surface-container-high rounded-lg hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined text-[20px] text-slate-600">bookmark</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating AI Prompt (Bonus contextual element) -->
+<div class="fixed bottom-36 right-8 pointer-events-auto">
+<div class="flex items-center gap-3 p-4 glass-panel rounded-2xl shadow-xl border border-primary/20 max-w-xs animate-bounce">
+<div class="w-10 h-10 bg-primary-container rounded-full flex items-center justify-center text-white shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<p class="text-xs font-medium text-on-surface leading-tight">
+                "이 근처에 주차하기 편한 맛집도 알려드릴까요?"
+            </p>
+</div>
+</div>
+</body></html>

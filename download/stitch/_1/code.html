@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Be+Vietnam+Pro:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
+        
+        body {
+            font-family: 'Pretendard', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .font-headline { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#59d5fb",
+                        "primary": "#ab3500",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#e2e2e2",
+                        "tertiary-fixed": "#b5ebff",
+                        "surface": "#f9f9f9",
+                        "on-tertiary-container": "#003744",
+                        "primary-container": "#ff6b35",
+                        "on-surface": "#1a1c1c",
+                        "error-container": "#ffdad6",
+                        "inverse-primary": "#ffb59d",
+                        "on-primary-fixed": "#390c00",
+                        "on-background": "#1a1c1c",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#d6e3ff",
+                        "secondary-fixed-dim": "#a8c8ff",
+                        "surface-dim": "#dadada",
+                        "secondary": "#225ea9",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#2f3131",
+                        "surface-tint": "#ab3500",
+                        "surface-bright": "#f9f9f9",
+                        "surface-container-high": "#e8e8e8",
+                        "on-secondary-fixed-variant": "#00468a",
+                        "primary-fixed": "#ffdbd0",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed": "#001f28",
+                        "on-secondary-container": "#004180",
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#f3f3f3",
+                        "primary-fixed-dim": "#ffb59d",
+                        "inverse-on-surface": "#f1f1f1",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-tertiary-fixed-variant": "#004e60",
+                        "on-surface-variant": "#594139",
+                        "on-primary-fixed-variant": "#832600",
+                        "outline": "#8d7168",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#5f1900",
+                        "background": "#f9f9f9",
+                        "surface-container": "#eeeeee",
+                        "tertiary-container": "#00a7cb",
+                        "secondary-container": "#7cafff",
+                        "tertiary": "#00677e",
+                        "on-secondary-fixed": "#001b3c",
+                        "outline-variant": "#e1bfb5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm">
+<div class="flex justify-between items-center px-8 h-20 max-w-[1920px] mx-auto font-['Plus_Jakarta_Sans','Pretendard'] text-sm font-medium">
+<div class="text-2xl font-bold tracking-tight text-[#ff6b35]">IdalTrip</div>
+<div class="hidden md:flex items-center gap-10">
+<a class="text-[#ff6b35] font-bold border-b-2 border-[#ff6b35] pb-1" href="#">홈</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-[#ff6b35] transition-colors duration-200" href="#">축제 정보</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-[#ff6b35] transition-colors duration-200" href="#">AI 코스 추천</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-[#ff6b35] transition-colors duration-200" href="#">커뮤니티</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-5 py-2 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-200 rounded-full">로그인</button>
+<button class="px-6 py-2.5 bg-primary-container text-on-primary rounded-full font-bold shadow-md hover:opacity-90 active:scale-95 transition-all">시작하기</button>
+</div>
+</div>
+</nav>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative w-full h-[870px] overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="vibrant red rose garden in full bloom under clear blue sky with warm sunlight highlighting textures of petals" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB4TaGuyUiOeV4Y65gWEFR549M1pEw8bfORF7VlqiDLG_B5d0k7gM3fcFs95cFwDPunnEwThSaolaGZf-juSDkOy0uiMAmxt69VoIPrINa_gVTGM1fL2kZ4oeu0QolPY3TVvW9lEfjpfOPDpcotH6Vxkr5KFE4EqOUv5y2Kod0HE96HyO_48_w2gI0WOzIv3_V8Uq_T2hI2D2ra409D9Vmmpjmo3x5BRdO7YGpRrMIyyxNWwsm3Pbj91l56AhcxH28IMAtnKZvYjFw');"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+<div class="relative h-full max-w-[1920px] mx-auto px-8 flex flex-col justify-end pb-24">
+<div class="max-w-3xl">
+<span class="inline-block px-4 py-1.5 mb-6 rounded-full bg-white/20 backdrop-blur-md text-white text-sm font-medium border border-white/30">
+                        Seasonal Highlight
+                    </span>
+<h1 class="font-headline text-[5rem] leading-[1.1] text-white font-bold mb-6 tracking-tight">
+                        5월의 여행,<br/>장미의 계절
+                    </h1>
+<p class="text-xl text-white/90 mb-10 leading-relaxed font-light">
+                        전국 곳곳에서 펼쳐지는 화려한 장미 축제와 함께<br/>잊지 못할 봄의 마지막 페이지를 장식해보세요.
+                    </p>
+<button class="px-10 py-5 bg-primary-container text-on-primary rounded-full text-lg font-bold shadow-2xl flex items-center gap-3 hover:scale-105 transition-transform">
+                        지금 축제 확인하기
+                        <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Monthly Filter Bar -->
+<section class="py-12 bg-surface-container-low">
+<div class="max-w-[1920px] mx-auto px-8">
+<div class="flex items-center justify-between gap-4 overflow-x-auto pb-4 no-scrollbar">
+<div class="flex gap-3">
+<!-- Iterating months 1 to 12 -->
+<button class="px-8 py-3 rounded-full bg-white text-slate-500 font-medium hover:bg-slate-50 transition-all shadow-sm">1월</button>
+<button class="px-8 py-3 rounded-full bg-white text-slate-500 font-medium hover:bg-slate-50 transition-all shadow-sm">2월</button>
+<button class="px-8 py-3 rounded-full bg-white text-slate-500 font-medium hover:bg-slate-50 transition-all shadow-sm">3월</button>
+<button class="px-8 py-3 rounded-full bg-white text-slate-500 font-medium hover:bg-slate-50 transition-all shadow-sm">4월</button>
+<button class="px-10 py-3 rounded-full bg-primary text-white font-bold shadow-lg shadow-primary/20 transition-all scale-105">5월</button>
+<button class="px-8 py-3 rounded-full bg-white text-slate-500 font-medium hover:bg-slate-50 transition-all shadow-sm">6월</button>
+<button class="px-8 py-3 rounded-full bg-white text-slate-500 font-medium hover:bg-slate-50 transition-all shadow-sm">7월</button>
+<button class="px-8 py-3 rounded-full bg-white text-slate-500 font-medium hover:bg-slate-50 transition-all shadow-sm">8월</button>
+<button class="px-8 py-3 rounded-full bg-white text-slate-500 font-medium hover:bg-slate-50 transition-all shadow-sm">9월</button>
+<button class="px-8 py-3 rounded-full bg-white text-slate-500 font-medium hover:bg-slate-50 transition-all shadow-sm">10월</button>
+<button class="px-8 py-3 rounded-full bg-white text-slate-500 font-medium hover:bg-slate-50 transition-all shadow-sm">11월</button>
+<button class="px-8 py-3 rounded-full bg-white text-slate-500 font-medium hover:bg-slate-50 transition-all shadow-sm">12월</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Festival Grid -->
+<section class="py-24 bg-surface">
+<div class="max-w-[1920px] mx-auto px-8">
+<div class="flex items-end justify-between mb-16">
+<div>
+<h2 class="font-headline text-4xl font-bold text-on-surface mb-4">현재 진행 중인 축제</h2>
+<p class="text-slate-500 text-lg">전국 각지의 생생한 축제 소식을 전해드립니다.</p>
+</div>
+<button class="flex items-center gap-2 text-primary font-bold group">
+                        전체보기
+                        <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+<!-- Festival Card 1 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-500">
+<div class="h-[320px] overflow-hidden relative">
+<img alt="장미 축제" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="close up of thousands of deep red and pink roses in a lush garden during a summer festival" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDybYzdOxcEhHslQ9tnR7in8aNmhNvA-bEm2AugVaPvzhi9tYGOuWgVlHiM4hAs-boJnlsbcJk20z5Hc6zpPVbbuIQZZp6p3SpcXjDjb5lItfaVwrLR3b1OyK_V84wcaLrhp9fjuzJ9lQScZP9iMkLQkeycclvJ7tWvLqo7GlltjKbsT5kl7svxQHiIpEJLq0RadNyE29-eWaneyaLAAJj7PoIdSNRYvUSLbvgIvP5-KisZQKmwskSls8FPk4nA9DQ26lJfplbRBrE"/>
+<div class="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur rounded-lg text-xs font-bold text-primary">진행중</div>
+</div>
+<div class="p-8">
+<p class="text-secondary font-bold text-sm mb-2">서울/경기</p>
+<h3 class="text-xl font-bold mb-4 text-on-surface">서울 장미 축제 2024</h3>
+<div class="flex items-center gap-4 text-slate-500 text-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_today</span> 05.18 - 05.25</span>
+</div>
+</div>
+</div>
+<!-- Festival Card 2 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-500">
+<div class="h-[320px] overflow-hidden relative">
+<img alt="유채꽃 축제" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="vibrant yellow canola flowers stretching across a wide field under a bright blue sky in Jeju island" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIZHjA1ZXdDQOXTdWL7hvs7jGeyeliIwiUi8AQcPGSgs2kuT1I9eb9urMGpHx7-ofOtBpSqS_ujSjE2Hz8Lv8IwD-p65p5V9JbhyJtatSKXaJsff1c1Nz8Iak-tsTRSPJC66ShamOPJ0zJmmw49R3w8cwXaUmffbE16soMTsReiFy9ls5L0AY9UEW-U_cDZDJ2xz1GbcyQ_W80qZV_1UPTX8dn2ruD-XxsHzqmCsJ_lPeB-K8QtOHPb8nOAyhIJ7yKm1eaAo22_sU"/>
+<div class="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur rounded-lg text-xs font-bold text-primary">진행중</div>
+</div>
+<div class="p-8">
+<p class="text-secondary font-bold text-sm mb-2">제주도</p>
+<h3 class="text-xl font-bold mb-4 text-on-surface">제주 가파도 청보리 축제</h3>
+<div class="flex items-center gap-4 text-slate-500 text-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_today</span> 04.06 - 05.10</span>
+</div>
+</div>
+</div>
+<!-- Festival Card 3 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-500">
+<div class="h-[320px] overflow-hidden relative">
+<img alt="담양 대나무" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="serene mountain landscape at sunset with orange and purple sky reflecting on a calm river" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDO9k92QMrcF2c8Fp6ZAs5orOgi42q8PHhkLLSYO8dk3LadBfVH62xTM_GooVEQ1favrgFdhIILPRJs4PLLKc-JMAkEjn3pcoNFAkdA3T6VUgFZgvEuOr_f0B24dDuEv4CSU0v6Yl4R_9OmROS8EtCbiRLWcmzGVKI48p0KauFJJQP_AhYRtAX2x4cDTVOdMd92N1RksMk6MjeCVZ5FoLF78e-A44H3eBZzSPqzG1Fq3LraDIOsshdz5eztBcsMAzb6zs2oSPVpijU"/>
+<div class="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur rounded-lg text-xs font-bold text-slate-400">D-3</div>
+</div>
+<div class="p-8">
+<p class="text-secondary font-bold text-sm mb-2">전라남도</p>
+<h3 class="text-xl font-bold mb-4 text-on-surface">담양 대나무 축제</h3>
+<div class="flex items-center gap-4 text-slate-500 text-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_today</span> 05.11 - 05.15</span>
+</div>
+</div>
+</div>
+<!-- Festival Card 4 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-500">
+<div class="h-[320px] overflow-hidden relative">
+<img alt="곡성 장미" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="traditionally dressed dancers at a folk festival with colorful costumes and dynamic movement" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApPIV8S93eKLR0XkMGaJ12hfr9x-9ICcLY9oqgns7i_zmqcpixif5tjd77mduizasn1b-zrvz0PFQ4paUbDDefVGIf6EjCvjG41nS4DERE3Se32U7ulVpiZQCP0TVjgdORApb4TI0wh9RzDnngO2V-GDWLSzADnCH1_vISLIwUGbJsFe4Kgz_hIAXrr3Ct1ky7asIyvpzW3vfUbY9clXtsfeXfn9V77a-5fBaDGUSLN0L17feJTIoUpMXVftYAv7SjuZ7e7zUFLtc"/>
+<div class="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur rounded-lg text-xs font-bold text-primary">진행중</div>
+</div>
+<div class="p-8">
+<p class="text-secondary font-bold text-sm mb-2">전라남도</p>
+<h3 class="text-xl font-bold mb-4 text-on-surface">곡성 세계 장미 축제</h3>
+<div class="flex items-center gap-4 text-slate-500 text-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_today</span> 05.17 - 05.26</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- AI Recommendation Section -->
+<section class="pb-32 px-8">
+<div class="max-w-[1920px] mx-auto bg-gradient-to-r from-primary to-primary-container rounded-[2.5rem] p-16 relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none transition-transform duration-1000 group-hover:scale-110">
+<span class="material-symbols-outlined text-[30rem] absolute -right-20 -top-20 text-white" style="font-variation-settings: 'FILL' 1;">explore</span>
+</div>
+<div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
+<div class="max-w-xl">
+<div class="flex items-center gap-2 mb-6">
+<span class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</span>
+<span class="text-white/80 font-bold tracking-widest text-sm">AI PERSONALIZED</span>
+</div>
+<h2 class="text-5xl font-bold text-white mb-8 leading-tight">내 취향에 맞는<br/>축제 찾기</h2>
+<p class="text-white/80 text-lg mb-10 leading-relaxed">
+                            당신의 여행 스타일을 분석하여<br/>가장 설레는 축제 여정을 설계해 드립니다.
+                        </p>
+<button class="px-10 py-5 bg-white text-primary rounded-full text-lg font-bold shadow-xl flex items-center gap-3 hover:bg-surface transition-colors">
+                            분석 시작하기
+                            <span class="material-symbols-outlined">compass_calibration</span>
+</button>
+</div>
+<div class="hidden lg:block">
+<div class="w-[400px] h-[400px] bg-white/10 backdrop-blur-2xl rounded-full flex items-center justify-center p-8 border border-white/20 relative">
+<div class="absolute inset-4 border-2 border-dashed border-white/30 rounded-full animate-[spin_20s_linear_infinite]"></div>
+<span class="material-symbols-outlined text-[12rem] text-white" style="font-variation-settings: 'FILL' 1;">explore</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 px-8 bg-slate-50 dark:bg-slate-950 flex flex-col items-center gap-6 border-t border-slate-100 dark:border-slate-800">
+<div class="text-lg font-bold text-slate-400">IdalTrip</div>
+<div class="flex gap-8">
+<a class="font-['Pretendard'] text-xs text-slate-500 hover:text-slate-600 hover:underline transition-all" href="#">이용약관</a>
+<a class="font-['Pretendard'] text-xs text-slate-500 hover:text-slate-600 hover:underline transition-all" href="#">개인정보처리방침</a>
+<a class="font-['Pretendard'] text-xs text-slate-500 hover:text-slate-600 hover:underline transition-all" href="#">고객센터</a>
+<a class="font-['Pretendard'] text-xs text-slate-500 hover:text-slate-600 hover:underline transition-all" href="#">광고문의</a>
+</div>
+<p class="font-['Pretendard'] text-xs text-slate-400">© 2024 IdalTrip. All rights reserved.</p>
+</footer>
+</body></html>

@@ -10,6 +10,7 @@ export interface Festival {
   eventstartdate: string;
   eventenddate: string;
   tel: string;
+  overview?: string; // Added for detail view
 }
 
 export interface Place {
@@ -23,6 +24,15 @@ export interface Place {
   dist?: number;
 }
 
+export interface ParkingLot {
+  name: string;
+  addr: string;
+  lat: number;
+  lng: number;
+  capacity: number;
+  feeInfo: string;
+}
+
 export interface CourseItem {
   time: string;
   placeName: string;
@@ -32,6 +42,16 @@ export interface CourseItem {
   lat: number;
   lng: number;
   kakaoMapUrl?: string;
+  parkingInfo?: ParkingLot; // For car users
+}
+
+export interface CourseResponse {
+  title: string;
+  summary: string;
+  days: {
+    day: number;
+    items: CourseItem[];
+  }[];
 }
 
 export interface TravelCourse {

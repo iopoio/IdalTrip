@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IdalTrip - 축제 상세 및 옵션 선택</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Be+Vietnam+Pro:wght@300;400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ba1a1a",
+                        "inverse-primary": "#ffb59d",
+                        "on-primary-fixed": "#390c00",
+                        "on-background": "#1a1c1c",
+                        "secondary-fixed": "#d6e3ff",
+                        "surface-variant": "#e2e2e2",
+                        "tertiary-fixed-dim": "#59d5fb",
+                        "primary": "#ab3500",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#1a1c1c",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#b5ebff",
+                        "on-tertiary-container": "#003744",
+                        "surface": "#f9f9f9",
+                        "primary-container": "#ff6b35",
+                        "surface-bright": "#f9f9f9",
+                        "surface-tint": "#ab3500",
+                        "on-secondary-fixed-variant": "#00468a",
+                        "surface-container-high": "#e8e8e8",
+                        "on-tertiary-fixed": "#001f28",
+                        "on-secondary-container": "#004180",
+                        "primary-fixed": "#ffdbd0",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#a8c8ff",
+                        "inverse-surface": "#2f3131",
+                        "secondary": "#225ea9",
+                        "surface-dim": "#dadada",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#594139",
+                        "on-primary-fixed-variant": "#832600",
+                        "outline": "#8d7168",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-tertiary-fixed-variant": "#004e60",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#5f1900",
+                        "background": "#f9f9f9",
+                        "surface-container-low": "#f3f3f3",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#f1f1f1",
+                        "primary-fixed-dim": "#ffb59d",
+                        "tertiary": "#00677e",
+                        "on-secondary-fixed": "#001b3c",
+                        "outline-variant": "#e1bfb5",
+                        "tertiary-container": "#00a7cb",
+                        "surface-container": "#eeeeee",
+                        "secondary-container": "#7cafff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Pretendard"],
+                        "label": ["Pretendard"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Pretendard', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-32">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors active:scale-90 duration-200">
+<span class="material-symbols-outlined text-on-surface">arrow_back</span>
+</button>
+<h1 class="text-xl font-black text-[#ab3500] tracking-tight font-['Plus_Jakarta_Sans']">IdalTrip</h1>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors active:scale-90 duration-200">
+<span class="material-symbols-outlined text-on-surface">share</span>
+</button>
+</div>
+</header>
+<main class="max-w-7xl mx-auto">
+<!-- Hero Section -->
+<section class="relative w-full h-[397px] overflow-hidden">
+<img alt="축제 메인 이미지" class="w-full h-full object-cover" data-alt="vibrant night festival with traditional lanterns glowing in warm orange and red hues against a dark twilight sky in a historic Korean village" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCG-TU34_AtXUsUV_3ywnXNrlRa8STdbYtXdsQ1mCFWmVNQ9aS0gkLmA7jSDq1mAq7nBkxBSFiAR0XvfQCmYCKM7cpS8gJtFObNdFbghADJfh6l-HsKT0jSxHuq92xWWK_FY6I7AiY9CB7UX1f150DYsdMbEOG0O60Cl7dY97N-eN1EWrk1mVdQw7rgYM4SxY7qhAlt3zIeddif2e4fN8MH-MFNATLx5fxQ5DJ1JspGd1dNospd-0wALzznS_egik_zH-yP8Ag42jg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-black/20"></div>
+<div class="absolute bottom-0 left-0 right-0 p-8">
+<div class="inline-flex items-center gap-2 px-3 py-1 bg-primary text-white rounded-full mb-4 text-xs font-bold tracking-wider">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">festival</span>
+                    진행 중인 축제
+                </div>
+<h2 class="text-4xl font-bold font-headline text-on-surface mb-2 leading-tight">안동 국제 탈춤 페스티벌</h2>
+<div class="flex flex-wrap gap-4 text-on-surface-variant font-medium">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+                        경상북도 안동시 탈춤공원
+                    </div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                        2024.09.27 ~ 10.06
+                    </div>
+</div>
+</div>
+</section>
+<div class="px-6 space-y-10 mt-8">
+<!-- AI Recommendations Section -->
+<section>
+<div class="flex items-center justify-between mb-6">
+<div>
+<h3 class="text-2xl font-bold font-headline mb-1">AI 추천 주변 스팟</h3>
+<p class="text-on-surface-variant text-sm">축제와 함께 즐기기 좋은 검증된 장소들입니다.</p>
+</div>
+<button class="text-primary font-bold text-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+                        새로고침
+                    </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+<!-- Spot 1 -->
+<div class="group relative bg-surface-container-lowest rounded-3xl overflow-hidden hover:shadow-xl transition-all duration-300">
+<div class="relative h-48">
+<img alt="안동 하회마을" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="scenic view of a traditional Korean folk village with tiled roofs and mud walls surrounded by lush green mountains in morning mist" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMVj6-iQwYb3DduNyaMb98V5u-kM2p2uRu7YoTLrnHuZqWfzEV-Wt2sF-49NbDdL698og-OfcOepSpl1718Kxq9ooOUkzKqid_Q5imYoyQKmTOb0Ayf86RHw7AZExc5PCXXTVNzKGUdJlV8x5JwaVSiUwoqB90mQBWRlQ83yu8GpOX_d4F314sGjiEP7Dod-jiggXuzc-_XQGiOQYUVo9FieukoqxLOB59OOU1FHA69IR1Kb6KDL5jREjn0JvUQ5Fq-9US_gq-GF4"/>
+<div class="absolute top-4 left-4 px-3 py-1 bg-secondary text-white text-[10px] font-bold rounded-full">명소</div>
+<label class="absolute top-4 right-4 flex items-center justify-center">
+<input checked="" class="hidden peer" type="checkbox"/>
+<div class="w-8 h-8 rounded-full bg-white/40 backdrop-blur-md border border-white/20 flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary transition-all cursor-pointer">
+<span class="material-symbols-outlined text-white text-[20px]">check</span>
+</div>
+</label>
+</div>
+<div class="p-5">
+<h4 class="text-lg font-bold mb-1">안동 하회마을</h4>
+<p class="text-on-surface-variant text-sm mb-3">유네스코 세계문화유산, 전통의 숨결</p>
+<div class="flex items-center gap-3 text-xs text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">star</span> 4.8</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">map</span> 4.2km</span>
+</div>
+</div>
+</div>
+<!-- Spot 2 -->
+<div class="group relative bg-surface-container-lowest rounded-3xl overflow-hidden hover:shadow-xl transition-all duration-300">
+<div class="relative h-48">
+<img alt="안동 찜닭 골목" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="close up of delicious Korean Jjimdak spicy braised chicken dish with vegetables and glass noodles in a large round plate with warm steam rising" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAenZaJvFUnhCHzgHIYhnjmEDr7kANR-ItTpBKpm4nL0LfZAUjgd0pe1B3Bu9v646OM9A1hnbLBYfLnTfeObV9IiO2XRTtJkUeGLcP7OJ6T0Lk5belJXqHXhiiLwsDjXHgOYoHnR6c83ZUlcyp4lHEu6IBMX1uKfS2myAxIsHhSvxNpG9ydLlohQg2TymA0l8PMXqJwGCtvUrYfzQyoKjFjCjuTFq7G17AyFuGJD94ZjsAiZYnQIIp0lb0tPo9lIrzYDQLDOxr6Lk"/>
+<div class="absolute top-4 left-4 px-3 py-1 bg-[#ffb703] text-on-primary-fixed text-[10px] font-bold rounded-full">맛집</div>
+<label class="absolute top-4 right-4 flex items-center justify-center">
+<input checked="" class="hidden peer" type="checkbox"/>
+<div class="w-8 h-8 rounded-full bg-white/40 backdrop-blur-md border border-white/20 flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary transition-all cursor-pointer">
+<span class="material-symbols-outlined text-white text-[20px]">check</span>
+</div>
+</label>
+</div>
+<div class="p-5">
+<h4 class="text-lg font-bold mb-1">구시장 찜닭거리</h4>
+<p class="text-on-surface-variant text-sm mb-3">매콤달콤한 안동의 시그니처 미식</p>
+<div class="flex items-center gap-3 text-xs text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">star</span> 4.6</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">map</span> 0.8km</span>
+</div>
+</div>
+</div>
+<!-- Spot 3 -->
+<div class="group relative bg-surface-container-lowest rounded-3xl overflow-hidden hover:shadow-xl transition-all duration-300">
+<div class="relative h-48">
+<img alt="월영교" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="elegant wooden bridge lit with blue and purple LED lights reflecting in a calm river at night with mountains in the background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVUkg4dq2y5AvrOqDtCKqsyOSGKYvwU3SIeg7hlKP53bRW2D43UjaAUdu7kOqd18_0-0d3fReJok8TNXverwixcAbOiNCbyWOOq2ANSKwVQMNe3FlygWRN1eG5rGEwvFx13JlrUyUCrpwB0opeswh4yo44zalyv1P_Zh9yel5utqQNh74JAGFYOaAu2RaAlpXD4wz7kPlX0RTJ_HYUXjl6h0-ZLQgBFzXMko_D5N16kL-sXx1_QtDBuGhoRHzigSTSeMwBWZ8xw7M"/>
+<div class="absolute top-4 left-4 px-3 py-1 bg-secondary text-white text-[10px] font-bold rounded-full">명소</div>
+<label class="absolute top-4 right-4 flex items-center justify-center">
+<input class="hidden peer" type="checkbox"/>
+<div class="w-8 h-8 rounded-full bg-white/40 backdrop-blur-md border border-white/20 flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary transition-all cursor-pointer">
+<span class="material-symbols-outlined text-white text-[20px]">check</span>
+</div>
+</label>
+</div>
+<div class="p-5">
+<h4 class="text-lg font-bold mb-1">월영교</h4>
+<p class="text-on-surface-variant text-sm mb-3">한국에서 가장 긴 목조 다리의 야경</p>
+<div class="flex items-center gap-3 text-xs text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">star</span> 4.9</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">map</span> 2.5km</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Option Area Section -->
+<section class="bg-surface-container-low rounded-[2rem] p-8 space-y-10">
+<div class="space-y-6">
+<label class="block">
+<span class="text-lg font-bold mb-3 block">출발지 입력</span>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">my_location</span>
+<input class="w-full bg-surface-container-highest border-none rounded-2xl py-4 pl-12 pr-4 focus:ring-2 focus:ring-primary/30 transition-all font-medium" placeholder="어디서 출발하시나요?" type="text" value="서울역"/>
+</div>
+</label>
+<div class="space-y-4">
+<span class="text-lg font-bold block">이동 수단</span>
+<div class="flex gap-4">
+<label class="flex-1 cursor-pointer">
+<input checked="" class="hidden peer" name="transport" type="radio" value="car"/>
+<div class="flex flex-col items-center justify-center p-4 rounded-2xl bg-surface-container-highest peer-checked:bg-primary peer-checked:text-white transition-all gap-2 border-2 border-transparent peer-checked:border-primary-container">
+<span class="material-symbols-outlined text-2xl">directions_car</span>
+<span class="text-sm font-bold">자차</span>
+</div>
+</label>
+<label class="flex-1 cursor-pointer">
+<input class="hidden peer" name="transport" type="radio" value="public"/>
+<div class="flex flex-col items-center justify-center p-4 rounded-2xl bg-surface-container-highest peer-checked:bg-primary peer-checked:text-white transition-all gap-2 border-2 border-transparent peer-checked:border-primary-container">
+<span class="material-symbols-outlined text-2xl">train</span>
+<span class="text-sm font-bold">대중교통</span>
+</div>
+</label>
+</div>
+</div>
+<div class="space-y-4">
+<span class="text-lg font-bold block">여행 일정</span>
+<div class="grid grid-cols-3 gap-3">
+<button class="py-3 rounded-2xl bg-primary text-white font-bold text-sm shadow-lg shadow-primary/20">당일</button>
+<button class="py-3 rounded-2xl bg-surface-container-highest text-on-surface-variant font-bold text-sm hover:bg-surface-container-high">1박 2일</button>
+<button class="py-3 rounded-2xl bg-surface-container-highest text-on-surface-variant font-bold text-sm hover:bg-surface-container-high">2박 3일</button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Fixed Bottom Action Bar -->
+<div class="fixed bottom-0 left-0 right-0 p-6 bg-white/90 backdrop-blur-xl border-t border-slate-100/50 z-50">
+<div class="max-w-7xl mx-auto">
+<button class="w-full py-5 bg-primary hover:bg-[#832600] active:scale-[0.98] transition-all text-white rounded-3xl font-bold text-lg flex items-center justify-center gap-3 shadow-xl shadow-primary/20">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                AI 코스 생성하기
+            </button>
+</div>
+</div>
+</body></html>

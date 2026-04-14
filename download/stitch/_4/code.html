@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IdalTrip - 코스 지도 보기</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Be+Vietnam+Pro:wght@400;500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #f9f9f9;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ba1a1a",
+                        "inverse-primary": "#ffb59d",
+                        "on-primary-fixed": "#390c00",
+                        "on-background": "#1a1c1c",
+                        "secondary-fixed": "#d6e3ff",
+                        "surface-variant": "#e2e2e2",
+                        "tertiary-fixed-dim": "#59d5fb",
+                        "primary": "#ab3500",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#1a1c1c",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#b5ebff",
+                        "on-tertiary-container": "#003744",
+                        "surface": "#f9f9f9",
+                        "primary-container": "#ff6b35",
+                        "surface-bright": "#f9f9f9",
+                        "surface-tint": "#ab3500",
+                        "on-secondary-fixed-variant": "#00468a",
+                        "surface-container-high": "#e8e8e8",
+                        "on-tertiary-fixed": "#001f28",
+                        "on-secondary-container": "#004180",
+                        "primary-fixed": "#ffdbd0",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#a8c8ff",
+                        "inverse-surface": "#2f3131",
+                        "secondary": "#225ea9",
+                        "surface-dim": "#dadada",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#594139",
+                        "on-primary-fixed-variant": "#832600",
+                        "outline": "#8d7168",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-tertiary-fixed-variant": "#004e60",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#5f1900",
+                        "background": "#f9f9f9",
+                        "surface-container-low": "#f3f3f3",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#f1f1f1",
+                        "primary-fixed-dim": "#ffb59d",
+                        "tertiary": "#00677e",
+                        "on-secondary-fixed": "#001b3c",
+                        "outline-variant": "#e1bfb5",
+                        "tertiary-container": "#00a7cb",
+                        "surface-container": "#eeeeee",
+                        "secondary-container": "#7cafff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Pretendard"],
+                        "label": ["Pretendard"]
+                    }
+                },
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-white/80 dark:bg-slate-950/80 backdrop-blur-md docked full-width top-0 z-50 fixed w-full">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<div class="flex items-center gap-3">
+<button class="hover:opacity-80 transition-opacity scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-on-surface">arrow_back</span>
+</button>
+<h1 class="text-xl font-black text-[#ab3500] dark:text-[#ff6b35] tracking-tight font-['Plus_Jakarta_Sans']">IdalTrip</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:opacity-80 transition-opacity scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-on-surface">search</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container">
+<img alt="사용자 프로필" data-alt="close-up portrait of a smiling young person with a friendly expression in soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiDFEPI0gTkLfO04aSrSlQqJ5KeeQMlBUdQs8nHkU3Xa2-LtOeCGuqBw9PDbERfwxEDtBgk2I2W7qSSEJVpYp00PZ8e-cWQiO3e6-spHb0OUZEu0-gL8n_6rHHvRCQ2UhAfrA4hac_CnstKRYZWLVIOL-nJwLF1VNUjXphRTUcVs7JWMaHPo8h3DA3ODxZqxLU4GjaIZrZsjFllcmovQfLF7onNNzs0mYrQDETg-IYSKhIgzjRKEym8zNKhqIMbKQLhLK71UbfMFU"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Area: Map + Cards -->
+<main class="flex-grow pt-16 flex flex-col h-screen overflow-hidden">
+<!-- Interactive Map Area -->
+<section class="flex-grow relative w-full bg-surface-container-low">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover grayscale-[0.2] contrast-[0.9]" data-alt="clean minimalist city map interface with stylized roads and grey blocks on a neutral background" data-location="Seoul" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOrriFvw3mG8rAn3lcAXHv5Z4QZ9yE-bWMnW-U1VZiPcSknBKwW1CPcgAhtJGf4W2WifvtQQY8OkleJP9xL1MXtPLKmvwYKKyJmtww0J60lSQF-uW7fxRqEwdxLVlCxhGBQnHJsEh_wKgJ8GFQx-pLG8Y2uaG4_zyAeY-6ce5EteTbyhxtL1WjPOuFyUI8hz4WkidQynIy5pHE7UOVjKmAQnIjsPRfcx9kbQtdxUJwGFcMx6y6XYd8C0G1E3Uo96odSQlwXFZccnY"/>
+</div>
+<!-- Custom Map Route Markers (Simulated Overlay) -->
+<div class="absolute inset-0 z-10 pointer-events-none">
+<!-- Marker 1 -->
+<div class="absolute top-[30%] left-[25%] pointer-events-auto">
+<div class="relative flex flex-col items-center">
+<div class="bg-primary text-on-primary w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-lg border-2 border-white">1</div>
+<div class="mt-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-[10px] font-bold shadow-sm border border-outline-variant/20">남산서울타워</div>
+</div>
+</div>
+<!-- Route Line Path (Simulated with simple svg) -->
+<svg class="absolute inset-0 w-full h-full opacity-50" viewbox="0 0 400 600">
+<path d="M 100 200 L 250 350 L 180 500" fill="transparent" stroke="#ab3500" stroke-dasharray="8 4" stroke-width="4"></path>
+</svg>
+<!-- Marker 2 -->
+<div class="absolute top-[55%] left-[60%] pointer-events-auto">
+<div class="relative flex flex-col items-center">
+<div class="bg-primary text-on-primary w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-lg border-2 border-white">2</div>
+<div class="mt-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-[10px] font-bold shadow-sm border border-outline-variant/20">익선동 카페거리</div>
+</div>
+</div>
+<!-- Marker 3 -->
+<div class="absolute top-[80%] left-[45%] pointer-events-auto">
+<div class="relative flex flex-col items-center">
+<div class="bg-primary text-on-primary w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-lg border-2 border-white">3</div>
+<div class="mt-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-[10px] font-bold shadow-sm border border-outline-variant/20">광장시장</div>
+</div>
+</div>
+</div>
+<!-- Floating Tool Buttons -->
+<div class="absolute right-4 top-4 flex flex-col gap-2 z-20">
+<button class="bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-on-surface">my_location</span>
+</button>
+<button class="bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-on-surface">layers</span>
+</button>
+</div>
+</section>
+<!-- Bottom Slider: Place Cards -->
+<section class="absolute bottom-24 left-0 w-full z-30 pointer-events-none">
+<div class="max-w-7xl mx-auto px-4 pb-4 pointer-events-auto">
+<div class="flex overflow-x-auto gap-4 hide-scrollbar snap-x snap-mandatory px-2">
+<!-- Card 1 -->
+<div class="min-w-[85vw] md:min-w-[400px] bg-white/95 backdrop-blur-md rounded-3xl p-4 shadow-2xl snap-center flex gap-4">
+<div class="w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Namsan Seoul Tower at dusk with city lights glowing below under a purple and orange sunset sky" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6u-cd1m_w5S8eg38V8pezX9la4Nf3IEuhmLRDO-4m_JC7G1hHdrrDrv2UR1lNj7TcK6v1O_FEvzvAwMf7Ug45zti64fTKnLJUsBDD848kD19cBrVl7L44zgRGbvngNKlYeh6nHrl9R27_21Ny36ZuTPhqq7d1r3gt7x5pg7_QOjMfIMHPkBrsc5H7h71jvcNoiL7S9nknKD72wSb91VsW3RvkHSfnr5l6HRPeeVoZhvzE_Fe3Szs6mvgLYBRthx5NpvMMDf92oc4"/>
+</div>
+<div class="flex-grow flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between">
+<span class="text-[10px] font-medium text-primary px-2 py-0.5 bg-primary/10 rounded-full">관광명소</span>
+<div class="flex items-center text-secondary gap-1">
+<span class="material-symbols-outlined text-sm">local_parking</span>
+<span class="text-[10px] font-medium">자체 주차장 유</span>
+</div>
+</div>
+<h3 class="text-lg font-bold text-on-surface mt-1">남산서울타워</h3>
+<p class="text-xs text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">schedule</span>
+                                    출발지에서 0분
+                                </p>
+</div>
+<button class="mt-2 w-full bg-[#f9e000] text-on-surface py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-2 active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-sm">navigation</span>
+                                카카오맵 네비
+                            </button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="min-w-[85vw] md:min-w-[400px] bg-white/95 backdrop-blur-md rounded-3xl p-4 shadow-2xl snap-center flex gap-4">
+<div class="w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="charming traditional Korean Hanok street in Ikseon-dong with modern cafe interiors visible through glass windows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAY7hOS1-FeJYHVb5RD3BTisyBTV07xq6uJo_7bNi0o4v6ou7ONMgQP3uZqu4lKCMIRJmfs06o7vreymEbZz6zBifO8zBwWZLrrWWXlz9HhL0jwLaVqqvb3RLuZJXeKOfidsumqkmavD7ypTZs8yccgI_Mv2JKBdkxSXDL8ZX-BgI2W9i_R1FipzgAkLaPLpcAXeW6FpbhYf1eIeDWAndMFqG_AQPt8S3Xee_Xosste1HXAASslVTXXxLkeULHWuu9f8VJM3PL57pE"/>
+</div>
+<div class="flex-grow flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between">
+<span class="text-[10px] font-medium text-primary px-2 py-0.5 bg-primary/10 rounded-full">카페거리</span>
+<div class="flex items-center text-secondary gap-1">
+<span class="material-symbols-outlined text-sm">local_parking</span>
+<span class="text-[10px] font-medium">공영주차장 권장</span>
+</div>
+</div>
+<h3 class="text-lg font-bold text-on-surface mt-1">익선동 카페거리</h3>
+<p class="text-xs text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">directions_car</span>
+                                    이전 장소에서 15분
+                                </p>
+</div>
+<button class="mt-2 w-full bg-[#f9e000] text-on-surface py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-2 active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-sm">navigation</span>
+                                카카오맵 네비
+                            </button>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="min-w-[85vw] md:min-w-[400px] bg-white/95 backdrop-blur-md rounded-3xl p-4 shadow-2xl snap-center flex gap-4">
+<div class="w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="vibrant Gwangjang Market food stalls with steaming hot dishes and local people enjoying street food under warm lights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDq1F_gveOnE4GlhQP6gjzSLfj4Pvby9aNJdPAKpYGLdHP4ZNcTYiMAD3DL5Sg3MpZuw6Bz9A6DpzCZL63MJ7gV7tdUImVNAUiHhILrzW2G_c4dz1AWkPVpLR8Xje2MIj2HEfXGYuD0XT6kDu7yV-qhx75egGWbAsCGrC7B-t72y_J00VF_ERo8JlLt2FXjakuQqemkIDU4CuQ6gmnBEpqxRaour3fw90cRh7KJdzfRjuCfDKy3dpY9SwvOfK3AyEfFGeyeKaxChzk"/>
+</div>
+<div class="flex-grow flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between">
+<span class="text-[10px] font-medium text-primary px-2 py-0.5 bg-primary/10 rounded-full">전통시장</span>
+<div class="flex items-center text-secondary gap-1">
+<span class="material-symbols-outlined text-sm">info</span>
+<span class="text-[10px] font-medium">유료 주차장 이용</span>
+</div>
+</div>
+<h3 class="text-lg font-bold text-on-surface mt-1">광장시장</h3>
+<p class="text-xs text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">directions_car</span>
+                                    이전 장소에서 8분
+                                </p>
+</div>
+<button class="mt-2 w-full bg-[#f9e000] text-on-surface py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-2 active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-sm">navigation</span>
+                                카카오맵 네비
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-2 bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg rounded-t-3xl shadow-[0_-4px_20px_0_rgba(0,0,0,0.05)] border-t border-slate-100 dark:border-slate-800">
+<!-- 홈 -->
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-4 py-2 hover:text-[#ab3500] dark:hover:text-[#ff6b35] transition-colors" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-['Pretendard'] font-medium text-[11px] mt-1">홈</span>
+</a>
+<!-- 내 여행 (Active) -->
+<a class="flex flex-col items-center justify-center text-[#ff6b35] dark:text-[#ff6b35] font-bold bg-[#ff6b35]/10 rounded-2xl px-6 py-2 active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">map</span>
+<span class="font-['Pretendard'] font-bold text-[11px] mt-1">내 여행</span>
+</a>
+<!-- 축제 -->
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-4 py-2 hover:text-[#ab3500] dark:hover:text-[#ff6b35] transition-colors" href="#">
+<span class="material-symbols-outlined">festival</span>
+<span class="font-['Pretendard'] font-medium text-[11px] mt-1">축제</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Pretendard:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#59d5fb",
+                    "primary": "#ab3500",
+                    "on-error-container": "#93000a",
+                    "surface-variant": "#e2e2e2",
+                    "tertiary-fixed": "#b5ebff",
+                    "surface": "#f9f9f9",
+                    "on-tertiary-container": "#003744",
+                    "primary-container": "#ff6b35",
+                    "on-surface": "#1a1c1c",
+                    "error-container": "#ffdad6",
+                    "inverse-primary": "#ffb59d",
+                    "on-primary-fixed": "#390c00",
+                    "on-background": "#1a1c1c",
+                    "error": "#ba1a1a",
+                    "secondary-fixed": "#d6e3ff",
+                    "secondary-fixed-dim": "#a8c8ff",
+                    "surface-dim": "#dadada",
+                    "secondary": "#225ea9",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-surface": "#2f3131",
+                    "surface-tint": "#ab3500",
+                    "surface-bright": "#f9f9f9",
+                    "surface-container-high": "#e8e8e8",
+                    "on-secondary-fixed-variant": "#00468a",
+                    "primary-fixed": "#ffdbd0",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed": "#001f28",
+                    "on-secondary-container": "#004180",
+                    "on-primary": "#ffffff",
+                    "surface-container-low": "#f3f3f3",
+                    "primary-fixed-dim": "#ffb59d",
+                    "inverse-on-surface": "#f1f1f1",
+                    "surface-container-highest": "#e2e2e2",
+                    "on-tertiary-fixed-variant": "#004e60",
+                    "on-surface-variant": "#594139",
+                    "on-primary-fixed-variant": "#832600",
+                    "outline": "#8d7168",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-primary-container": "#5f1900",
+                    "background": "#f9f9f9",
+                    "surface-container": "#eeeeee",
+                    "tertiary-container": "#00a7cb",
+                    "secondary-container": "#7cafff",
+                    "tertiary": "#00677e",
+                    "on-secondary-fixed": "#001b3c",
+                    "outline-variant": "#e1bfb5"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans", "Pretendard"],
+                    "body": ["Pretendard"],
+                    "label": ["Pretendard"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Pretendard', sans-serif; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary-fixed">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm">
+<div class="flex justify-between items-center px-8 h-20 max-w-[1920px] mx-auto">
+<div class="text-2xl font-bold tracking-tight text-[#ff6b35]">IdalTrip</div>
+<div class="hidden md:flex items-center gap-10">
+<a class="text-slate-600 dark:text-slate-300 hover:text-[#ff6b35] font-['Plus_Jakarta_Sans','Pretendard'] text-sm font-medium transition-colors duration-200" href="#">홈</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-[#ff6b35] font-['Plus_Jakarta_Sans','Pretendard'] text-sm font-medium transition-colors duration-200" href="#">축제 정보</a>
+<a class="text-[#ff6b35] font-bold border-b-2 border-[#ff6b35] pb-1 font-['Plus_Jakarta_Sans','Pretendard'] text-sm" href="#">AI 코스 추천</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-[#ff6b35] font-['Plus_Jakarta_Sans','Pretendard'] text-sm font-medium transition-colors duration-200" href="#">커뮤니티</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="font-['Plus_Jakarta_Sans','Pretendard'] text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 px-4 py-2 rounded-xl transition-all">로그인</button>
+<button class="bg-primary-container text-on-primary font-['Plus_Jakarta_Sans','Pretendard'] text-sm font-bold px-6 py-2.5 rounded-xl hover:opacity-90 active:scale-95 transition-all">시작하기</button>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="pt-28 pb-12 px-8 max-w-[1440px] mx-auto">
+<div class="flex flex-col gap-8">
+<!-- Hero Header Section -->
+<header class="flex flex-col md:flex-row justify-between items-end gap-6">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="bg-primary-container/10 text-primary px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase">AI Curation</span>
+<h2 class="text-secondary font-bold text-sm">부산의 바다와 예술이 흐르는 2박 3일</h2>
+</div>
+<h1 class="text-4xl md:text-5xl font-extrabold font-headline tracking-tight leading-tight">
+                        해운대 불꽃축제 &amp; <br/>광안리 시티라이트 코스
+                    </h1>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 bg-surface-container-low px-5 py-3 rounded-xl text-sm font-medium hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]">share</span> 공유하기
+                    </button>
+<button class="flex items-center gap-2 bg-primary-container text-on-primary px-6 py-3 rounded-xl text-sm font-bold hover:opacity-95 transition-all shadow-lg shadow-primary-container/20">
+<span class="material-symbols-outlined text-[18px]">bookmark</span> 코스 저장
+                    </button>
+</div>
+</header>
+<!-- Dashboard Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left: Timeline -->
+<div class="lg:col-span-7 flex flex-col gap-6">
+<!-- Day Selector -->
+<div class="flex p-1.5 bg-surface-container-low rounded-2xl w-fit">
+<button class="px-8 py-2.5 bg-white rounded-xl shadow-sm text-sm font-bold text-primary transition-all">Day 1</button>
+<button class="px-8 py-2.5 text-sm font-medium text-slate-500 hover:text-slate-800 transition-all">Day 2</button>
+<button class="px-8 py-2.5 text-sm font-medium text-slate-500 hover:text-slate-800 transition-all">Day 3</button>
+</div>
+<!-- Timeline Cards -->
+<div class="relative pl-8 space-y-8">
+<!-- Vertical Line -->
+<div class="absolute left-[7px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-primary/40 via-surface-container-highest to-transparent"></div>
+<!-- Card 1 -->
+<div class="relative">
+<div class="absolute -left-[31px] top-6 w-4 h-4 rounded-full border-4 border-surface bg-primary shadow-sm z-10"></div>
+<div class="bg-surface-container-lowest rounded-xl p-5 flex gap-6 hover:shadow-xl transition-shadow group">
+<div class="w-32 h-32 flex-shrink-0 rounded-xl overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Modern high-end hotel lobby with ocean view through large glass windows at dawn with soft blue and orange light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBO7LFr-4blrJUeHfVT6Zz0DE-ULL0sa2EV2Nlcq-Z4PoQAERmqEmF75cbmTfXFpu-VqyIG7k8KAbwjec8BDgKeS3GBpmHuRHktOwNWV0M3f4cMz67qAPm12yBvroYMRd34lyG4QO1eeKbyGymSWgTRdjlW9ALA1F3mAmUIwgsvGKSquF60emckL-wW3Oiyi1FKkH-gbzpeSRdMNbq6KF7YSsAroT7aEQW1k5SUFO0bwuAglX5AedzswaAksCmPHRmC4bF9IB8vlto"/>
+</div>
+<div class="flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-1">
+<span class="text-primary font-bold font-headline text-xs">10:00 AM</span>
+<button class="text-secondary text-xs font-semibold flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-[14px]">map</span> 카카오맵
+                                        </button>
+</div>
+<h3 class="text-xl font-bold mb-2">시그니엘 부산 체크인</h3>
+<p class="text-sm text-slate-500 leading-relaxed mb-4">여행의 시작은 탁 트인 오션뷰에서 시작하세요. 짐을 맡기고 가벼운 옷차림으로 해변 산책을 추천합니다.</p>
+<div class="flex gap-2 mt-auto">
+<span class="bg-surface-container text-slate-500 px-2.5 py-1 rounded-lg text-[11px] font-medium">숙소</span>
+<span class="bg-surface-container text-slate-500 px-2.5 py-1 rounded-lg text-[11px] font-medium">럭셔리</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="relative">
+<div class="absolute -left-[31px] top-6 w-4 h-4 rounded-full border-4 border-surface bg-surface-container-highest shadow-sm z-10"></div>
+<div class="bg-surface-container-lowest rounded-xl p-5 flex gap-6 hover:shadow-xl transition-shadow group">
+<div class="w-32 h-32 flex-shrink-0 rounded-xl overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Authentic Korean grilled seafood platter on a rustic table with a view of the sea through a window, warm sunset lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEBOIi7urG8noKV3_XczD2LBQtz7I4EHfgzN9u80UO-EVGz0lOFjlvVDomAKhEPFMmfOftR-rX00cqvX4vpAm56Ztd6qixxSt3Sdl4hkKKnz99WYW4EA0Pfnq1dsNEZqyOvgQPxIx4msfgqgvA9GwwdbRxjhLTntXSIPdRBzFJjnYkIpU0J6qj__vPDq8tUj5EtkBfe82sUqPiPeY7qKjptfEBAUf7xM-qSOnrxliZiXE0_Rojvl-jlMolQUsJ97CAFoZC_ts5E_I"/>
+</div>
+<div class="flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-1">
+<span class="text-slate-400 font-bold font-headline text-xs">12:30 PM</span>
+<button class="text-secondary text-xs font-semibold flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-[14px]">map</span> 카카오맵
+                                        </button>
+</div>
+<h3 class="text-xl font-bold mb-2">미포 씨푸드 그릴</h3>
+<p class="text-sm text-slate-500 leading-relaxed mb-4">현지인들이 즐겨 찾는 숨은 맛집입니다. 신선한 조개구이와 함께 부산의 바다 향을 만끽해보세요.</p>
+<div class="flex gap-2 mt-auto">
+<span class="bg-surface-container text-slate-500 px-2.5 py-1 rounded-lg text-[11px] font-medium">음식점</span>
+<span class="bg-surface-container text-slate-500 px-2.5 py-1 rounded-lg text-[11px] font-medium">현지인추천</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="relative">
+<div class="absolute -left-[31px] top-6 w-4 h-4 rounded-full border-4 border-surface bg-surface-container-highest shadow-sm z-10"></div>
+<div class="bg-surface-container-lowest rounded-xl p-5 flex gap-6 hover:shadow-xl transition-shadow group">
+<div class="w-32 h-32 flex-shrink-0 rounded-xl overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A modern electric tram traveling along a coastal rail with blue sea and pine trees, bright sunny afternoon lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXLhw34OE9VmRIEmJMhQG8e012Up92EOh9hyOyLTGEvjWrkH5nFWauBPa3n7fmoPNDWXKfhSnSrtlC_4rOuZ3dcKUCsNwxFKorymLcl0JpUGyyqWtyYE8Mw1JhxMgeZvUB6RcMrgjMK2gH6l7ARDjsHd4p4_oBZejUWjjT1F_r_aGwbJfyMbNWoX1LxA-nVqzsRX8BI28A2WV08DqVL8WV83xP_cHEK7g2QSLsal9EGM2yzN1DrmQS2gmFhpEFK8Uhfi6ZQMtTAXc"/>
+</div>
+<div class="flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-1">
+<span class="text-slate-400 font-bold font-headline text-xs">03:00 PM</span>
+<button class="text-secondary text-xs font-semibold flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-[14px]">map</span> 카카오맵
+                                        </button>
+</div>
+<h3 class="text-xl font-bold mb-2">블루라인파크 해변열차</h3>
+<p class="text-sm text-slate-500 leading-relaxed mb-4">해안 절경을 따라 달리는 열차에서 감상하는 풍경은 부산 여행의 하이라이트입니다.</p>
+<div class="flex gap-2 mt-auto">
+<span class="bg-surface-container text-slate-500 px-2.5 py-1 rounded-lg text-[11px] font-medium">액티비티</span>
+<span class="bg-surface-container text-slate-500 px-2.5 py-1 rounded-lg text-[11px] font-medium">풍경명소</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Summary & Map -->
+<div class="lg:col-span-5 flex flex-col gap-6">
+<!-- Map Preview -->
+<div class="rounded-xl overflow-hidden bg-surface-container-high h-[320px] relative">
+<img class="w-full h-full object-cover" data-alt="Minimalist top-down map view of a coastal city with soft blue water and simplified road network, editorial style" data-location="Busan" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-WEUasDwmjkGJCzfxJrBWolVpr_AUTLmLzCYjgOehRTmhf35St-hZAx9RxjuAO17IX2saCUq_jBcYqfyJ-JyV9IfxVH4QELhTY3jX86FjKqmTeFVP446bJGCQ-SPI-U1szthge738tlbnV_7LtYUL9h3ITPmvnm2SuIL25FfSznfhzZCNdkOqlDuD_v6l4w3tgX8TvWIIH_akWyRWyEJHqYVMHV1UPUL_0J-yDIbzrT3fVMy2aCje5PMLu74Q0ToOshFsUR2v9n8"/>
+<div class="absolute bottom-4 right-4 glass-panel px-4 py-2 rounded-xl flex items-center gap-2 border border-white/20">
+<span class="material-symbols-outlined text-[18px] text-primary">zoom_in</span>
+<span class="text-xs font-bold">크게 보기</span>
+</div>
+</div>
+<!-- Course Stats -->
+<div class="bg-surface-container-lowest rounded-xl p-8 border border-surface-container-low">
+<h4 class="text-lg font-bold mb-6">코스 요약</h4>
+<div class="grid grid-cols-3 gap-4">
+<div class="flex flex-col items-center p-4 bg-surface-container-low rounded-xl">
+<span class="material-symbols-outlined text-secondary mb-2">schedule</span>
+<span class="text-[10px] text-slate-400 font-bold mb-1">총 소요시간</span>
+<span class="text-base font-extrabold">2박 3일</span>
+</div>
+<div class="flex flex-col items-center p-4 bg-surface-container-low rounded-xl">
+<span class="material-symbols-outlined text-secondary mb-2">payments</span>
+<span class="text-[10px] text-slate-400 font-bold mb-1">예상 비용</span>
+<span class="text-base font-extrabold">45만원~</span>
+</div>
+<div class="flex flex-col items-center p-4 bg-surface-container-low rounded-xl">
+<span class="material-symbols-outlined text-secondary mb-2">location_on</span>
+<span class="text-[10px] text-slate-400 font-bold mb-1">방문 장소</span>
+<span class="text-base font-extrabold">12곳</span>
+</div>
+</div>
+</div>
+<!-- AI Insight Bubble -->
+<div class="relative bg-primary/5 rounded-xl p-6 border border-primary/10">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary">smart_toy</span>
+</div>
+<span class="font-bold text-primary">Idal AI 추천 사유</span>
+</div>
+<p class="text-sm leading-relaxed text-on-primary-container font-medium">
+                            "사용자님의 취향 분석 결과, <span class="text-primary font-bold">오션뷰 숙소와 사진 촬영 명소</span>를 선호하시는 것으로 나타났습니다. 이번 코스는 부산의 가장 화려한 불꽃축제 기간에 맞춰, 인파를 피해 축제를 감상할 수 있는 시크릿 스팟들을 중심으로 구성되었습니다. 특히 해변열차는 해 질 녘 시간에 맞춰 예약하여 노을을 보실 수 있게 조정했습니다."
+                        </p>
+<!-- Speech Bubble Tail -->
+<div class="absolute -top-3 left-10 w-6 h-6 bg-primary/5 rotate-45 border-l border-t border-primary/10 -z-10"></div>
+</div>
+<!-- Next Action -->
+<button class="w-full bg-secondary text-on-secondary py-5 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-secondary-container transition-all">
+                        이 코스로 여행 확정하기 <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 px-8 bg-slate-50 dark:bg-slate-950 border-t border-slate-100 dark:border-slate-800">
+<div class="flex flex-col items-center gap-6 border-t pt-8">
+<div class="text-lg font-bold text-slate-400">IdalTrip</div>
+<div class="flex gap-8">
+<a class="font-['Pretendard'] text-xs text-slate-500 hover:text-slate-600 hover:underline transition-all" href="#">이용약관</a>
+<a class="font-['Pretendard'] text-xs text-slate-500 hover:text-slate-600 hover:underline transition-all" href="#">개인정보처리방침</a>
+<a class="font-['Pretendard'] text-xs text-slate-500 hover:text-slate-600 hover:underline transition-all" href="#">고객센터</a>
+<a class="font-['Pretendard'] text-xs text-slate-500 hover:text-slate-600 hover:underline transition-all" href="#">광고문의</a>
+</div>
+<p class="font-['Pretendard'] text-xs text-slate-500">© 2024 IdalTrip. All rights reserved.</p>
+</div>
+</footer>
+<!-- FAB (Suppressed as per rules for detailed/transactional screens) -->
+</body></html>
