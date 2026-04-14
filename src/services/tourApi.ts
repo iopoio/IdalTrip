@@ -10,6 +10,8 @@ export const tourApi = {
       const formattedMonth = month.padStart(2, '0');
       const year = new Date().getFullYear();
       const startDate = `${year}${formattedMonth}01`;
+      const lastDay = new Date(year, parseInt(month), 0).getDate();
+      const endDate = `${year}${formattedMonth}${lastDay}`;
 
       const response = await axios.get(`${BASE_URL}/searchFestival2`, {
         params: {
@@ -19,6 +21,7 @@ export const tourApi = {
           MobileApp: 'IdalTrip',
           arrange: 'O',
           eventStartDate: startDate,
+          eventEndDate: endDate,
           numOfRows: 20,
           pageNo: 1
         }
