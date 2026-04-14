@@ -1,43 +1,51 @@
-import { Calendar } from 'lucide-react';
-import { formatKTODate } from '../lib/utils';
+import React from 'react';
+import { Calendar, MapPin } from 'lucide-react';
 import type { Festival } from '../types';
 
 interface FestivalCardProps {
   festival: Festival;
+  onClick: () => void;
 }
 
-const FestivalCard = ({ festival }: FestivalCardProps) => {
+const FestivalCard: React.FC<FestivalCardProps> = ({ festival, onClick }) => {
+  // Extract region from address
+  const region = festival.addr1?.split(' ')[0] || '전국';
+  
   return (
-    <div className="group bg-surface-container-lowest rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-500">
-      {/* Thumbnail */}
-      <div className="h-[320px] overflow-hidden relative">
+    <div 
+      onClick={onClick}
+      className="group cursor-pointer"
+    >
+      <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden mb-5 shadow-premium border border-black/5 bg-gray-100">
         {festival.firstimage ? (
-          <img
-            src={festival.firstimage}
+          <img 
+            src={festival.firstimage} 
             alt={festival.title}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=1000&auto=format&fit=crop';
+            }}
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-primary/15 to-secondary/10 flex items-center justify-center">
-            <Calendar size={48} className="text-primary opacity-30" strokeWidth={1.5} />
+          <div className="w-full h-full bg-gradient-to-br from-brand-primary/20 to-brand-secondary/10 flex items-center justify-center">
+             <MapPin size={40} className="text-brand-primary opacity-30" />
           </div>
         )}
-        <div className="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur rounded-lg text-xs font-bold text-primary">
-          진행중
+        
+        {/* Status Badge from Mockup */}
+        <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/20">
+          <span className="text-[11px] font-bold text-white tracking-widest uppercase">진행중</span>
         </div>
       </div>
-
-      {/* Content */}
-      <div className="p-8">
-        <p className="text-secondary font-bold text-sm mb-2">
-          {festival.addr1 ? `${festival.addr1.split(' ')[0]} ${festival.addr1.split(' ')[1] || ''}`.trim() : '전국'}
-        </p>
-        <h3 className="text-xl font-bold mb-4 text-on-surface leading-snug group-hover:text-primary transition-colors line-clamp-2">
+      
+      <div className="px-1">
+        <span className="text-[13px] font-bold text-brand-primary mb-2 block uppercase tracking-wider">{region}</span>
+        <h3 className="text-[19px] font-bold text-brand-secondary mb-3 leading-tight group-hover:text-brand-primary transition-colors">
           {festival.title}
         </h3>
-        <div className="flex items-center gap-1.5 text-on-surface-variant text-sm">
+        <div className="flex items-center gap-2 text-surface-text-muted text-[13px] font-medium">
           <Calendar size={14} />
-          <span>{formatKTODate(festival.eventstartdate)} - {formatKTODate(festival.eventenddate)}</span>
+          <span>{festival.eventstartdate} - {festival.eventenddate}</span>
         </div>
       </div>
     </div>

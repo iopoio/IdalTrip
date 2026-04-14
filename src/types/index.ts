@@ -2,62 +2,57 @@ export interface Festival {
   contentid: string;
   title: string;
   addr1: string;
-  addr2: string;
   firstimage: string;
   firstimage2: string;
   mapx: string;
   mapy: string;
   eventstartdate: string;
   eventenddate: string;
-  tel: string;
-  overview?: string; // Added for detail view
+  tel?: string;
+  overview?: string;
+  cat1?: string;
+  cat2?: string;
+  cat3?: string;
 }
 
 export interface Place {
   contentid: string;
-  contenttypeid: string;
   title: string;
   addr1: string;
+  firstimage: string;
   mapx: string;
   mapy: string;
-  firstimage: string;
-  dist?: number;
-}
-
-export interface ParkingLot {
-  name: string;
-  addr: string;
-  lat: number;
-  lng: number;
-  capacity: number;
-  feeInfo: string;
+  contenttypeid: string;
 }
 
 export interface CourseItem {
   time: string;
-  placeName: string;
-  category: 'festival' | 'attraction' | 'food' | 'parking';
-  duration: string;
-  memo?: string;
+  place_name: string;
+  type: 'festival' | 'attraction' | 'food' | 'coffee';
+  stay_duration: string;
+  description: string;
+  move_time?: string;
+  distance?: string;
+  image_url?: string;
   lat: number;
   lng: number;
-  kakaoMapUrl?: string;
-  parkingInfo?: ParkingLot; // For car users
 }
 
 export interface CourseResponse {
   title: string;
+  theme: string;
   summary: string;
-  days: {
-    day: number;
-    items: CourseItem[];
-  }[];
+  total_duration: string;
+  estimated_cost: string;
+  schedule: CourseItem[];
 }
 
-export interface TravelCourse {
-  title: string;
-  items: CourseItem[];
-  transportation: 'car' | 'public';
-  durationWeeks?: number;
-  day: number;
+export interface ParkingLot {
+  prkpk: string;
+  prknm: string;
+  prk_style: string;
+  pay_yn: string;
+  addr: string;
+  lat: string;
+  lng: string;
 }

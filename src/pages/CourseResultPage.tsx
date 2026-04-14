@@ -1,204 +1,135 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { Map, Share2, Heart, RefreshCcw, Car, Train, CalendarDays, Sparkles, Loader2, Info } from 'lucide-react';
-import AiBubble from '../components/AiBubble';
-import TimelineItem from '../components/TimelineItem';
-import CourseSummary from '../components/CourseSummary';
-import { kakaoMapService } from '../services/kakaoMap';
-import { parkingApi } from '../services/parkingApi';
-import { formatDuration, formatDistance } from '../lib/utils';
-import type { CourseResponse, CourseItem } from '../types';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { MapPin, Sparkles, Navigation, RotateCcw, Save, Smartphone } from 'lucide-react';
+import type { CourseResponse } from '../types';
 
-const CourseResultPage: React.FC = () => {
-  const navigate = useNavigate();
+const CourseResultPage = () => {
   const location = useLocation();
-  const { id } = useParams<{ id: string }>();
-  
-  // Received from FestivalDetailPage
-  const initialCourse = location.state?.course as CourseResponse | undefined;
-  const initialTransport = location.state?.transport as 'car' | 'public' | undefined;
-
-  // Use initialCourse as a stable constant if it exists
-  const course = initialCourse;
-  const [transport, setTransport] = useState<'car' | 'public'>(initialTransport || 'car');
-  const [activeDay, setActiveDay] = useState<number>(1);
-  const [loading, setLoading] = useState(false);
-  const [summaryData, setSummaryData] = useState({ duration: '계산 중', distance: '계산 중', count: 0 });
-
-  useEffect(() => {
-    if (!course) return;
-
-    const processRouteDetails = async () => {
-      setLoading(true);
-      const currentDayData = course.days.find(d => d.day === activeDay);
-      if (!currentDayData) return;
-
-      const updatedItems = [...currentDayData.items];
-      let totalSeconds = 0;
-      let totalMeters = 0;
-
-      for (let i = 0; i < updatedItems.length - 1; i++) {
-        const origin = { lat: updatedItems[i].lat, lng: updatedItems[i].lng };
-        const dest = { lat: updatedItems[i+1].lat, lng: updatedItems[i+1].lng };
-        
-        const route = transport === 'car' 
-          ? await kakaoMapService.getCarRoute(origin, dest) 
-          : await kakaoMapService.getPublicRoute(origin, dest);
-
-        if (route) {
-          totalSeconds += route.duration;
-          totalMeters += route.distance;
-          updatedItems[i+1].duration = formatDuration(route.duration);
-        }
-
-        if (transport === 'car' && updatedItems[i+1].category !== 'parking') {
-           const parkings = await parkingApi.fetchNearbyParking(updatedItems[i+1].lat, updatedItems[i+1].lng);
-           if (parkings.length > 0) {
-             updatedItems[i+1].parkingInfo = parkings[0];
-           }
-        }
-      }
-
-      setSummaryData({
-        duration: formatDuration(totalSeconds + (updatedItems.length * 5400)), 
-        distance: formatDistance(totalMeters),
-        count: updatedItems.length
-      });
-      setLoading(false);
-    };
-
-    processRouteDetails();
-  }, [course, activeDay, transport]);
+  const navigate = useNavigate();
+  const { course } = (location.state as { course: CourseResponse }) || {};
 
   if (!course) {
     return (
-      <div className="min-h-screen bg-surface flex flex-col items-center justify-center gap-6 p-8 text-center">
-        <div className="w-20 h-20 bg-primary/10 rounded-3xl flex items-center justify-center">
-           <Info size={40} className="text-primary" />
-        </div>
-        <div className="space-y-2">
-          <h2 className="text-2xl font-bold text-on-surface">코스 정보가 없습니다</h2>
-          <p className="text-on-surface-variant max-w-xs">상세 페이지에서 AI 코스를 먼저 생성해 주세요.</p>
-        </div>
-        <button onClick={() => navigate('/')} className="px-8 py-3 bg-on-surface text-white rounded-full font-bold">홈으로 이동</button>
+      <div className="h-screen flex flex-col items-center justify-center p-10 text-center bg-gray-50">
+        <h2 className="display-lg !text-[2rem] mb-10">코스 정보가 없습니다.</h2>
+        <button onClick={() => navigate('/')} className="cta-primary px-12">처음으로 돌아가기</button>
       </div>
     );
   }
 
   return (
-    <div className="bg-surface-container-low min-h-screen">
-      <div className="max-w-[1920px] mx-auto px-8 py-32 space-y-12">
-        
-        {/* Header Section */}
-        <section className="flex flex-col md:flex-row items-end justify-between gap-8 mb-16 animate-in slide-in-from-top duration-500">
-          <div className="space-y-4">
-            <div className="flex items-center gap-2 text-primary font-bold text-sm tracking-widest uppercase">
-              <Sparkles size={18} className="fill-primary/20" />
-              <span>AI Optimized Course</span>
-            </div>
-            <h1 className="text-5xl font-headline font-bold text-on-surface tracking-tight leading-tight">
-              {course.title}
-            </h1>
-            <p className="text-on-surface-variant font-medium text-lg opacity-70">당신만을 위해 정교하게 설계된 맞춤형 일정입니다.</p>
-          </div>
-          <div className="flex gap-3">
-            <button className="p-5 bg-white rounded-2xl shadow-soft text-on-surface-variant hover:text-primary transition-all hover:scale-105">
-              <Share2 size={24} />
-            </button>
-            <button className="px-8 py-4 bg-white rounded-2xl shadow-soft text-primary font-bold flex items-center gap-3 hover:scale-105 transition-all">
-              <Heart size={20} className="fill-primary" />
-              <span>74</span>
-            </button>
-          </div>
-        </section>
-
-        {/* AI Insight Section */}
-        <section className="max-w-4xl pt-8">
-           <AiBubble content={course.summary} />
-        </section>
-
-        {/* Control & Summary Bar */}
-        <section className="space-y-8 animate-in fade-in duration-700 delay-300">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex bg-white p-2 rounded-2xl shadow-sm border border-surface-container w-full md:w-auto">
-               {course.days.map((d: { day: number }) => (
-                 <button 
-                  key={d.day}
-                  onClick={() => setActiveDay(d.day)}
-                  className={`flex-grow md:flex-none px-10 py-3.5 rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${activeDay === d.day ? 'bg-on-surface text-white shadow-soft' : 'text-on-surface-variant hover:bg-surface-container-low'}`}
-                 >
-                   <CalendarDays size={18} />
-                   <span>Day {d.day}</span>
-                 </button>
-               ))}
-            </div>
-
-            <div className="flex bg-white p-2 rounded-2xl shadow-sm border border-surface-container w-full md:w-auto">
-               <button 
-                onClick={() => setTransport('car')}
-                className={`flex-grow md:flex-none px-12 py-3.5 rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${transport === 'car' ? 'bg-primary text-white shadow-vibrant' : 'text-on-surface-variant hover:bg-surface-container-low'}`}
-               >
-                 <Car size={18} />
-                 <span>자차</span>
-               </button>
-               <button 
-                onClick={() => setTransport('public')}
-                className={`flex-grow md:flex-none px-12 py-3.5 rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${transport === 'public' ? 'bg-primary text-white shadow-vibrant' : 'text-on-surface-variant hover:bg-surface-container-low'}`}
-               >
-                 <Train size={18} />
-                 <span>대중교통</span>
-               </button>
-            </div>
-          </div>
-
-          <CourseSummary 
-            duration={summaryData.duration} 
-            distance={summaryData.distance} 
-            count={summaryData.count} 
-            theme={course.days[activeDay-1]?.items[0]?.category === 'festival' ? '축제 중심 힐링' : '커스텀 투어'} 
-          />
-        </section>
-
-        {/* Timeline Section */}
-        <section className="max-w-5xl py-12 relative min-h-[400px]">
-           {loading && (
-             <div className="absolute inset-0 bg-surface/50 backdrop-blur-sm z-20 flex flex-col items-center justify-center gap-4 rounded-3xl">
-                <Loader2 size={40} className="animate-spin text-primary" />
-                <p className="font-bold text-on-surface-variant">경로를 실시간으로 분석 중입니다...</p>
-             </div>
-           )}
-           <div className="space-y-4">
-              {course.days.find(d => d.day === activeDay)?.items.map((item: CourseItem, idx: number, arr: CourseItem[]) => (
-                <TimelineItem 
-                  key={idx}
-                  index={idx + 1}
-                  isLast={idx === arr.length - 1}
-                  {...item}
-                  name={item.placeName}
-                  description={item.memo || ''}
-                />
-              ))}
+    <div className="bg-[#f9f9f9] min-h-screen pb-48">
+      {/* AI Curator Welcome - Bubble UI */}
+      <section className="inner-container pt-20 mb-24">
+        <div className="flex flex-col md:flex-row items-start gap-10 mb-16">
+           <div className="w-20 h-20 bg-brand-primary rounded-[32px] shadow-2xl shadow-brand-primary/40 flex items-center justify-center text-white shrink-0 animate-bounce-subtle">
+              <Sparkles size={40} />
            </div>
-        </section>
+           <div className="flex-1">
+              <h1 className="display-lg !text-[3.5rem] text-brand-secondary mb-8 leading-[1.1] animate-fade-in-up">AI 큐레이터가<br />최적의 여정을 설계했습니다!</h1>
+              <div className="relative glass-panel p-8 rounded-[40px] rounded-tl-none max-w-3xl animate-fade-in-up delay-100">
+                 <p className="text-xl text-brand-secondary font-medium leading-relaxed italic">
+                   "불필요한 이동을 걷어내고 {course.theme}에 집중했어요. {course.summary}"
+                 </p>
+                 <div className="absolute top-0 left-[-15px] w-0 h-0 border-t-[20px] border-t-white/70 border-l-[20px] border-l-transparent" />
+              </div>
+           </div>
+        </div>
 
-        {/* Final Actions */}
-        <section className="flex flex-col md:flex-row gap-4 pt-12 pb-32">
-          <button 
-            onClick={() => navigate(`/course/${id}/map`, { state: { course, activeDay, transport } })}
-            className="flex-grow py-8 bg-on-surface text-white rounded-[2.5rem] text-2xl font-bold shadow-soft hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4 group"
-          >
-            <Map size={32} className="group-hover:rotate-6 transition-transform" />
-            <span>지도로 상세 동선 확인하기</span>
+        {/* Stats Grid - Elevated Surface */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+           {[
+             { label: '총 소요 시간', value: course.total_duration },
+             { label: '예상 경비', value: course.estimated_cost },
+             { label: '방문 스팟', value: `${course.schedule.length}곳` }
+           ].map((stat, idx) => (
+             <div key={idx} className="bg-white p-10 rounded-[48px] shadow-premium flex flex-col items-center text-center animate-fade-in-up" style={{ animationDelay: `${200 + idx*100}ms` }}>
+               <span className="text-[13px] font-black text-gray-300 mb-4 uppercase tracking-[0.2em]">{stat.label}</span>
+               <span className="text-3xl md:text-4xl font-black text-brand-secondary">{stat.value}</span>
+             </div>
+           ))}
+        </div>
+      </section>
+
+      {/* Course Timeline - Editorial Vertical Flow */}
+      <section className="inner-container">
+        <div className="flex gap-8 mb-20 border-b border-gray-100 pb-6 whitespace-nowrap overflow-x-auto no-scrollbar">
+          <button className="text-2xl font-black text-brand-primary border-b-4 border-brand-primary pb-4 px-6">1일차</button>
+          <button className="text-2xl font-black text-gray-200 hover:text-gray-300 pb-4 px-6 transition-all">2일차</button>
+          <button className="text-2xl font-black text-gray-200 hover:text-gray-300 pb-4 px-6 transition-all">3일차</button>
+        </div>
+
+        <div className="relative space-y-24 pl-6 md:pl-16">
+          {/* Timeline Backbone */}
+          <div className="absolute left-[38px] md:left-[83px] top-12 bottom-12 w-[1px] bg-gradient-to-b from-brand-primary via-brand-primary/20 to-transparent" />
+
+          {course.schedule.map((item, idx) => (
+            <div key={idx} className="relative group animate-fade-in-up" style={{ animationDelay: `${400 + idx*100}ms` }}>
+              {/* Timeline Icon */}
+              <div className="absolute left-[-45px] md:left-[-100px] top-4 w-20 h-20 bg-white border-2 border-brand-primary rounded-full z-10 flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-500">
+                 {item.type === 'food' || item.type === 'coffee' ? (
+                   <span className="text-brand-primary text-[28px] font-black tracking-tighter">YU</span>
+                 ) : (
+                   <MapPin className="text-brand-primary" size={32} />
+                 )}
+              </div>
+
+              <div className="md:ml-12 lg:ml-20">
+                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+                   <div>
+                     <div className="flex items-center gap-4 text-brand-primary text-[15px] font-black mb-4 uppercase tracking-widest">
+                       <span>{item.time}</span>
+                       <span className="w-2 h-2 bg-brand-primary/20 rounded-full" />
+                       <span>머무는 시간 {item.stay_duration}</span>
+                     </div>
+                     <h3 className="text-3xl md:text-5xl font-black text-brand-secondary tracking-tight">{item.place_name}</h3>
+                   </div>
+                   <button className="glass-panel px-8 py-3.5 rounded-full text-[14px] font-black text-brand-secondary flex items-center gap-3 hover:bg-white transition-all shadow-sm">
+                     <Smartphone size={18} /> 카카오맵 열기
+                   </button>
+                 </div>
+
+                 {/* Editorial Hero Image */}
+                 <div className="rounded-[48px] overflow-hidden mb-10 shadow-premium max-w-4xl group">
+                   <img 
+                    src={item.image_url || "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=1200"} 
+                    className="w-full aspect-[16/9] object-cover transition-transform duration-1000 group-hover:scale-105" 
+                    alt={item.place_name} 
+                   />
+                 </div>
+                 
+                 <p className="text-xl text-gray-400 leading-relaxed font-medium max-w-3xl mb-12">
+                   {item.description}
+                 </p>
+
+                 {/* Smart Move Pill */}
+                 {idx < course.schedule.length - 1 && (
+                   <div className="my-20 -ml-10 flex items-center gap-6">
+                      <div className="w-6 h-6 rounded-full bg-white border-[6px] border-brand-primary shadow-lg scale-110" />
+                      <div className="glass-panel px-8 py-4 rounded-full flex items-center gap-4 text-[15px] font-black text-brand-secondary">
+                        <Navigation size={18} className="text-brand-primary animate-pulse" />
+                        이동 {item.move_time} <span className="text-gray-300">({item.distance})</span>
+                      </div>
+                   </div>
+                 )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Floating Action Bar - Design System Spike */}
+      <div className="fixed bottom-12 left-0 right-0 z-50 pointer-events-none">
+        <div className="inner-container pointer-events-auto flex justify-center gap-8 py-2">
+          <button className="flex-1 max-w-[320px] h-[84px] bg-brand-secondary text-white rounded-[32px] font-black text-[20px] shadow-2xl flex items-center justify-center gap-4 hover:scale-105 transition-all active:scale-95 group">
+            <Save size={26} className="group-hover:translate-y-[-2px] transition-transform" /> 이 여정 저장하기
           </button>
           <button 
             onClick={() => navigate(-1)}
-            className="px-12 py-8 bg-white border border-surface-container text-on-surface rounded-[2.5rem] text-2xl font-bold hover:bg-surface-container transition-all flex items-center justify-center gap-4"
+            className="flex-1 max-w-[320px] h-[84px] glass-panel text-brand-secondary rounded-[32px] font-black text-[20px] flex items-center justify-center gap-4 hover:bg-white transition-all active:scale-95"
           >
-            <RefreshCcw size={32} />
-            <span>조건 변경하기</span>
+            <RotateCcw size={26} /> 다른 일정 추천
           </button>
-        </section>
-
+        </div>
       </div>
     </div>
   );

@@ -1,62 +1,50 @@
-import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Calendar, MapPin, Car, Train, Clock, ArrowLeft, Sparkles, Loader2, Info } from 'lucide-react';
+import { Calendar, MapPin, Car, Train, ArrowLeft, Sparkles, Loader2, Check } from 'lucide-react';
 import { tourApi } from '../services/tourApi';
 import { geminiService } from '../services/gemini';
 import type { Festival, Place } from '../types';
-import SpotCard from '../components/SpotCard';
-import { formatKTODate } from '../lib/utils';
 
-const FestivalDetailPage: React.FC = () => {
+const FestivalDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  
   const [festival, setFestival] = useState<Festival | null>(null);
   const [nearbyPlaces, setNearbyPlaces] = useState<Place[]>([]);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
+  const [selectedSpots, setSelectedSpots] = useState<string[]>([]);
+  
   const [transport, setTransport] = useState<'car' | 'public'>('car');
   const [duration, setDuration] = useState<'day' | '1night' | '2night'>('day');
-  const [selectedSpots, setSelectedSpots] = useState<string[]>([]);
 
   useEffect(() => {
     const loadData = async () => {
       if (!id) return;
       setLoading(true);
-      try {
-        const detail = await tourApi.fetchFestivalDetail(id);
-        if (detail) {
-          setFestival(detail);
-          // Fetch nearby attractions and restaurants
-          const attractions = await tourApi.fetchNearbyPlaces(detail.mapx, detail.mapy, 10000, '12');
-          const restaurants = await tourApi.fetchNearbyPlaces(detail.mapx, detail.mapy, 10000, '39');
-          setNearbyPlaces([...attractions.slice(0, 4), ...restaurants.slice(0, 4)]);
-        }
-      } catch (error) {
-        console.error('Failed to load detail data:', error);
-      } finally {
-        setLoading(false);
+      const festDetail = await tourApi.fetchFestivalDetail(id);
+      if (festDetail) {
+        setFestival(festDetail);
+        const [attractions, foods] = await Promise.all([
+          tourApi.fetchNearbyPlaces(festDetail.mapx, festDetail.mapy, 10000, '12'),
+          tourApi.fetchNearbyPlaces(festDetail.mapx, festDetail.mapy, 10000, '39')
+        ]);
+        setNearbyPlaces([...(attractions || []), ...(foods || [])]);
       }
+      setLoading(false);
     };
     loadData();
   }, [id]);
 
-  const handleSpotToggle = (spotId: string) => {
+  const toggleSpot = (contentId: string) => {
     setSelectedSpots(prev => 
-      prev.includes(spotId) ? prev.filter(s => s !== spotId) : [...prev, spotId]
+      prev.includes(contentId) ? prev.filter(i => i !== contentId) : [...prev, contentId]
     );
   };
 
   const handleGenerateCourse = async () => {
     if (!festival) return;
     setGenerating(true);
-    
-    // Filter selected places objects
-    const selectedPlaceObjects = nearbyPlaces.filter(p => selectedSpots.includes(p.contentid));
-
     try {
+      const selectedPlaceObjects = nearbyPlaces.filter(p => selectedSpots.includes(p.contentid));
       const response = await geminiService.generateCourse({
         festivalTitle: festival.title,
         festivalAddr: festival.addr1,
@@ -69,195 +57,184 @@ const FestivalDetailPage: React.FC = () => {
 
       if (response) {
         navigate(`/course/${id}`, { state: { course: response, transport } });
-      } else {
-        setError('AI 코스 생성에 실패했습니다. 장소를 2~3곳 선택 후 다시 시도해 주세요.');
       }
     } catch (error) {
-       setError('서비스 연결이 원활하지 않습니다. 잠시 후 다시 시도해 주세요.');
+       console.error(error);
     } finally {
       setGenerating(false);
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-surface flex flex-col items-center justify-center gap-4">
-        <Loader2 size={48} className="text-primary animate-spin" />
-        <p className="text-on-surface-variant font-bold">축제 정보를 불러오는 중입니다...</p>
-      </div>
-    );
-  }
-
-  if (!festival) return <div className="p-20 text-center">정보를 찾을 수 없습니다.</div>;
+  if (loading || !festival) return (
+    <div className="h-screen flex items-center justify-center bg-gray-50">
+      <Loader2 className="animate-spin text-brand-primary" size={60} strokeWidth={3} />
+    </div>
+  );
 
   return (
-    <div className="bg-surface min-h-screen">
-      {/* Back Button for mobile */}
-      <div className="fixed top-24 left-8 z-30 md:hidden">
-        <button onClick={() => navigate(-1)} className="p-3 bg-white shadow-soft rounded-2xl">
-          <ArrowLeft size={20} />
-        </button>
-      </div>
-
-      <div className="max-w-[1920px] mx-auto flex flex-col lg:flex-row gap-12 px-8 py-32">
-        <div className="flex-grow lg:max-w-[65%] space-y-16">
-          {/* Main Content */}
-          <section className="space-y-8 animate-in fade-in duration-700">
-            <div className="aspect-[21/9] rounded-2xl overflow-hidden shadow-soft bg-gradient-to-br from-primary/10 to-secondary/5 flex items-center justify-center border border-surface-container">
-              {festival.firstimage ? (
-                <img src={festival.firstimage} alt={festival.title} className="w-full h-full object-cover" />
-              ) : (
-                <div className="flex flex-col items-center gap-4 text-primary opacity-30">
-                  <Calendar size={80} strokeWidth={1} />
-                  <span className="font-brand text-2xl tracking-widest italic font-bold">Nature Pulse</span>
-                </div>
-              )}
-            </div>
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 text-primary font-bold text-xs tracking-widest uppercase">
-                <Calendar size={14} />
-                <span>이달의 특별한 축제</span>
-              </div>
-              <h1 className="text-5xl font-headline font-bold text-on-surface tracking-tight leading-tight">
-                {festival.title}
-              </h1>
-              <div className="flex flex-wrap gap-4 text-on-surface-variant font-medium">
-                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-surface-container rounded-lg">
-                  <MapPin size={16} />
-                  <span>{festival.addr1}</span>
-                </div>
-                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-surface-container rounded-lg">
-                  <Clock size={16} />
-                  <span>{formatKTODate(festival.eventstartdate)} - {formatKTODate(festival.eventenddate)}</span>
-                </div>
-              </div>
-              <p className="text-xl leading-relaxed text-on-surface-variant font-light font-body pt-4">
-                {festival.overview?.replace(/<br\s*\/?>/gi, '\n') || '상세 정보가 준비 중입니다.'}
-              </p>
-            </div>
-          </section>
-
-          {/* AI Nearby Spots */}
-          <section className="space-y-8 bg-surface-container-low p-10 rounded-2xl border border-surface-container/50">
-            <div className="flex items-center justify-between">
-              <div className="space-y-1">
-                <div className="flex items-center gap-1.5 text-secondary font-bold text-sm">
-                   <Sparkles size={20} className="fill-secondary/20" />
-                   <span>주변 핫플레이스 추천</span>
-                </div>
-                <h3 className="text-3xl font-headline font-bold text-on-surface">함께 가고 싶은 곳들을 선택해 보세요</h3>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {nearbyPlaces.map(spot => (
-                <SpotCard 
-                   key={spot.contentid}
-                   id={spot.contentid}
-                   name={spot.title}
-                   image={spot.firstimage || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b'}
-                   category={spot.contenttypeid === '39' ? '음식점' : '관광지'}
-                   rating={4.7} // Placeholder as API doesn't provide rating
-                   isSelected={selectedSpots.includes(spot.contentid)}
-                   onToggle={handleSpotToggle}
-                />
-              ))}
-            </div>
-          </section>
+    <div className="pb-40 bg-white min-h-screen">
+      {/* Cinematic Hero - Premium Scale */}
+      <section className="relative h-[600px] md:h-[700px]">
+        <div className="absolute inset-0">
+          <img 
+            src={festival.firstimage || "https://images.unsplash.com/photo-1547036967-23d1199d3b1f?auto=format&fit=crop&q=80&w=2400"} 
+            className="w-full h-full object-cover"
+            alt={festival.title}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-black/10 to-transparent" />
         </div>
 
-        {/* Options Stickable Aside */}
-        <aside className="lg:w-[35%]">
-           <div className="lg:sticky lg:top-32 bg-white rounded-3xl p-10 shadow-soft border border-surface-container/30 space-y-10">
-              <h3 className="text-2xl font-bold text-on-surface">여행 설계 가이드</h3>
-              
-              {/* Transport */}
-              <div className="space-y-4">
-                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest px-1">이동 수단</label>
-                <div className="grid grid-cols-2 gap-3">
-                  <button 
-                    onClick={() => setTransport('car')}
-                    className={`flex flex-col items-center gap-3 p-6 rounded-2xl transition-all border-2 ${transport === 'car' ? 'bg-primary/5 border-primary text-primary shadow-vibrant scale-[1.02]' : 'bg-surface-container-low border-transparent text-on-surface-variant hover:bg-surface-container'}`}
-                  >
-                    <Car size={32} strokeWidth={transport === 'car' ? 2.5 : 2} />
-                    <span className="font-bold">자차 이용</span>
-                  </button>
-                  <button 
-                    onClick={() => setTransport('public')}
-                    className={`flex flex-col items-center gap-3 p-6 rounded-2xl transition-all border-2 ${transport === 'public' ? 'bg-primary/5 border-primary text-primary shadow-vibrant scale-[1.02]' : 'bg-surface-container-low border-transparent text-on-surface-variant hover:bg-surface-container'}`}
-                  >
-                    <Train size={32} strokeWidth={transport === 'public' ? 2.5 : 2} />
-                    <span className="font-bold">대중교통</span>
-                  </button>
+        <div className="relative inner-container h-full flex flex-col justify-end pb-32">
+          <button 
+            onClick={() => navigate(-1)}
+            className="absolute top-12 left-8 w-14 h-14 bg-white/20 backdrop-blur-2xl rounded-full flex items-center justify-center text-white hover:bg-white hover:text-brand-secondary transition-all shadow-premium"
+          >
+            <ArrowLeft size={28} />
+          </button>
+
+          <div className="mb-10 px-6 py-2 bg-brand-primary rounded-full w-fit flex items-center gap-3 text-white shadow-premium">
+             <Sparkles size={16} />
+             <span className="text-[12px] font-black tracking-widest uppercase">Festive Pulse</span>
+          </div>
+          <h1 className="display-lg text-brand-secondary mb-10">{festival.title}</h1>
+          <div className="flex flex-col md:flex-row gap-8 text-[18px] font-bold text-gray-500">
+            <span className="flex items-center gap-3"><MapPin size={22} className="text-brand-primary" /> {festival.addr1}</span>
+            <span className="flex items-center gap-3"><Calendar size={22} className="text-brand-primary" /> {festival.eventstartdate} ~ {festival.eventenddate}</span>
+          </div>
+        </div>
+      </section>
+
+      <div className="inner-container pt-32 flex flex-col lg:flex-row gap-24">
+        {/* Nearby Spots - No-Line Grid */}
+        <div className="flex-1">
+          <div className="flex justify-between items-end mb-16">
+            <div>
+              <h2 className="display-lg !text-[2.5rem] text-brand-secondary mb-4">함께 떠나면 좋은 곳</h2>
+              <p className="text-lg text-gray-400 font-medium">축제 현장 주변의 검증된 명소와 미식 거점들입니다.</p>
+            </div>
+            <button className="text-brand-primary font-black text-[15px] flex items-center gap-3 group transition-all">
+              목록 새로고침 <Sparkles size={18} className="group-hover:rotate-12 transition-transform" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 gap-10">
+            {nearbyPlaces.map((place) => (
+              <div 
+                key={place.contentid}
+                onClick={() => toggleSpot(place.contentid)}
+                className={`flex gap-10 p-6 rounded-[40px] transition-all duration-500 cursor-pointer ${
+                  selectedSpots.includes(place.contentid) 
+                  ? 'bg-brand-primary/5 shadow-[0_0_0_2px_#ff6b35] scale-[1.02]' 
+                  : 'bg-gray-50 hover:bg-gray-100'
+                }`}
+              >
+                <div className="relative w-40 h-40 md:w-60 md:h-56 flex-shrink-0 rounded-[32px] overflow-hidden">
+                   <img 
+                    src={place.firstimage || "https://images.unsplash.com/photo-1547036967-23d1199d3b1f?w=600"} 
+                    alt={place.title}
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                  />
+                  <div className={`absolute top-4 left-4 px-4 py-1.5 rounded-full text-[11px] font-black text-white shadow-lg ${
+                    place.contenttypeid === '39' ? 'bg-orange-500' : 'bg-brand-secondary'
+                  }`}>
+                    {place.contenttypeid === '39' ? '미식' : '명소'}
+                  </div>
+                  {selectedSpots.includes(place.contentid) && (
+                    <div className="absolute top-4 right-4 w-10 h-10 bg-brand-primary rounded-full flex items-center justify-center text-white shadow-2xl animate-scale-in">
+                      <Check size={24} strokeWidth={4} />
+                    </div>
+                  )}
                 </div>
-              </div>
-
-              {/* Duration */}
-              <div className="space-y-4">
-                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest px-1">일정 기간</label>
-                <div className="flex bg-surface-container-low p-1.5 rounded-2xl">
-                   {[
-                     { id: 'day', label: '당일' },
-                     { id: '1night', label: '1박 2일' },
-                     { id: '2night', label: '2박 3일' }
-                   ].map(opt => (
-                     <button
-                       key={opt.id}
-                       onClick={() => setDuration(opt.id as any)}
-                       className={`flex-grow py-3 rounded-xl font-bold transition-all ${duration === opt.id ? 'bg-white text-on-surface shadow-sm' : 'text-on-surface-variant opacity-60 hover:opacity-100'}`}
-                     >
-                       {opt.label}
-                     </button>
-                   ))}
-                </div>
-              </div>
-
-              {/* Summary of selection */}
-              <div className="p-4 bg-secondary/5 rounded-xl flex items-center justify-between border border-secondary/10">
-                 <span className="text-sm font-medium text-secondary">선택된 장소</span>
-                 <span className="text-lg font-bold text-secondary">{selectedSpots.length + 1}곳</span>
-              </div>
-
-              {/* Error Message */}
-              {error && (
-                <div className="p-4 bg-red-50 border border-red-100 rounded-xl text-red-500 text-sm font-medium animate-in fade-in slide-in-from-top-2">
-                  <div className="flex items-center gap-2">
-                    <Info size={16} />
-                    <span>{error}</span>
+                <div className="flex flex-col justify-center py-4">
+                  <h4 className="text-2xl font-black text-brand-secondary mb-4">{place.title}</h4>
+                  <p className="text-gray-400 text-[16px] leading-relaxed font-medium mb-6 line-clamp-2">
+                    시안의 감성을 담은 주변 추천 장소입니다. 축제 여정의 밀도를 높여줄 특별한 경험이 기다리고 있습니다.
+                  </p>
+                  <div className="flex gap-8 text-[14px] font-black">
+                    <span className="flex items-center gap-2 text-brand-primary"><Sparkles size={16} /> 신뢰도 98%</span>
+                    <span className="flex items-center gap-2 text-gray-500"><MapPin size={16} /> 직선거리 1.2km</span>
                   </div>
                 </div>
-              )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Planner Sidebar - Surface Tiering */}
+        <div className="w-full lg:w-[420px]">
+          <div className="sticky top-32 p-12 bg-white rounded-[56px] shadow-premium border-none">
+            <h3 className="display-lg !text-[2rem] text-brand-secondary mb-12">여정 설계</h3>
+            
+            <div className="space-y-12">
+              <section>
+                <label className="text-[12px] font-black text-gray-300 uppercase tracking-[0.2em] block mb-6">출발 지점</label>
+                <div className="relative">
+                   <input 
+                    type="text" 
+                    placeholder="출발지를 입력하세요 (예: 서울역)"
+                    className="w-full bg-gray-50 border-none rounded-[24px] py-5 px-14 text-[16px] font-bold focus:bg-white focus:shadow-premium outline-none transition-all"
+                  />
+                  <div className="absolute left-5 top-1/2 -translate-y-1/2 w-2 h-2 bg-brand-primary rounded-full" />
+                </div>
+              </section>
+
+              <section>
+                <label className="text-[12px] font-black text-gray-300 uppercase tracking-[0.2em] block mb-6">최적 이동 수단</label>
+                <div className="grid grid-cols-2 gap-6">
+                  {(['car', 'public'] as const).map((t) => (
+                    <button 
+                      key={t}
+                      onClick={() => setTransport(t)}
+                      className={`h-40 rounded-[32px] flex flex-col items-center justify-center gap-4 transition-all duration-500 ${
+                        transport === t 
+                        ? 'bg-brand-primary text-white shadow-2xl scale-105 font-black' 
+                        : 'bg-gray-50 text-gray-300 hover:bg-gray-100'
+                      }`}
+                    >
+                      {t === 'car' ? <Car size={36} /> : <Train size={36} />}
+                      <span>{t === 'car' ? '자가용' : '대중교통'}</span>
+                    </button>
+                  ))}
+                </div>
+              </section>
+
+              <section>
+                <label className="text-[12px] font-black text-gray-300 uppercase tracking-[0.2em] block mb-6">여행 박수</label>
+                <div className="grid grid-cols-3 gap-4">
+                  {(['day', '1night', '2night'] as const).map((d) => (
+                    <button 
+                      key={d}
+                      onClick={() => setDuration(d)}
+                      className={`py-5 rounded-[20px] font-black text-[14px] transition-all duration-300 ${
+                        duration === d 
+                        ? 'bg-brand-secondary text-white shadow-xl' 
+                        : 'bg-gray-50 text-gray-400 hover:bg-gray-100'
+                      }`}
+                    >
+                      {d === 'day' ? '당일' : d === '1night' ? '1박 2일' : '2박 3일'}
+                    </button>
+                  ))}
+                </div>
+              </section>
+
+              <div className="pt-8 flex justify-between items-center border-t border-gray-50 mb-12">
+                 <span className="text-gray-400 font-bold">선택된 장소</span>
+                 <span className="text-2xl font-black text-brand-secondary">{selectedSpots.length + 1}곳</span>
+              </div>
 
               <button 
                 onClick={handleGenerateCourse}
                 disabled={generating}
-                className={`w-full py-6 mt-8 rounded-2xl text-xl font-bold shadow-vibrant hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-4 bg-gradient-to-r from-primary to-primary-container text-on-primary ${generating ? 'opacity-70 cursor-not-allowed' : ''}`}
+                className={`cta-primary w-full py-6 text-xl shadow-brand-primary/30 ${
+                  generating ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
               >
-                {generating ? (
-                  <>
-                    <Loader2 size={24} className="animate-spin" />
-                    <span>AI 코스 생성 중...</span>
-                  </>
-                ) : (
-                  <>
-                    <span>AI 코스 설계하기</span>
-                    <Sparkles size={24} />
-                  </>
-                )}
+                {generating ? <Loader2 className="animate-spin" size={24} /> : <Sparkles size={24} />}
+                {generating ? '여정 분석 중...' : 'AI 코스 생성하기'}
               </button>
-           </div>
-        </aside>
-      </div>
-
-      {/* Floating CTA for Mobile */}
-      <div className="md:hidden fixed bottom-0 left-0 w-full p-6 bg-white/80 backdrop-blur-xl border-t border-surface-container z-50">
-        <button 
-          onClick={handleGenerateCourse}
-          disabled={generating}
-          className="w-full py-5 bg-primary text-white rounded-2xl font-bold shadow-vibrant text-lg flex items-center justify-center gap-3"
-        >
-          {generating ? <Loader2 className="animate-spin" /> : <Sparkles size={20} />}
-          {generating ? 'AI 코스 생성 중...' : 'AI 코스 생성하기'}
-        </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
