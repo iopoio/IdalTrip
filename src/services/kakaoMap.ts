@@ -68,7 +68,7 @@ export const kakaoMapService = {
    * Generate a Kakao Map redirection URL for mobile/web navi
    */
   getDirectionUrl: (name: string, lat: number, lng: number) => {
-    return `https://map.kakao.com/link/to/${encodeURIComponent(name)},${lat},${lng}`;
+    return `https://map.kakao.com/link/map/${encodeURIComponent(name)},${lat},${lng}`;
   },
 
   /**
