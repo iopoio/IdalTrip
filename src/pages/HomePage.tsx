@@ -56,7 +56,7 @@ const HomePage = () => {
         </section>
 
         {/* Monthly Filter Bar - No-Line Rule Implementation */}
-        <section className="py-12 bg-surface-container-low overflow-visible">
+        <section className="pt-12 pb-16 bg-surface-container-low overflow-visible">
           <div className="max-w-[1920px] mx-auto px-8 overflow-visible">
             <MonthFilter currentMonth={currentMonth} onMonthChange={setCurrentMonth} />
           </div>
