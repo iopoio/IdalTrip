@@ -5,6 +5,7 @@ import { tourApi } from '../services/tourApi';
 import type { Festival } from '../types';
 import MonthFilter from '../components/MonthFilter';
 import FestivalCard from '../components/FestivalCard';
+import { seasonCopy } from '../data/seasonCopy';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -47,47 +48,44 @@ const HomePage = () => {
 
   return (
     <div className="bg-surface text-on-surface">
-      <main className="pt-20">
-        {/* Hero Section - Matching Mockup 1:1 */}
-        <section className="relative w-full h-[870px] overflow-hidden">
+      <main className="pt-0">
+        {/* Hero Section - Mobile App Style */}
+        <section className="relative w-full aspect-[4/5] overflow-hidden">
           <img
             src="https://images.unsplash.com/photo-1490750967868-88aa4486c946?q=80&w=2670&auto=format&fit=crop"
             alt="시즌 히어로"
             className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-          <div className="relative h-full max-w-[1920px] mx-auto px-8 flex flex-col justify-end pb-24">
+          <div className="relative h-full mx-auto px-6 flex flex-col justify-end pb-12">
             <div className="max-w-3xl">
-              <span className="inline-block px-4 py-1.5 mb-6 rounded-full bg-white/20 backdrop-blur-md text-white text-sm font-medium border border-white/30">
-                Seasonal Highlight
-              </span>
-              <h1 className="font-headline text-[5rem] leading-[1.1] text-white font-bold mb-6 tracking-tight">
-                {currentMonth}월의 여행,<br />장미의 계절
+              <h1 className="font-headline text-5xl leading-[1.2] text-white font-bold mb-4 tracking-tight whitespace-pre-line">
+                {seasonCopy[currentMonth]?.title || `${currentMonth}월의 여행`}
               </h1>
-              <p className="text-xl text-white/90 mb-10 leading-relaxed font-light">
-                전국 곳곳에서 펼쳐지는 화려한 장미 축제와 함께<br />잊지 못할 봄의 마지막 페이지를 장식해보세요.
+              <p className="text-lg text-white/90 mb-8 leading-relaxed font-light whitespace-pre-line">
+                {seasonCopy[currentMonth]?.subtitle}
               </p>
               <button 
                 onClick={() => document.getElementById('festivals')?.scrollIntoView({ behavior: 'smooth' })}
-                className="px-10 py-5 bg-primary-container text-on-primary rounded-full text-lg font-bold shadow-2xl flex items-center gap-3 hover:scale-105 transition-transform"
+                className="px-6 py-4 bg-primary-container text-on-primary rounded-full text-base font-bold shadow-2xl flex items-center gap-2 hover:scale-105 transition-transform"
               >
                 지금 축제 확인하기
-                <ArrowForward className="w-6 h-6" />
+                <ArrowForward className="w-5 h-5" />
               </button>
             </div>
           </div>
         </section>
 
         {/* Monthly Filter Bar - No-Line Rule Implementation */}
-        <section className="pt-12 pb-16 bg-surface-container-low overflow-visible">
-          <div className="max-w-[1920px] mx-auto px-8 overflow-visible">
+        <section className="pt-8 pb-10 bg-surface-container-low overflow-visible">
+          <div className="mx-auto px-6 overflow-visible">
             <MonthFilter currentMonth={currentMonth} onMonthChange={setCurrentMonth} />
           </div>
         </section>
 
         {/* Festival Grid - High-End Editorial Style */}
-        <section id="festivals" className="py-24 bg-surface">
-          <div className="max-w-[1920px] mx-auto px-8">
+        <section id="festivals" className="py-12 bg-surface">
+          <div className="mx-auto px-4">
             <div className="flex items-end justify-between mb-8">
               <div>
                 <div className="flex gap-6 mb-8 overflow-x-auto pb-2 scrollbar-hide">
@@ -105,8 +103,8 @@ const HomePage = () => {
                     </button>
                   ))}
                 </div>
-                <h2 className="font-headline text-4xl font-bold text-on-surface mb-4">현재 진행 중인 축제</h2>
-                <p className="text-slate-500 text-lg">전국 각지의 생생한 축제 소식을 전해드립니다.</p>
+                <h2 className="font-headline text-2xl font-bold text-on-surface mb-2">현재 진행 중인 축제</h2>
+                <p className="text-slate-500 text-sm">전국 각지의 생생한 축제 소식을 전해드립니다.</p>
               </div>
               <button className="flex items-center gap-2 text-primary font-bold group">
                 전체보기
@@ -115,13 +113,13 @@ const HomePage = () => {
             </div>
             
             {loading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="grid grid-cols-2 gap-3">
                 {[1, 2, 3, 4].map(i => (
                   <div key={i} className="animate-pulse bg-surface-container-high rounded-xl aspect-[3/4]" />
                 ))}
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="grid grid-cols-2 gap-3">
                 {filteredFestivals.slice(0, 8).map((festival) => (
                   <FestivalCard 
                     key={festival.contentid} 
@@ -135,30 +133,30 @@ const HomePage = () => {
         </section>
 
         {/* AI Recommendation Section - Glassmorphism & Depth */}
-        <section className="pb-32 px-8">
-          <div className="max-w-[1920px] mx-auto bg-gradient-to-r from-primary to-primary-container rounded-[2.5rem] p-16 relative overflow-hidden group shadow-2xl shadow-primary/20">
+        <section className="pb-16 px-4">
+          <div className="mx-auto bg-gradient-to-r from-primary to-primary-container rounded-[2rem] p-8 relative overflow-hidden group shadow-2xl shadow-primary/20">
             <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none transition-transform duration-1000 group-hover:scale-110">
                {/* Decorative Background Element */}
                <div className="absolute -right-20 -top-20 w-[600px] h-[600px] bg-white rounded-full blur-[100px]" />
             </div>
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
               <div className="max-w-xl">
-                <div className="flex items-center gap-2 mb-6">
-                  <span className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white">
-                    <AutoAwesome className="w-6 h-6 fill-current" />
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white">
+                    <AutoAwesome className="w-4 h-4 fill-current" />
                   </span>
-                  <span className="text-white/80 font-bold tracking-widest text-sm uppercase">AI Personalized</span>
+                  <span className="text-white/80 font-bold tracking-widest text-[11px] uppercase">AI 맞춤 추천</span>
                 </div>
-                <h2 className="text-5xl font-bold text-white mb-8 leading-tight">내 취향에 맞는<br />축제 찾기</h2>
-                <p className="text-white/80 text-lg mb-10 leading-relaxed font-light">
+                <h2 className="text-3xl font-bold text-white mb-4 leading-tight">내 취향에 맞는<br />축제 찾기</h2>
+                <p className="text-white/80 text-sm mb-8 leading-relaxed font-light">
                   당신의 여행 스타일을 분석하여<br />가장 설레는 축제 여정을 설계해 드립니다.
                 </p>
                 <button 
                   onClick={() => navigate('/festivals')}
-                  className="px-10 py-5 bg-white text-primary rounded-full text-lg font-bold shadow-xl flex items-center gap-3 hover:bg-surface transition-colors"
+                  className="px-6 py-4 bg-white text-primary rounded-full font-bold shadow-xl flex items-center gap-2 hover:bg-surface transition-colors text-sm"
                 >
                   분석 시작하기
-                  <CompassCalibration className="w-6 h-6" />
+                  <CompassCalibration className="w-5 h-5" />
                 </button>
               </div>
               <div className="hidden lg:block relative">
@@ -175,15 +173,15 @@ const HomePage = () => {
       </main>
 
       {/* Editorial Footer - DESIGN.md Guidelines */}
-      <footer className="w-full py-16 px-8 bg-surface-container-lowest flex flex-col items-center gap-8 border-t border-surface-container">
-        <div className="text-2xl font-black text-slate-300 tracking-tighter">IdalTrip</div>
-        <div className="flex gap-10">
-          <a className="text-sm font-bold text-slate-400 hover:text-primary transition-all underline-offset-8 hover:underline" href="#">이용약관</a>
-          <a className="text-sm font-bold text-slate-400 hover:text-primary transition-all underline-offset-8 hover:underline" href="#">개인정보처리방침</a>
-          <a className="text-sm font-bold text-slate-400 hover:text-primary transition-all underline-offset-8 hover:underline" href="#">고객센터</a>
-          <a className="text-sm font-bold text-slate-400 hover:text-primary transition-all underline-offset-8 hover:underline" href="#">광고문의</a>
+      <footer className="w-full py-12 px-6 bg-surface-container-lowest flex flex-col items-center gap-6 border-t border-surface-container">
+        <div className="text-xl font-black text-slate-300 tracking-tighter">IdalTrip</div>
+        <div className="flex flex-wrap justify-center gap-4">
+          <a className="text-xs font-bold text-slate-400 hover:text-primary transition-all hover:underline" href="#">이용약관</a>
+          <a className="text-xs font-bold text-slate-400 hover:text-primary transition-all hover:underline" href="#">개인정보처리방침</a>
+          <a className="text-xs font-bold text-slate-400 hover:text-primary transition-all hover:underline" href="#">고객센터</a>
+          <a className="text-xs font-bold text-slate-400 hover:text-primary transition-all hover:underline" href="#">광고문의</a>
         </div>
-        <p className="text-sm text-slate-300 font-medium">© 2024 IdalTrip. All rights reserved.</p>
+        <p className="text-xs text-slate-300 font-medium">© 2026 이달트립. All rights reserved.</p>
       </footer>
     </div>
   );

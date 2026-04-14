@@ -10,6 +10,16 @@ export default defineConfig({
         target: 'https://apis.data.go.kr',
         changeOrigin: true,
         secure: false,
+      },
+      '/kakao-navi': {
+        target: 'https://apis-navi.kakaomobility.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/kakao-navi/, '')
+      },
+      '/kakao-local': {
+        target: 'https://dapi.kakao.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/kakao-local/, '')
       }
     }
   }

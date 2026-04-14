@@ -131,12 +131,12 @@ const FestivalDetailPage = () => {
 
   return (
     <div className="bg-surface text-on-surface">
-      <main className="pt-32 pb-24 px-8 max-w-[1440px] mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <main className="pt-4 pb-12 px-5">
+        <div className="flex flex-col gap-10">
           {/* Main Content Area (Left) */}
-          <div className="lg:col-span-8 space-y-12">
+          <div className="space-y-10">
             {/* Hero Section - Mockup 1:1 */}
-            <section className="relative aspect-[21/9] rounded-xl overflow-hidden shadow-2xl group">
+            <section className="relative aspect-[4/5] rounded-xl overflow-hidden shadow-2xl group">
               <img 
                 alt={festival.title} 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
@@ -156,12 +156,12 @@ const FestivalDetailPage = () => {
             </section>
 
             {/* Detailed Description */}
-            <section className="bg-surface-container-low rounded-xl p-8">
-              <h2 className="text-2xl font-headline font-bold mb-6 flex items-center gap-2">
-                <Description className="text-primary w-6 h-6" />
+            <section className="bg-surface-container-low rounded-xl p-5">
+              <h2 className="text-xl font-headline font-bold mb-4 flex items-center gap-2">
+                <Description className="text-primary w-5 h-5" />
                 축제 상세 정보
               </h2>
-              <div className="space-y-4 text-on-surface-variant leading-relaxed font-body">
+              <div className="space-y-3 text-sm text-on-surface-variant leading-relaxed font-body">
                 <div className="relative">
                   <p className={showFullOverview ? "" : "line-clamp-3"}>
                     {festival.overview || "축제에 대한 풍성한 이야기가 곧 업데이트될 예정입니다. IdalTrip과 함께 계절의 정취를 만끽해 보세요."}
@@ -197,13 +197,13 @@ const FestivalDetailPage = () => {
                 </div>
                 <button 
                   onClick={() => setSelectedSpots(nearbyPlaces.map(p => p.contentid))}
-                  className="text-primary text-sm font-bold cursor-pointer hover:underline"
+                  className="text-primary text-[11px] font-bold cursor-pointer hover:underline"
                 >
                   모두 선택
                 </button>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 gap-3">
                 {nearbyPlaces.slice(0, 5).map((place, idx) => {
                   const isLarge = idx === 0;
                   const isChecked = selectedSpots.includes(place.contentid);
@@ -211,7 +211,7 @@ const FestivalDetailPage = () => {
                     <div 
                       key={place.contentid}
                       onClick={() => toggleSpot(place.contentid)}
-                      className={`${isLarge ? 'col-span-2' : ''} relative group rounded-xl overflow-hidden bg-surface-container-highest h-[240px] cursor-pointer`}
+                      className={`${isLarge ? 'col-span-2' : ''} relative group rounded-xl overflow-hidden bg-surface-container-highest h-[200px] cursor-pointer`}
                     >
                       <img 
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
@@ -240,10 +240,10 @@ const FestivalDetailPage = () => {
           </div>
 
           {/* Sidebar (Right) - Mockup 1:1 */}
-          <div className="lg:col-span-4">
-            <aside className="sticky top-32 bg-surface-container-lowest rounded-xl p-8 shadow-sm border-t border-slate-50">
-              <h2 className="text-xl font-bold mb-8 text-on-surface font-headline">여행 옵션 설정</h2>
-              <div className="space-y-8">
+          <div className="border-t border-surface-container pt-8">
+            <aside className="bg-surface-container-lowest rounded-xl p-5 shadow-sm border-t border-slate-50">
+              <h2 className="text-lg font-bold mb-6 text-on-surface font-headline">여행 옵션 설정</h2>
+              <div className="space-y-6">
                 {/* Origin Input */}
                 <div>
                   <div className="flex justify-between items-center mb-2">
@@ -355,19 +355,19 @@ const FestivalDetailPage = () => {
 
                 {/* AI Course Generation Button */}
                 <div className="pt-6 border-t border-slate-100">
-                  <div className="flex justify-between items-center mb-6">
-                    <span className="text-slate-500 font-medium">예상 방문 장소</span>
-                    <span className="text-lg font-bold text-on-surface">{selectedSpots.length + 1}곳</span>
+                  <div className="flex justify-between items-center mb-5">
+                    <span className="text-slate-500 font-medium text-sm">예상 방문 장소</span>
+                    <span className="text-base font-bold text-on-surface">{selectedSpots.length + 1}곳</span>
                   </div>
                   <button 
                     onClick={handleGenerateCourse}
                     disabled={generating || selectedSpots.length === 0}
-                    className="w-full bg-primary-container hover:scale-[1.02] text-white py-5 rounded-xl font-headline font-bold text-lg shadow-lg shadow-primary-container/20 transition-all active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed"
+                    className="w-full bg-primary-container hover:scale-[1.02] text-white py-4 rounded-xl font-headline font-bold text-base shadow-lg shadow-primary-container/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed"
                   >
-                    {generating ? <Loader2 className="animate-spin w-6 h-6" /> : <AutoAwesome className="w-6 h-6" />}
+                    {generating ? <Loader2 className="animate-spin w-5 h-5" /> : <AutoAwesome className="w-5 h-5" />}
                     AI 코스 생성하기
                   </button>
-                  <p className="text-center text-[10px] text-slate-400 mt-4 leading-relaxed">
+                  <p className="text-center text-[10px] text-slate-400 mt-3 leading-relaxed">
                     선택한 스팟과 옵션을 바탕으로 최적의 동선을 설계합니다.
                   </p>
                 </div>

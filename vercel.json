@@ -3,6 +3,14 @@
     {
       "source": "/B551011/:path*",
       "destination": "https://apis.data.go.kr/B551011/:path*"
+    },
+    {
+      "source": "/kakao-navi/:path*",
+      "destination": "https://apis-navi.kakaomobility.com/:path*"
+    },
+    {
+      "source": "/kakao-local/:path*",
+      "destination": "https://dapi.kakao.com/:path*"
     }
   ]
 }

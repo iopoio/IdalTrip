@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const REST_API_KEY = import.meta.env.VITE_KAKAO_REST_KEY;
-const NAVI_URL = 'https://apis-navi.kakaomobility.com/v1/directions';
+const NAVI_URL = '/kakao-navi/v1/directions';
 
 export const kakaoMapService = {
   /**
@@ -76,7 +76,7 @@ export const kakaoMapService = {
    */
   searchPlace: async (query: string) => {
     try {
-      const response = await axios.get('https://dapi.kakao.com/v2/local/search/keyword.json', {
+      const response = await axios.get('/kakao-local/v2/local/search/keyword.json', {
         params: { query, size: 5 },
         headers: { Authorization: `KakaoAK ${REST_API_KEY}` }
       });

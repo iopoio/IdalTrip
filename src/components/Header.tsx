@@ -12,8 +12,8 @@ const Header = () => {
   ];
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md shadow-sm">
-      <div className="flex justify-between items-center px-8 h-20 max-w-[1920px] mx-auto">
+    <nav className="hidden fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md shadow-sm">
+      <div className="flex justify-between items-center px-8 h-20 mx-auto">
         <div className="flex items-center gap-12">
           <Link to="/" className="hover:opacity-80 transition-opacity">
             <img src={LogoLight} alt="이달여행" className="h-7 w-auto" />

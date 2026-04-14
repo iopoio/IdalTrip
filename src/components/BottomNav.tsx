@@ -13,7 +13,7 @@ const BottomNav: React.FC = () => {
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-xl border-t border-surface-container z-50 flex items-center justify-around px-4 pt-3 pb-6">
+    <nav className="fixed bottom-0 w-full max-w-[430px] bg-white/90 backdrop-blur-xl border-t border-surface-container z-50 flex items-center justify-around px-4 pt-3 pb-6">
       {navItems.map((item) => {
         const isActive = location.pathname === item.path;
         const Icon = item.icon;

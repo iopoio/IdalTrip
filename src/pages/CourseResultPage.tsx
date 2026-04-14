@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
-  ShareIcon,
-  BookmarkIcon,
   NearMe,
   Schedule,
   LocationOn,
@@ -10,7 +8,7 @@ import {
   ArrowForward
 } from '../components/Icons';
 import { kakaoMapService } from '../services/kakaoMap';
-import type { CourseResponse, Place } from '../types';
+import type { CourseResponse, Place, CourseItem } from '../types';
 
 declare global {
   interface Window { kakao: any; }
@@ -21,16 +19,31 @@ const CourseResultPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const mapRef = useRef<HTMLDivElement>(null);
-  const { course, places, duration } = (location.state as {
+  const [activeDay, setActiveDay] = useState(1);
+
+  // 세션 스토리지 복원 로직
+  useEffect(() => {
+    if (location.state?.course) {
+      sessionStorage.setItem('lastCourse', JSON.stringify(location.state));
+    }
+  }, [location.state]);
+
+  const stateData = (location.state || JSON.parse(sessionStorage.getItem('lastCourse') || 'null')) as {
     course: CourseResponse;
     places?: Place[];
     duration?: string;
-  }) || {};
-  const [activeDay, setActiveDay] = useState(1);
+    transport?: string;
+  } | null;
+  
+  useEffect(() => {
+    if (!stateData) navigate('/');
+  }, [stateData, navigate]);
+
+  const { course, transport, places, duration } = stateData || {};
 
   const dayCountFromDuration = duration === 'day' ? 1 : duration === '1night' ? 2 : 3;
   const dayCountFromSchedule = course
-    ? Math.max(1, ...course.schedule.map(i => (typeof i.day === 'number' ? i.day : parseInt(String(i.day)) || 1)))
+    ? Math.max(1, ...course.schedule.map((i: CourseItem) => (typeof i.day === 'number' ? i.day : parseInt(String(i.day)) || 1)))
     : 1;
   const dayCount = Math.max(dayCountFromDuration, dayCountFromSchedule);
 
@@ -45,7 +58,7 @@ const CourseResultPage = () => {
   useEffect(() => {
     if (!course || !mapRef.current || !window.kakao) return;
 
-    const daySchedule = course.schedule.filter(item => (typeof item.day === 'number' ? item.day : parseInt(String(item.day)) || 1) === activeDay);
+    const daySchedule = course.schedule.filter((item: CourseItem) => (typeof item.day === 'number' ? item.day : parseInt(String(item.day)) || 1) === activeDay);
     const firstItem = daySchedule[0] || course.schedule[0];
     if (!firstItem?.lat || !firstItem?.lng) return;
 
@@ -56,7 +69,7 @@ const CourseResultPage = () => {
 
     const linePath: any[] = [];
 
-    course.schedule.forEach((item, idx) => {
+    course.schedule.forEach((item: CourseItem, idx: number) => {
       if (!item.lat || !item.lng) return;
       const position = new window.kakao.maps.LatLng(item.lat, item.lng);
       linePath.push(position);
@@ -103,27 +116,18 @@ const CourseResultPage = () => {
 
   return (
     <div className="bg-surface text-on-surface min-h-screen">
-      <main className="pt-28 pb-12 px-8 max-w-[1440px] mx-auto">
+      <main className="pt-4 pb-12 px-5">
         <div className="flex flex-col gap-8">
           {/* Header */}
-          <header className="flex flex-col md:flex-row justify-between items-end gap-6">
+          <header className="flex flex-col gap-4">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <span className="bg-primary-container/10 text-primary px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase">AI Curation</span>
+                <span className="bg-primary-container/10 text-primary px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase">AI 큐레이션</span>
                 <span className="text-secondary font-bold text-sm">{course.theme}</span>
               </div>
-              <h1 className="text-3xl md:text-4xl font-extrabold font-headline tracking-tight leading-tight">
+              <h1 className="text-3xl font-extrabold font-headline tracking-tight leading-tight">
                 {course.title}
               </h1>
-              <p className="text-slate-500 mt-2">{course.summary}</p>
-            </div>
-            <div className="flex gap-3">
-              <button className="flex items-center gap-2 bg-surface-container-low px-5 py-3 rounded-xl text-sm font-medium hover:bg-surface-container-high transition-colors">
-                <ShareIcon className="w-4 h-4" /> 공유하기
-              </button>
-              <button className="flex items-center gap-2 bg-primary-container text-on-primary px-6 py-3 rounded-xl text-sm font-bold hover:opacity-95 transition-all shadow-lg shadow-primary-container/20">
-                <BookmarkIcon className="w-4 h-4" /> 코스 저장
-              </button>
             </div>
           </header>
 
@@ -134,36 +138,41 @@ const CourseResultPage = () => {
                 <button
                   key={i}
                   onClick={() => setActiveDay(i + 1)}
-                  className={`px-8 py-3 rounded-full font-bold transition-all ${
+                  className={`px-6 py-2 rounded-full font-bold transition-all text-sm ${
                     activeDay === i + 1 
-                    ? "bg-primary text-white shadow-lg" 
+                    ? "bg-primary text-white shadow-md" 
                     : "bg-surface-container-high text-slate-500 hover:bg-slate-200"
                   }`}
                 >
-                  Day {i + 1}
+                  {i + 1}일차
                 </button>
               ))}
             </div>
           )}
 
           {/* Dashboard */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            {/* Left: Timeline */}
-            <div className="lg:col-span-7 flex flex-col gap-6">
-              {/* Timeline */}
+          <div className="flex flex-col gap-8">
+            
+            {/* 카카오맵 */}
+            <div ref={mapRef} className="rounded-xl overflow-hidden bg-surface-container-high h-[240px] relative shadow-lg">
+              {/* 카카오맵 SDK가 렌더링할 영역 */}
+            </div>
+
+            {/* Timeline */}
+            <div className="flex flex-col gap-6">
               <div className="relative pl-8 space-y-8">
                 <div className="absolute left-[7px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-primary/40 via-surface-container-highest to-transparent"></div>
 
                 {course.schedule
-                  .filter(item => (typeof item.day === 'number' ? item.day : parseInt(String(item.day)) || 1) === activeDay)
-                  .map((item, idx) => {
+                  .filter((item: CourseItem) => (typeof item.day === 'number' ? item.day : parseInt(String(item.day)) || 1) === activeDay)
+                  .map((item: CourseItem, idx: number) => {
                     const placeImage = getPlaceImage(item.place_name);
                   return (
                     <div key={idx} className="relative">
                       <div className={`absolute -left-[31px] top-6 w-4 h-4 rounded-full border-4 border-surface shadow-sm z-10 ${idx === 0 ? 'bg-primary' : 'bg-surface-container-highest'}`}></div>
 
-                      <div className="bg-surface-container-lowest rounded-xl p-5 flex flex-col md:flex-row gap-5 hover:shadow-xl transition-shadow group">
-                        <div className="w-full md:w-32 h-32 flex-shrink-0 rounded-xl overflow-hidden bg-surface-container-high">
+                      <div className="bg-surface-container-lowest rounded-xl p-4 flex flex-row gap-4 hover:shadow-xl transition-shadow group">
+                        <div className="w-24 h-24 flex-shrink-0 rounded-xl overflow-hidden bg-surface-container-high">
                           {placeImage ? (
                             <img className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src={placeImage} alt={item.place_name} />
                           ) : (
@@ -184,20 +193,31 @@ const CourseResultPage = () => {
                               <NearMe className="w-3.5 h-3.5" /> 카카오맵
                             </a>
                           </div>
-                          <h3 className="text-lg font-bold mb-1 text-on-surface">{item.place_name}</h3>
-                          <p className="text-sm text-slate-500 mb-3">{item.description}</p>
+                          <h3 className="text-base font-bold mb-1 text-on-surface">{item.place_name}</h3>
+                          <p className="text-[11px] text-slate-500 mb-2">{item.description}</p>
                           <div className="flex gap-2 mt-auto">
-                            <span className="bg-surface-container text-slate-500 px-2.5 py-1 rounded-lg text-[10px] font-bold">{item.type === 'food' ? '맛집' : item.type === 'festival' ? '축제' : '관광'}</span>
-                            <span className="bg-surface-container text-slate-500 px-2.5 py-1 rounded-lg text-[10px] font-bold">{item.stay_duration}</span>
+                            <span className="bg-surface-container text-slate-500 px-2 py-0.5 rounded text-[10px] font-bold">{item.type === 'food' ? '맛집' : item.type === 'festival' ? '축제' : '관광'}</span>
+                            <span className="bg-surface-container text-slate-500 px-2 py-0.5 rounded text-[10px] font-bold">{item.stay_duration}</span>
                           </div>
                         </div>
                       </div>
 
                       {idx < course.schedule.length - 1 && item.move_time && (
                         <div className="my-4 ml-4">
-                          <span className="px-4 py-1.5 glass-panel rounded-full text-[11px] font-bold text-secondary shadow-sm">
-                            이동 {item.move_time} ({item.distance})
-                          </span>
+                          {transport === 'public' ? (
+                            <a 
+                              href={`https://map.kakao.com/link/to/${encodeURIComponent(item.place_name)},${item.lat},${item.lng}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="px-4 py-1.5 glass-panel rounded-full text-[11px] font-bold text-secondary shadow-sm hover:underline flex items-center gap-1 w-max"
+                            >
+                              <NearMe className="w-3 h-3" /> 카카오맵에서 대중교통 경로 보기
+                            </a>
+                          ) : (
+                            <span className="px-4 py-1.5 glass-panel rounded-full text-[11px] font-bold text-secondary shadow-sm">
+                              이동 {item.move_time} ({item.distance})
+                            </span>
+                          )}
                         </div>
                       )}
                     </div>
@@ -206,14 +226,8 @@ const CourseResultPage = () => {
               </div>
             </div>
 
-            {/* Right: Map + Summary */}
-            <div className="lg:col-span-5 flex flex-col gap-6">
-              {/* 카카오맵 */}
-              <div ref={mapRef} className="rounded-xl overflow-hidden bg-surface-container-high h-[320px] relative shadow-lg">
-                {/* 카카오맵 SDK가 렌더링할 영역 */}
-              </div>
-
-              {/* 코스 요약 */}
+            {/* 코스 요약 및 비용 */}
+            <div className="flex flex-col gap-6">
               <div className="bg-surface-container-lowest rounded-xl p-8 border border-surface-container-low">
                 <h4 className="text-lg font-bold mb-6 font-headline">코스 요약</h4>
                 <div className="grid grid-cols-2 gap-4">
@@ -252,7 +266,7 @@ const CourseResultPage = () => {
               </div>
 
               {/* 확정 버튼 */}
-              <button className="w-full bg-secondary text-on-secondary py-5 rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90 shadow-lg transition-all active:scale-[0.98]">
+              <button className="w-full bg-secondary text-on-secondary py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90 shadow-lg transition-all active:scale-[0.98]">
                 이 코스로 여행 확정하기 <ArrowForward className="w-5 h-5" />
               </button>
             </div>
