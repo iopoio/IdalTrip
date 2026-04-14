@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Navigation, MapPin, Sparkles } from 'lucide-react';
+import { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { ArrowLeft, Navigation } from 'lucide-react';
 import type { CourseResponse } from '../types';
 
 declare global {
-  interface window {
+  interface Window {
     kakao: any;
   }
 }
 
 const CourseMapPage = () => {
-  const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const navigate = useNavigate();
   const { course } = (location.state as { course: CourseResponse }) || {};
 
   useEffect(() => {
-    if (!course) return;
+    if (!course || !course.schedule || course.schedule.length === 0) return;
 
     // Load Kakao Map
     const container = document.getElementById('map');
+    const firstPlace = course.schedule[0];
     const options = {
-      center: new (window as any).kakao.maps.LatLng(course.schedule[0].lat, course.schedule[0].lng),
+      center: new (window as any).kakao.maps.LatLng(firstPlace.lat, firstPlace.lng),
       level: 5
     };
 
@@ -34,7 +34,7 @@ const CourseMapPage = () => {
       const position = new (window as any).kakao.maps.LatLng(item.lat, item.lng);
       linePath.push(position);
 
-      const marker = new (window as any).kakao.maps.Marker({
+      new (window as any).kakao.maps.Marker({
         position,
         map: map
       });
@@ -42,7 +42,7 @@ const CourseMapPage = () => {
       const customOverlay = new (window as any).kakao.maps.CustomOverlay({
         position,
         content: `
-          <div class="bg-white px-3 py-1 rounded-full shadow-lg border-2 border-brand-primary text-[11px] font-black">
+          <div class="bg-white px-3 py-1 rounded-full shadow-lg border-2 border-brand-primary text-[11px] font-black pointer-events-none">
             ${idx + 1}. ${item.place_name}
           </div>
         `,
@@ -68,39 +68,43 @@ const CourseMapPage = () => {
   }, [course]);
 
   if (!course) {
-    return <div className="p-10 text-center">코스 정보가 없습니다.</div>;
+    return (
+      <div className="h-screen flex items-center justify-center bg-gray-50">
+        <h2 className="text-xl font-bold">코스 정보가 없습니다.</h2>
+      </div>
+    );
   }
 
   return (
-    <div className="h-screen flex flex-col pt-24">
-      <div className="inner-container flex items-center gap-6 py-6 overflow-hidden">
+    <div className="h-screen flex flex-col pt-24 bg-white">
+      <div className="inner-container flex items-center gap-8 py-8 overflow-hidden">
         <button 
           onClick={() => navigate(-1)} 
-          className="w-12 h-12 bg-white rounded-full shadow-premium flex items-center justify-center text-brand-secondary hover:text-brand-primary transition-all"
+          className="w-14 h-14 bg-white rounded-full shadow-premium flex items-center justify-center text-brand-secondary hover:text-brand-primary transition-all active:scale-95"
         >
-          <ArrowLeft size={24} />
+          <ArrowLeft size={28} />
         </button>
         <div>
-          <h1 className="text-2xl font-black text-brand-secondary">{course.title} 경로 확인</h1>
-          <p className="text-sm text-gray-400 font-bold">AI가 설계한 최적의 이동 동선입니다.</p>
+          <h1 className="text-3xl font-black text-brand-secondary tracking-tight">{course.title} 경로 미리보기</h1>
+          <p className="text-sm text-gray-400 font-bold uppercase tracking-widest mt-1">AI Optimized Routing Map</p>
         </div>
       </div>
 
-      <div id="map" className="flex-1 w-full bg-gray-100" />
+      <div id="map" className="flex-1 w-full bg-gray-50" />
 
-      {/* Mini info overlay */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-full max-w-sm px-6 pointer-events-none">
-         <div className="bg-white/90 backdrop-blur-xl p-8 rounded-[40px] shadow-premium pointer-events-auto border border-white/20">
-            <div className="flex items-center gap-4 mb-6">
-               <div className="w-12 h-12 bg-brand-primary rounded-2xl flex items-center justify-center text-white">
-                  <Navigation size={24} />
+      {/* Floating Navigator Panel */}
+      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 w-full max-w-sm px-8 pointer-events-none">
+         <div className="bg-white/80 backdrop-blur-2xl p-10 rounded-[48px] shadow-premium pointer-events-auto border border-white/20 animate-fade-in-up">
+            <div className="flex items-center gap-6 mb-8">
+               <div className="w-16 h-16 bg-brand-primary rounded-3xl flex items-center justify-center text-white shadow-2xl shadow-brand-primary/30">
+                  <Navigation size={32} />
                </div>
                <div>
-                  <span className="text-[11px] font-black text-brand-primary uppercase tracking-widest block">Real-time Path</span>
-                  <h3 className="text-lg font-black text-brand-secondary">총 {course.schedule.length}개의 경유지</h3>
+                  <span className="text-[11px] font-black text-brand-primary uppercase tracking-[0.2em] block mb-1">Navigation</span>
+                  <h3 className="text-[20px] font-black text-brand-secondary">총 {course.schedule.length}개의 포인트</h3>
                </div>
             </div>
-            <button className="cta-primary w-full py-4 text-[15px]">경로 안내 시작하기</button>
+            <button className="cta-primary w-full py-5 text-[16px] font-black shadow-brand-primary/30">탐색 시작</button>
          </div>
       </div>
     </div>

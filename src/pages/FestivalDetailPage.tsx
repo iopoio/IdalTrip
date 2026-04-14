@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Calendar, MapPin, Car, Train, ArrowLeft, Sparkles, Loader2, Check } from 'lucide-react';
 import { tourApi } from '../services/tourApi';
@@ -35,8 +36,8 @@ const FestivalDetailPage = () => {
   }, [id]);
 
   const toggleSpot = (contentId: string) => {
-    setSelectedSpots(prev => 
-      prev.includes(contentId) ? prev.filter(i => i !== contentId) : [...prev, contentId]
+    setSelectedSpots((prev: string[]) => 
+      prev.includes(contentId) ? prev.filter((i: string) => i !== contentId) : [...prev, contentId]
     );
   };
 
@@ -44,7 +45,7 @@ const FestivalDetailPage = () => {
     if (!festival) return;
     setGenerating(true);
     try {
-      const selectedPlaceObjects = nearbyPlaces.filter(p => selectedSpots.includes(p.contentid));
+      const selectedPlaceObjects = nearbyPlaces.filter((p: Place) => selectedSpots.includes(p.contentid));
       const response = await geminiService.generateCourse({
         festivalTitle: festival.title,
         festivalAddr: festival.addr1,
@@ -118,7 +119,7 @@ const FestivalDetailPage = () => {
           </div>
 
           <div className="grid grid-cols-1 gap-10">
-            {nearbyPlaces.map((place) => (
+            {nearbyPlaces.map((place: Place) => (
               <div 
                 key={place.contentid}
                 onClick={() => toggleSpot(place.contentid)}
