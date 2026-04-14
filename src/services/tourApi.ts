@@ -1,9 +1,7 @@
 import axios from 'axios';
 import type { Festival, Place } from '../types';
 
-const BASE_URL = import.meta.env.DEV 
-  ? '/B551011/KorService2' 
-  : 'https://apis.data.go.kr/B551011/KorService2';
+const BASE_URL = '/B551011/KorService2';
 const API_KEY = import.meta.env.VITE_TOUR_API_KEY;
 
 export const tourApi = {
