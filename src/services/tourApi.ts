@@ -42,12 +42,7 @@ export const tourApi = {
           _type: 'json',
           MobileOS: 'ETC',
           MobileApp: 'IdalTrip',
-          contentId: contentId,
-          defaultYN: 'Y',
-          overviewYN: 'Y',
-          addrinfoYN: 'Y',
-          mapinfoYN: 'Y',
-          firstImageYN: 'Y'
+          contentId: contentId
         }
       });
 
