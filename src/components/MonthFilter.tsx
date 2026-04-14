@@ -7,8 +7,8 @@ const MonthFilter = ({ currentMonth, onMonthChange }: MonthFilterProps) => {
   const months = Array.from({ length: 12 }, (_, i) => i + 1);
 
   return (
-    <div className="overflow-x-auto no-scrollbar -mx-4 px-4">
-      <div className="flex items-center gap-3 py-4">
+    <div className="overflow-x-auto no-scrollbar" style={{ overflow: 'clip visible', overflowX: 'auto', overflowY: 'visible' }}>
+      <div className="flex items-center gap-3" style={{ padding: '16px 4px' }}>
         {months.map((month) => {
           const isActive = currentMonth === month;
           return (
