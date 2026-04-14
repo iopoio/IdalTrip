@@ -21,9 +21,10 @@ const CourseResultPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const mapRef = useRef<HTMLDivElement>(null);
-  const { course, places } = (location.state as {
+  const { course, places, duration } = (location.state as {
     course: CourseResponse;
     places?: Place[];
+    duration?: string;
   }) || {};
 
   // 장소명으로 TourAPI 이미지 매칭

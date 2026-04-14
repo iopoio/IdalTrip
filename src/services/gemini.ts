@@ -13,6 +13,7 @@ interface CourseRequest {
   places: Place[];
   transportation: 'car' | 'public';
   duration: 'day' | '1night' | '2night';
+  origin?: string;
 }
 
 export const geminiService = {
@@ -31,6 +32,7 @@ export const geminiService = {
     const prompt = `한국 여행 코스 설계 전문가로서 ${dayCount}일 여행 코스를 JSON으로 생성하세요.
 
 ## 입력
+- 출발지: ${req.origin || '서울역'}
 - 축제: ${req.festivalTitle} (${req.festivalAddr})
 - 이동수단: ${transportLabel}
 - 일정: ${dayCount === 1 ? '당일치기' : dayCount + '일'}

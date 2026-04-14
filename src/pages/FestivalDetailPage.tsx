@@ -25,6 +25,7 @@ const FestivalDetailPage = () => {
   const [generating, setGenerating] = useState(false);
   const [selectedSpots, setSelectedSpots] = useState<string[]>([]);
   
+  const [origin, setOrigin] = useState('');
   const [transport, setTransport] = useState<'car' | 'public'>('car');
   const [duration, setDuration] = useState<'day' | '1night' | '2night'>('day');
 
@@ -67,7 +68,8 @@ const FestivalDetailPage = () => {
         festivalLng: parseFloat(festival.mapx),
         places: selectedPlaceObjects,
         transportation: transport,
-        duration: duration
+        duration: duration,
+        origin: origin || '서울역'
       });
 
       if (response) {
@@ -75,6 +77,7 @@ const FestivalDetailPage = () => {
           state: {
             course: response,
             transport,
+            duration,
             places: selectedPlaceObjects,
             festival
           }
