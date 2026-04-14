@@ -1,5 +1,6 @@
 import React from 'react';
-import { Calendar, MapPin } from 'lucide-react';
+import { CalendarToday } from './Icons';
+import { formatKTODate } from '../lib/utils';
 import type { Festival } from '../types';
 
 interface FestivalCardProps {
@@ -14,38 +15,36 @@ const FestivalCard: React.FC<FestivalCardProps> = ({ festival, onClick }) => {
   return (
     <div 
       onClick={onClick}
-      className="group cursor-pointer"
+      className="group cursor-pointer bg-surface-container-lowest rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-500 border border-transparent hover:border-surface-variant flex flex-col"
     >
-      <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden mb-5 shadow-premium border border-black/5 bg-gray-100">
+      <div className="h-[320px] overflow-hidden relative bg-surface-container-high">
         {festival.firstimage ? (
           <img 
             src={festival.firstimage} 
             alt={festival.title}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             onError={(e) => {
-              (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=1000&auto=format&fit=crop';
+              (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1547036967-23d1199d3b1f?w=600';
             }}
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-brand-primary/20 to-brand-secondary/10 flex items-center justify-center">
-             <MapPin size={40} className="text-brand-primary opacity-30" />
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-secondary/10">
+             <CalendarToday className="w-16 h-16 text-primary opacity-20" />
           </div>
         )}
-        
-        {/* Status Badge from Mockup */}
-        <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/20">
-          <span className="text-[11px] font-bold text-white tracking-widest uppercase">진행중</span>
+        <div className="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur rounded-lg text-xs font-bold text-primary shadow-sm">
+          진행중
         </div>
       </div>
       
-      <div className="px-1">
-        <span className="text-[13px] font-bold text-brand-primary mb-2 block uppercase tracking-wider">{region}</span>
-        <h3 className="text-[19px] font-bold text-brand-secondary mb-3 leading-tight group-hover:text-brand-primary transition-colors">
+      <div className="p-8 flex-1 flex flex-col">
+        <p className="text-secondary font-bold text-sm mb-2">{region}</p>
+        <h3 className="text-xl font-bold mb-4 text-on-surface leading-tight group-hover:text-primary transition-colors">
           {festival.title}
         </h3>
-        <div className="flex items-center gap-2 text-surface-text-muted text-[13px] font-medium">
-          <Calendar size={14} />
-          <span>{festival.eventstartdate} - {festival.eventenddate}</span>
+        <div className="mt-auto flex items-center gap-2 text-slate-500 text-sm">
+          <CalendarToday className="w-4 h-4" />
+          <span>{formatKTODate(festival.eventstartdate)} - {formatKTODate(festival.eventenddate)}</span>
         </div>
       </div>
     </div>

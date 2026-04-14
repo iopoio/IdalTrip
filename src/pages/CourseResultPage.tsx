@@ -1,136 +1,182 @@
-import { useLocation, useNavigate } from 'react-router-dom';
-import { MapPin, Sparkles, Navigation, RotateCcw, Save, Smartphone } from 'lucide-react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { 
+  ShareIcon, 
+  BookmarkIcon, 
+  NearMe, 
+  Schedule, 
+  Payments, 
+  LocationOn, 
+  SmartToy, 
+  ArrowForward 
+} from '../components/Icons';
 import type { CourseResponse } from '../types';
 
 const CourseResultPage = () => {
+  const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const navigate = useNavigate();
   const { course } = (location.state as { course: CourseResponse }) || {};
 
   if (!course) {
     return (
-      <div className="h-screen flex flex-col items-center justify-center p-10 text-center bg-gray-50">
-        <h2 className="display-lg !text-[2rem] mb-10">코스 정보가 없습니다.</h2>
-        <button onClick={() => navigate('/')} className="cta-primary px-12">처음으로 돌아가기</button>
+      <div className="h-screen flex flex-col items-center justify-center p-10 text-center bg-surface">
+        <h2 className="text-2xl font-headline font-bold mb-10">코스 정보가 없습니다.</h2>
+        <button 
+          onClick={() => navigate('/')} 
+          className="px-10 py-5 bg-primary text-white rounded-full font-bold shadow-xl"
+        >
+          처음으로 돌아가기
+        </button>
       </div>
     );
   }
 
   return (
-    <div className="bg-[#f9f9f9] min-h-screen pb-48">
-      {/* AI Curator Welcome - Bubble UI */}
-      <section className="inner-container pt-20 mb-24">
-        <div className="flex flex-col md:flex-row items-start gap-10 mb-16">
-           <div className="w-20 h-20 bg-brand-primary rounded-[32px] shadow-2xl shadow-brand-primary/40 flex items-center justify-center text-white shrink-0 animate-bounce-subtle">
-              <Sparkles size={40} />
-           </div>
-           <div className="flex-1">
-              <h1 className="display-lg !text-[3.5rem] text-brand-secondary mb-8 leading-[1.1] animate-fade-in-up">AI 큐레이터가<br />최적의 여정을 설계했습니다!</h1>
-              <div className="relative glass-panel p-8 rounded-[40px] rounded-tl-none max-w-3xl animate-fade-in-up delay-100">
-                 <p className="text-xl text-brand-secondary font-medium leading-relaxed italic">
-                   "불필요한 이동을 걷어내고 {course.theme}에 집중했어요. {course.summary}"
-                 </p>
-                 <div className="absolute top-0 left-[-15px] w-0 h-0 border-t-[20px] border-t-white/70 border-l-[20px] border-l-transparent" />
+    <div className="bg-surface text-on-surface selection:bg-primary-fixed min-h-screen">
+      <main className="pt-28 pb-12 px-8 max-w-[1440px] mx-auto">
+        <div className="flex flex-col gap-8">
+          {/* Hero Header Section - Mockup 1:1 */}
+          <header className="flex flex-col md:flex-row justify-between items-end gap-6">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="bg-primary-container/10 text-primary px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase">AI Curation</span>
+                <h2 className="text-secondary font-bold text-sm tracking-tight">{course.theme} 코스</h2>
               </div>
-           </div>
-        </div>
+              <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight leading-tight">
+                {course.summary.split('. ')[0]}<br />{course.summary.split('. ')[1] || '당신만을 위한 특별한 여정'}
+              </h1>
+            </div>
+            <div className="flex gap-3">
+              <button className="flex items-center gap-2 bg-surface-container-low px-5 py-3 rounded-xl text-sm font-medium hover:bg-surface-container-high transition-colors">
+                <ShareIcon className="w-5 h-5" /> 공유하기
+              </button>
+              <button className="flex items-center gap-2 bg-primary-container text-on-primary px-6 py-3 rounded-xl text-sm font-bold hover:opacity-95 transition-all shadow-lg shadow-primary-container/20">
+                <BookmarkIcon className="w-5 h-5 fill-current" /> 코스 저장
+              </button>
+            </div>
+          </header>
 
-        {/* Stats Grid - Elevated Surface */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-           {[
-             { label: '총 소요 시간', value: course.total_duration },
-             { label: '예상 경비', value: course.estimated_cost },
-             { label: '방문 스팟', value: `${course.schedule.length}곳` }
-           ].map((stat, idx) => (
-             <div key={idx} className="bg-white p-10 rounded-[48px] shadow-premium flex flex-col items-center text-center animate-fade-in-up" style={{ animationDelay: `${200 + idx*100}ms` }}>
-               <span className="text-[13px] font-black text-gray-300 mb-4 uppercase tracking-[0.2em]">{stat.label}</span>
-               <span className="text-3xl md:text-4xl font-black text-brand-secondary">{stat.value}</span>
-             </div>
-           ))}
-        </div>
-      </section>
-
-      {/* Course Timeline - Editorial Vertical Flow */}
-      <section className="inner-container">
-        <div className="flex gap-8 mb-20 border-b border-gray-100 pb-6 whitespace-nowrap overflow-x-auto no-scrollbar">
-          <button className="text-2xl font-black text-brand-primary border-b-4 border-brand-primary pb-4 px-6">1일차</button>
-          <button className="text-2xl font-black text-gray-200 hover:text-gray-300 pb-4 px-6 transition-all">2일차</button>
-          <button className="text-2xl font-black text-gray-200 hover:text-gray-300 pb-4 px-6 transition-all">3일차</button>
-        </div>
-
-        <div className="relative space-y-24 pl-6 md:pl-16">
-          {/* Timeline Backbone */}
-          <div className="absolute left-[38px] md:left-[83px] top-12 bottom-12 w-[1px] bg-gradient-to-b from-brand-primary via-brand-primary/20 to-transparent" />
-
-          {course.schedule.map((item, idx) => (
-            <div key={idx} className="relative group animate-fade-in-up" style={{ animationDelay: `${400 + idx*100}ms` }}>
-              {/* Timeline Icon */}
-              <div className="absolute left-[-45px] md:left-[-100px] top-4 w-20 h-20 bg-white border-2 border-brand-primary rounded-full z-10 flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-500">
-                 {item.type === 'food' || item.type === 'coffee' ? (
-                   <span className="text-brand-primary text-[28px] font-black tracking-tighter">YU</span>
-                 ) : (
-                   <MapPin className="text-brand-primary" size={32} />
-                 )}
+          {/* Dashboard Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* Left: Timeline - Multiple Day Support */}
+            <div className="lg:col-span-7 flex flex-col gap-6">
+              {/* Day Selector - Mockup 1:1 */}
+              <div className="flex p-1.5 bg-surface-container-low rounded-2xl w-fit">
+                <button className="px-8 py-2.5 bg-white rounded-xl shadow-sm text-sm font-bold text-primary transition-all">Day 1</button>
+                <button className="px-8 py-2.5 text-sm font-medium text-slate-500 hover:text-slate-800 transition-all">Day 2</button>
               </div>
 
-              <div className="md:ml-12 lg:ml-20">
-                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
-                   <div>
-                     <div className="flex items-center gap-4 text-brand-primary text-[15px] font-black mb-4 uppercase tracking-widest">
-                       <span>{item.time}</span>
-                       <span className="w-2 h-2 bg-brand-primary/20 rounded-full" />
-                       <span>머무는 시간 {item.stay_duration}</span>
-                     </div>
-                     <h3 className="text-3xl md:text-5xl font-black text-brand-secondary tracking-tight">{item.place_name}</h3>
-                   </div>
-                   <button className="glass-panel px-8 py-3.5 rounded-full text-[14px] font-black text-brand-secondary flex items-center gap-3 hover:bg-white transition-all shadow-sm">
-                     <Smartphone size={18} /> 카카오맵 열기
-                   </button>
-                 </div>
-
-                 {/* Editorial Hero Image */}
-                 <div className="rounded-[48px] overflow-hidden mb-10 shadow-premium max-w-4xl group">
-                   <img 
-                    src={item.image_url || "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=1200"} 
-                    className="w-full aspect-[16/9] object-cover transition-transform duration-1000 group-hover:scale-105" 
-                    alt={item.place_name} 
-                   />
-                 </div>
-                 
-                 <p className="text-xl text-gray-400 leading-relaxed font-medium max-w-3xl mb-12">
-                   {item.description}
-                 </p>
-
-                 {/* Smart Move Pill */}
-                 {idx < course.schedule.length - 1 && (
-                   <div className="my-20 -ml-10 flex items-center gap-6">
-                      <div className="w-6 h-6 rounded-full bg-white border-[6px] border-brand-primary shadow-lg scale-110" />
-                      <div className="glass-panel px-8 py-4 rounded-full flex items-center gap-4 text-[15px] font-black text-brand-secondary">
-                        <Navigation size={18} className="text-brand-primary animate-pulse" />
-                        이동 {item.move_time} <span className="text-gray-300">({item.distance})</span>
+              {/* Timeline Cards - Editorial Style */}
+              <div className="relative pl-8 space-y-8">
+                {/* Vertical Line - Mockup 1:1 */}
+                <div className="absolute left-[7px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-primary/40 via-surface-container-highest to-transparent"></div>
+                
+                {course.schedule.map((item, idx) => (
+                  <div key={idx} className="relative">
+                    {/* Timeline Dot */}
+                    <div className="absolute -left-[31px] top-6 w-4 h-4 rounded-full border-4 border-surface bg-primary shadow-sm z-10 transition-transform hover:scale-125 cursor-pointer"></div>
+                    
+                    <div className="bg-surface-container-lowest rounded-xl p-5 flex flex-col md:flex-row gap-6 hover:shadow-xl transition-shadow group border border-transparent hover:border-surface-variant/50">
+                      <div className="w-full md:w-32 h-32 flex-shrink-0 rounded-xl overflow-hidden bg-surface-container-high">
+                        <img 
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                          src={item.image_url || "https://images.unsplash.com/photo-1547036967-23d1199d3b1f?w=400"}
+                          alt={item.place_name}
+                        />
                       </div>
-                   </div>
-                 )}
+                      <div className="flex-1 flex flex-col">
+                        <div className="flex justify-between items-start mb-1">
+                          <span className="text-primary font-bold font-headline text-xs">{item.time}</span>
+                          <button className="text-secondary text-xs font-semibold flex items-center gap-1 hover:underline">
+                            <NearMe className="w-3.5 h-3.5" /> 카카오맵
+                          </button>
+                        </div>
+                        <h3 className="text-xl font-bold mb-2 text-on-surface">{item.place_name}</h3>
+                        <p className="text-sm text-slate-500 leading-relaxed mb-4 line-clamp-2">{item.description}</p>
+                        <div className="flex gap-2 mt-auto">
+                          <span className="bg-surface-container text-slate-500 px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider">{item.type}</span>
+                          <span className="bg-surface-container text-slate-500 px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider">머무는시간 {item.stay_duration}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Smart Move Pill - Mockup 1:1 Extension */}
+                    {idx < course.schedule.length - 1 && (
+                      <div className="my-6 ml-4 flex items-center gap-4">
+                        <div className="px-5 py-2 glass-panel rounded-full flex items-center gap-3 text-[11px] font-bold text-secondary shadow-sm">
+                          <NearMe className="w-3.5 h-3.5 text-primary rotate-45" />
+                          이동 {item.move_time} <span className="text-slate-300">({item.distance})</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
-          ))}
-        </div>
-      </section>
 
-      {/* Floating Action Bar - Design System Spike */}
-      <div className="fixed bottom-12 left-0 right-0 z-50 pointer-events-none">
-        <div className="inner-container pointer-events-auto flex justify-center gap-8 py-2">
-          <button className="flex-1 max-w-[320px] h-[84px] bg-brand-secondary text-white rounded-[32px] font-black text-[20px] shadow-2xl flex items-center justify-center gap-4 hover:scale-105 transition-all active:scale-95 group">
-            <Save size={26} className="group-hover:translate-y-[-2px] transition-transform" /> 이 여정 저장하기
-          </button>
-          <button 
-            onClick={() => navigate(-1)}
-            className="flex-1 max-w-[320px] h-[84px] glass-panel text-brand-secondary rounded-[32px] font-black text-[20px] flex items-center justify-center gap-4 hover:bg-white transition-all active:scale-95"
-          >
-            <RotateCcw size={26} /> 다른 일정 추천
-          </button>
+            {/* Right: Summary & Map - Mockup 1:1 */}
+            <div className="lg:col-span-5 flex flex-col gap-6">
+              {/* Map Preview */}
+              <div className="rounded-xl overflow-hidden bg-surface-container-high h-[320px] relative shadow-premium">
+                <img 
+                  className="w-full h-full object-cover" 
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-WEUasDwmjkGJCzfxJrBWolVpr_AUTLmLzCYjgOehRTmhf35St-hZAx9RxjuAO17IX2saCUq_jBcYqfyJ-JyV9IfxVH4QELhTY3jX86FjKqmTeFVP446bJGCQ-SPI-U1szthge738tlbnV_7LtYUL9h3ITPmvnm2SuIL25FfSznfhzZCNdkOqlDuD_v6l4w3tgX8TvWIIH_akWyRWyEJHqYVMHV1UPUL_0J-yDIbzrT3fVMy2aCje5PMLu74Q0ToOshFsUR2v9n8"
+                  alt="Course Map Preview"
+                />
+                  <button 
+                    onClick={() => navigate(`/course/${id}/map`, { state: { course } })}
+                    className="absolute bottom-4 right-4 glass-panel px-4 py-2 rounded-xl flex items-center gap-2 border border-white/20 hover:scale-105 transition-transform"
+                  >
+                    <LocationOn className="w-4.5 h-4.5 text-primary" />
+                    <span className="text-xs font-bold">지도로 크게 보기</span>
+                  </button>
+              </div>
+
+              {/* Course Stats Card */}
+              <div className="bg-surface-container-lowest rounded-xl p-8 border border-surface-container-low shadow-sm">
+                <h4 className="text-lg font-bold mb-6 text-on-surface font-headline">코스 요약</h4>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="flex flex-col items-center p-4 bg-surface-container-low rounded-xl">
+                    <Schedule className="text-secondary w-6 h-6 mb-2" />
+                    <span className="text-[10px] text-slate-400 font-bold mb-1 uppercase">총 소요시간</span>
+                    <span className="text-sm font-extrabold text-on-surface">{course.total_duration}</span>
+                  </div>
+                  <div className="flex flex-col items-center p-4 bg-surface-container-low rounded-xl">
+                    <Payments className="text-secondary w-6 h-6 mb-2" />
+                    <span className="text-[10px] text-slate-400 font-bold mb-1 uppercase">예상 비용</span>
+                    <span className="text-sm font-extrabold text-on-surface">{course.estimated_cost}</span>
+                  </div>
+                  <div className="flex flex-col items-center p-4 bg-surface-container-low rounded-xl">
+                    <LocationOn className="text-secondary w-6 h-6 mb-2" />
+                    <span className="text-[10px] text-slate-400 font-bold mb-1 uppercase">방문 장소</span>
+                    <span className="text-sm font-extrabold text-on-surface">{course.schedule.length}곳</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* AI Insight Bubble - DESIGN.MD Signature */}
+              <div className="relative bg-primary/5 rounded-xl p-6 border border-primary/10">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-white shadow-lg">
+                    <SmartToy className="w-6 h-6" />
+                  </div>
+                  <span className="font-bold text-primary text-sm uppercase tracking-wide">Idal AI 추천 사유</span>
+                </div>
+                <p className="text-sm leading-relaxed text-on-primary-container font-medium font-body italic">
+                  "{course.summary}"
+                </p>
+                {/* Speech Bubble Tail */}
+                <div className="absolute -top-3 left-10 w-6 h-6 bg-primary/5 rotate-45 border-l border-t border-primary/10 -z-10"></div>
+              </div>
+
+              {/* Next Action */}
+              <button className="w-full bg-secondary text-on-secondary py-5 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-[#1a4b87] shadow-xl transition-all active:scale-[0.98]">
+                이 코스로 여행 확정하기 <ArrowForward className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 };

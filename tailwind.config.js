@@ -7,50 +7,65 @@ export default {
   darkMode: "class",
   theme: {
     extend: {
-      colors: {
-        // Brand Primary (Idal Orange)
-        primary: "#ab3500",
-        "primary-container": "#ff6b35",
-        "on-primary": "#ffffff",
-        "on-primary-container": "#5f1900",
-        
-        // Brand Secondary (Trip Blue)
-        secondary: "#225ea9",
-        "secondary-container": "#7cafff",
-        "on-secondary": "#ffffff",
-        "on-secondary-container": "#004180",
-
-        // Surface / Foundation
-        surface: "#f9f9f9",
-        "on-surface": "#1a1c1c",
-        "surface-container-lowest": "#ffffff",
-        "surface-container-low": "#f3f3f3",
-        "surface-container": "#eeeeee",
-        "surface-container-high": "#e8e8e8",
-        "surface-container-highest": "#e2e2e2",
-        "surface-variant": "#e2e2e2",
-        "on-surface-variant": "#594139",
-
-        // Accent / Status
-        error: "#ba1a1a",
-        "error-container": "#ffdad6",
-        "on-error": "#ffffff",
+      "colors": {
+        "tertiary-fixed-dim": "#59d5fb",
+        "primary": "#ab3500",
         "on-error-container": "#93000a",
-        outline: "#8d7168",
-        "outline-variant": "#e1bfb5",
+        "surface-variant": "#e2e2e2",
+        "tertiary-fixed": "#b5ebff",
+        "surface": "#f9f9f9",
+        "on-tertiary-container": "#003744",
+        "primary-container": "#ff6b35",
+        "on-surface": "#1a1c1c",
+        "error-container": "#ffdad6",
+        "inverse-primary": "#ffb59d",
+        "on-primary-fixed": "#390c00",
+        "on-background": "#1a1c1c",
+        "error": "#ba1a1a",
+        "secondary-fixed": "#d6e3ff",
+        "secondary-fixed-dim": "#a8c8ff",
+        "surface-dim": "#dadada",
+        "secondary": "#225ea9",
+        "surface-container-lowest": "#ffffff",
+        "inverse-surface": "#2f3131",
+        "surface-tint": "#ab3500",
+        "surface-bright": "#f9f9f9",
+        "surface-container-high": "#e8e8e8",
+        "on-secondary-fixed-variant": "#00468a",
+        "primary-fixed": "#ffdbd0",
+        "on-error": "#ffffff",
+        "on-tertiary-fixed": "#001f28",
+        "on-secondary-container": "#004180",
+        "on-primary": "#ffffff",
+        "surface-container-low": "#f3f3f3",
+        "primary-fixed-dim": "#ffb59d",
+        "inverse-on-surface": "#f1f1f1",
+        "surface-container-highest": "#e2e2e2",
+        "on-tertiary-fixed-variant": "#004e60",
+        "on-surface-variant": "#594139",
+        "on-primary-fixed-variant": "#832600",
+        "outline": "#8d7168",
+        "on-tertiary": "#ffffff",
+        "on-secondary": "#ffffff",
+        "on-primary-container": "#5f1900",
+        "background": "#f9f9f9",
+        "surface-container": "#eeeeee",
+        "tertiary-container": "#00a7cb",
+        "secondary-container": "#7cafff",
+        "tertiary": "#00677e",
+        "on-secondary-fixed": "#001b3c",
+        "outline-variant": "#e1bfb5"
       },
-      fontFamily: {
-        headline: ["Plus Jakarta Sans", "Pretendard", "sans-serif"],
-        body: ["Pretendard", "sans-serif"],
-        brand: ["Diphylleia", "serif"],
-      },
-      borderRadius: {
+      "borderRadius": {
+        "DEFAULT": "0.25rem",
+        "lg": "0.5rem",
         "xl": "1.5rem",
-        "2xl": "2.5rem",
+        "full": "9999px"
       },
-      boxShadow: {
-        "soft": "0 20px 40px -10px rgba(0, 0, 0, 0.05)",
-        "vibrant": "0 20px 40px -10px rgba(255, 107, 53, 0.15)",
+      "fontFamily": {
+        "headline": ["Plus Jakarta Sans", "Pretendard", "sans-serif"],
+        "body": ["Pretendard", "sans-serif"],
+        "label": ["Pretendard", "sans-serif"]
       }
     },
   },

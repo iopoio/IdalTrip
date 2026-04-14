@@ -13,7 +13,7 @@ function App() {
       <div className="min-h-screen bg-surface text-on-surface font-body selection:bg-primary/10">
         <Header />
 
-        <main className="min-h-screen pt-20">
+        <main className="min-h-screen">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/festival/:id" element={<FestivalDetailPage />} />

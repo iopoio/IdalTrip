@@ -2,101 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* Design Guideline: Colors */
-  --brand-primary: #ff6b35;
-  --brand-primary-dark: #ab3500;
-  --brand-secondary: #225ea9;
-  
-  /* Design Guideline: Surface Tokens (No-Line Rule) */
-  --surface-bg: #f9f9f9;
-  --surface-lowest: #ffffff;
-  --surface-low: #f4f4f4;
-  --surface-high: #efefef;
-  
-  /* Design Guideline: Shadows (Ambient Shadows) */
-  --shadow-premium: 0 20px 40px -10px rgba(255, 107, 53, 0.08), 0 10px 20px -5px rgba(0, 0, 0, 0.04);
-}
-
 @layer base {
   body {
-    margin: 0;
-    min-width: 320px;
-    min-height: 100vh;
-    background-color: var(--surface-bg);
-    color: #1a1c1c;
+    background-color: #f9f9f9; /* surface */
+    color: #1a1c1c; /* on-surface */
     font-family: 'Pretendard', sans-serif;
     -webkit-font-smoothing: antialiased;
-    letter-spacing: -0.025em;
-  }
-  
-  h1, h2, h3, .brand-font {
-    font-family: 'Plus Jakarta Sans', 'Pretendard', sans-serif;
-    letter-spacing: -0.04em;
   }
 }
 
-@layer components {
-  /* Layout: Replacing @apply with standard CSS to ensure build stability */
-  .inner-container {
-    max-width: 1280px;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-
-  /* Editorial Scale */
-  .display-lg {
-    font-weight: 800;
-    line-height: 1.05;
-    letter-spacing: -0.05em;
-  }
-  
-  @media (min-width: 768px) {
-    .display-lg {
-      font-size: 5.5rem;
-    }
-  }
-  
-  @media (max-width: 767px) {
-    .display-lg {
-      font-size: 3rem;
-    }
-  }
-
-  /* No-Line Cards */
-  .premium-card {
-    background-color: white;
-    border-radius: 24px;
-    box-shadow: var(--shadow-premium);
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    border: none !important;
-  }
-
-  /* Ambient Buttons */
-  .cta-primary {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    padding: 1.25rem 2.5rem;
-    border-radius: 9999px;
-    background: linear-gradient(135deg, #ff6b35 0%, #ff8c61 100%);
-    color: white;
-    font-weight: 800;
-    font-size: 1.125rem;
-    box-shadow: 0 25px 50px -12px rgba(255, 107, 53, 0.25);
-    transition: all 0.3s ease;
-    cursor: pointer;
-    border: none;
-  }
-  
+@layer utilities {
+  /* Glassmorphism utility specified in mockups */
   .glass-panel {
-    background-color: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: var(--shadow-premium);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
+
+  .glass-nav {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  
+  /* Layout utilities */
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
+  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 }
