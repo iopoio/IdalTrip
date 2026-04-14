@@ -71,7 +71,14 @@ const FestivalDetailPage = () => {
       });
 
       if (response) {
-        navigate(`/course/${id}`, { state: { course: response, transport } });
+        navigate(`/course/${id}`, {
+          state: {
+            course: response,
+            transport,
+            places: selectedPlaceObjects,
+            festival
+          }
+        });
       }
     } catch (error) {
        console.error(error);
