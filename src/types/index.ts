@@ -25,6 +25,24 @@ export interface Place {
   contenttypeid: string;
 }
 
+export interface SpotWithStatus {
+  contentid: string;
+  contenttypeid: string;
+  title: string;
+  firstimage?: string;
+  addr1?: string;
+  mapx?: string;
+  mapy?: string;
+  // 운영 상태 (detailIntro2에서 가져옴)
+  isOpen?: boolean;       // true: 운영중, false: 휴무, undefined: 확인중
+  openTime?: string;      // 이용시간/영업시간
+  restDate?: string;      // 쉬는날
+  firstMenu?: string;     // 대표메뉴 (음식점만)
+  // 축제 전용
+  eventstartdate?: string;
+  eventenddate?: string;
+}
+
 export interface CourseItem {
   day: number;
   time: string;

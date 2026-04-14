@@ -14,6 +14,15 @@ const HomePage = () => {
   const [selectedRegion, setSelectedRegion] = useState("전체");
   const [loading, setLoading] = useState(true);
 
+  // 새로운 상태 추가
+  const [searchRegion, setSearchRegion] = useState('강원');
+  const [searchDate, setSearchDate] = useState(() => {
+    // 기본값: 다음 주 토요일
+    const d = new Date();
+    d.setDate(d.getDate() + (6 - d.getDay() + 7) % 7 + 1);
+    return d.toISOString().split('T')[0];
+  });
+
   useEffect(() => {
     const loadFestivals = async () => {
       setLoading(true);
@@ -73,6 +82,46 @@ const HomePage = () => {
                 <ArrowForward className="w-5 h-5" />
               </button>
             </div>
+          </div>
+        </section>
+
+        {/* Region & Date Selector */}
+        <section className="px-4 py-6 bg-white">
+          <h2 className="text-lg font-bold text-on-surface mb-4">
+            어디로 떠날까요?
+          </h2>
+          <div className="flex flex-col gap-3">
+            {/* 지역 선택 */}
+            <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
+              {['서울/경기', '강원', '충청', '전라', '경상', '제주'].map(region => (
+                <button
+                  key={region}
+                  onClick={() => setSearchRegion(region)}
+                  className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-bold transition-all ${
+                    searchRegion === region
+                      ? 'bg-primary-container text-white'
+                      : 'bg-surface-container text-slate-500'
+                  }`}
+                >
+                  {region}
+                </button>
+              ))}
+            </div>
+            {/* 날짜 선택 */}
+            <input
+              type="date"
+              value={searchDate}
+              min={new Date().toISOString().split('T')[0]}
+              onChange={e => setSearchDate(e.target.value)}
+              className="w-full bg-surface-container-low rounded-xl px-4 py-3 text-on-surface font-semibold focus:outline-none focus:ring-2 focus:ring-primary/30"
+            />
+            {/* 탐색 버튼 */}
+            <button
+              onClick={() => navigate(`/explore?region=${encodeURIComponent(searchRegion)}&date=${searchDate}`)}
+              className="w-full bg-primary-container text-white py-4 rounded-xl font-bold text-base shadow-md active:scale-[0.98] transition-all"
+            >
+              {searchRegion} · {new Date(searchDate).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' })} 탐색하기
+            </button>
           </div>
         </section>
 

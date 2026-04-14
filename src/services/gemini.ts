@@ -14,12 +14,16 @@ interface CourseRequest {
   transportation: 'car' | 'public';
   duration: 'day' | '1night' | '2night';
   origin?: string;
+  travelDate?: string;
 }
 
 export const geminiService = {
   generateCourse: async (req: CourseRequest): Promise<CourseResponse | null> => {
     const dayCount = req.duration === 'day' ? 1 : req.duration === '1night' ? 2 : 3;
     const transportLabel = req.transportation === 'car' ? '자차' : '대중교통';
+    const dateInfo = req.travelDate
+      ? `여행 날짜: ${req.travelDate} (${new Date(req.travelDate).toLocaleDateString('ko-KR', { weekday: 'long' })})`
+      : '';
 
     const placeList = req.places.map(p => ({
       title: p.title,
@@ -33,10 +37,12 @@ export const geminiService = {
 
 ## 입력
 - 출발지: ${req.origin || '서울역'}
+${dateInfo}
 - 축제: ${req.festivalTitle} (${req.festivalAddr})
 - 이동수단: ${transportLabel}
 - 일정: ${dayCount === 1 ? '당일치기' : dayCount + '일'}
 - 후보 장소: ${JSON.stringify(placeList)}
+
 
 ## 규칙
 1. 축제를 반드시 포함하고 후보 장소 중 ${dayCount === 1 ? '3~4개' : dayCount === 2 ? '5~7개' : '8~10개'}를 선택
