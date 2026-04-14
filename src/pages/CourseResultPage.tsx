@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   ShareIcon,
@@ -26,6 +26,13 @@ const CourseResultPage = () => {
     places?: Place[];
     duration?: string;
   }) || {};
+  const [activeDay, setActiveDay] = useState(1);
+
+  const dayCountFromDuration = duration === 'day' ? 1 : duration === '1night' ? 2 : 3;
+  const dayCountFromSchedule = course
+    ? Math.max(1, ...course.schedule.map(i => (typeof i.day === 'number' ? i.day : parseInt(String(i.day)) || 1)))
+    : 1;
+  const dayCount = Math.max(dayCountFromDuration, dayCountFromSchedule);
 
   // 장소명으로 TourAPI 이미지 매칭
   const getPlaceImage = (placeName: string) => {
@@ -38,7 +45,8 @@ const CourseResultPage = () => {
   useEffect(() => {
     if (!course || !mapRef.current || !window.kakao) return;
 
-    const firstItem = course.schedule[0];
+    const daySchedule = course.schedule.filter(item => (typeof item.day === 'number' ? item.day : parseInt(String(item.day)) || 1) === activeDay);
+    const firstItem = daySchedule[0] || course.schedule[0];
     if (!firstItem?.lat || !firstItem?.lng) return;
 
     const map = new window.kakao.maps.Map(mapRef.current, {
@@ -77,7 +85,7 @@ const CourseResultPage = () => {
       linePath.forEach(p => bounds.extend(p));
       map.setBounds(bounds);
     }
-  }, [course]);
+  }, [course, activeDay]);
 
   if (!course) {
     return (
@@ -119,6 +127,25 @@ const CourseResultPage = () => {
             </div>
           </header>
 
+          {/* Day Tabs */}
+          {dayCount > 1 && (
+            <div className="flex gap-4">
+              {Array.from({ length: dayCount }).map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveDay(i + 1)}
+                  className={`px-8 py-3 rounded-full font-bold transition-all ${
+                    activeDay === i + 1 
+                    ? "bg-primary text-white shadow-lg" 
+                    : "bg-surface-container-high text-slate-500 hover:bg-slate-200"
+                  }`}
+                >
+                  Day {i + 1}
+                </button>
+              ))}
+            </div>
+          )}
+
           {/* Dashboard */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* Left: Timeline */}
@@ -127,8 +154,10 @@ const CourseResultPage = () => {
               <div className="relative pl-8 space-y-8">
                 <div className="absolute left-[7px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-primary/40 via-surface-container-highest to-transparent"></div>
 
-                {course.schedule.map((item, idx) => {
-                  const placeImage = getPlaceImage(item.place_name);
+                {course.schedule
+                  .filter(item => (typeof item.day === 'number' ? item.day : parseInt(String(item.day)) || 1) === activeDay)
+                  .map((item, idx) => {
+                    const placeImage = getPlaceImage(item.place_name);
                   return (
                     <div key={idx} className="relative">
                       <div className={`absolute -left-[31px] top-6 w-4 h-4 rounded-full border-4 border-surface shadow-sm z-10 ${idx === 0 ? 'bg-primary' : 'bg-surface-container-highest'}`}></div>
@@ -172,7 +201,7 @@ const CourseResultPage = () => {
                         </div>
                       )}
                     </div>
-                  );
+                  )
                 })}
               </div>
             </div>

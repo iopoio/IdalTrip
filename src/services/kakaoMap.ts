@@ -69,5 +69,21 @@ export const kakaoMapService = {
    */
   getDirectionUrl: (name: string, lat: number, lng: number) => {
     return `https://map.kakao.com/link/to/${encodeURIComponent(name)},${lat},${lng}`;
+  },
+
+  /**
+   * Search places using Kakao Keyword Search API
+   */
+  searchPlace: async (query: string) => {
+    try {
+      const response = await axios.get('https://dapi.kakao.com/v2/local/search/keyword.json', {
+        params: { query, size: 5 },
+        headers: { Authorization: `KakaoAK ${REST_API_KEY}` }
+      });
+      return response.data.documents; // [{place_name, x(lng), y(lat), address_name}]
+    } catch (error) {
+      console.error('Failed to search Kakao place:', error);
+      return [];
+    }
   }
 };

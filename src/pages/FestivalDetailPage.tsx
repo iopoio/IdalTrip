@@ -13,6 +13,7 @@ import {
 } from '../components/Icons';
 import { tourApi } from '../services/tourApi';
 import { geminiService } from '../services/gemini';
+import { kakaoMapService } from '../services/kakaoMap';
 import { formatKTODate, getFestivalStatus } from '../lib/utils';
 import type { Festival, Place } from '../types';
 
@@ -28,6 +29,9 @@ const FestivalDetailPage = () => {
   const [origin, setOrigin] = useState('');
   const [transport, setTransport] = useState<'car' | 'public'>('car');
   const [duration, setDuration] = useState<'day' | '1night' | '2night'>('day');
+  const [showFullOverview, setShowFullOverview] = useState(false);
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [showResults, setShowResults] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -49,6 +53,20 @@ const FestivalDetailPage = () => {
     };
     loadData();
   }, [id]);
+
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      if (origin.length > 1 && !origin.startsWith('내 위치')) {
+        const results = await kakaoMapService.searchPlace(origin);
+        setSearchResults(results);
+        setShowResults(true);
+      } else {
+        setSearchResults([]);
+        setShowResults(false);
+      }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [origin]);
 
   const toggleSpot = (contentId: string) => {
     setSelectedSpots((prev: string[]) => 
@@ -87,6 +105,21 @@ const FestivalDetailPage = () => {
        console.error(error);
     } finally {
       setGenerating(false);
+    }
+  };
+
+  const handleUseMyLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setOrigin(`내 위치 (${latitude.toFixed(2)}, ${longitude.toFixed(2)})`);
+          setShowResults(false);
+        },
+        () => {
+          alert("위치 정보를 가져올 수 없습니다.");
+        }
+      );
     }
   };
 
@@ -129,7 +162,19 @@ const FestivalDetailPage = () => {
                 축제 상세 정보
               </h2>
               <div className="space-y-4 text-on-surface-variant leading-relaxed font-body">
-                <p>{festival.overview || "축제에 대한 풍성한 이야기가 곧 업데이트될 예정입니다. IdalTrip과 함께 계절의 정취를 만끽해 보세요."}</p>
+                <div className="relative">
+                  <p className={showFullOverview ? "" : "line-clamp-3"}>
+                    {festival.overview || "축제에 대한 풍성한 이야기가 곧 업데이트될 예정입니다. IdalTrip과 함께 계절의 정취를 만끽해 보세요."}
+                  </p>
+                  {festival.overview && festival.overview.length > 150 && (
+                    <button 
+                      onClick={() => setShowFullOverview(!showFullOverview)}
+                      className="text-primary font-bold mt-2 text-sm hover:underline"
+                    >
+                      {showFullOverview ? "접기" : "더보기"}
+                    </button>
+                  )}
+                </div>
                 <div className="grid grid-cols-2 gap-4 pt-4 border-t border-outline-variant/20">
                   <div className="flex flex-col">
                     <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">기간</span>
@@ -201,14 +246,42 @@ const FestivalDetailPage = () => {
               <div className="space-y-8">
                 {/* Origin Input */}
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-400 mb-2 uppercase tracking-[0.2em]">출발지 입력</label>
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em]">출발지 입력</label>
+                    <button 
+                      onClick={handleUseMyLocation}
+                      className="text-[10px] text-primary font-bold hover:underline"
+                    >
+                      내 위치 사용
+                    </button>
+                  </div>
                   <div className="relative">
                     <input 
                       className="w-full bg-surface-container-high border-none rounded-xl py-4 pl-12 pr-4 text-on-surface focus:ring-2 focus:ring-primary/20 transition-all font-semibold italic" 
                       placeholder="서울역" 
                       type="text"
+                      value={origin}
+                      onChange={(e) => setOrigin(e.target.value)}
                     />
                     <LocationOn className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                    
+                    {showResults && searchResults.length > 0 && (
+                      <div className="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-xl z-50 border border-slate-100 overflow-hidden">
+                        {searchResults.map((result, idx) => (
+                          <div 
+                            key={idx}
+                            onClick={() => {
+                              setOrigin(result.place_name);
+                              setShowResults(false);
+                            }}
+                            className="px-4 py-3 hover:bg-slate-50 cursor-pointer text-sm border-b border-slate-50 last:border-0"
+                          >
+                            <div className="font-bold text-on-surface">{result.place_name}</div>
+                            <div className="text-xs text-slate-400">{result.address_name}</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -216,7 +289,7 @@ const FestivalDetailPage = () => {
                 <div>
                   <label className="block text-[11px] font-bold text-slate-400 mb-4 uppercase tracking-[0.2em]">이동수단 선택</label>
                   <div className="grid grid-cols-2 gap-3">
-                    <button 
+                    <button
                       onClick={() => setTransport('car')}
                       className={`flex flex-col items-center gap-2 p-4 rounded-xl transition-all shadow-md ${
                         transport === 'car' ? 'bg-primary text-white' : 'bg-surface-container-high text-slate-600 hover:bg-slate-200'
@@ -225,9 +298,9 @@ const FestivalDetailPage = () => {
                       <DirectionsCar className="w-6 h-6" />
                       <span className="text-sm font-bold">자가용</span>
                     </button>
-                    <button 
+                    <button
                       onClick={() => setTransport('public')}
-                      className={`flex flex-col items-center gap-2 p-4 rounded-xl transition-all ${
+                      className={`flex flex-col items-center gap-2 p-4 rounded-xl transition-all shadow-md ${
                         transport === 'public' ? 'bg-primary text-white' : 'bg-surface-container-high text-slate-600 hover:bg-slate-200'
                       }`}
                     >
@@ -288,8 +361,8 @@ const FestivalDetailPage = () => {
                   </div>
                   <button 
                     onClick={handleGenerateCourse}
-                    disabled={generating}
-                    className="w-full bg-primary-container hover:scale-[1.02] text-white py-5 rounded-xl font-headline font-bold text-lg shadow-lg shadow-primary-container/20 transition-all active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-50"
+                    disabled={generating || selectedSpots.length === 0}
+                    className="w-full bg-primary-container hover:scale-[1.02] text-white py-5 rounded-xl font-headline font-bold text-lg shadow-lg shadow-primary-container/20 transition-all active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed"
                   >
                     {generating ? <Loader2 className="animate-spin w-6 h-6" /> : <AutoAwesome className="w-6 h-6" />}
                     AI 코스 생성하기

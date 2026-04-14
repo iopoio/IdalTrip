@@ -47,6 +47,8 @@ export const geminiService = {
 6. estimated_cost는 교통비+식비+입장료 항목별 근거를 간단히 포함 (예: "교통 2만+식비 3만+입장 1만 = 약 6만원")
 7. type은 "festival", "attraction", "food" 중 하나
 8. lat, lng는 후보 장소에서 가져오고 없으면 0
+9. 일정(${dayCount}일)에 맞게 각 장소에 "day" 값을 1부터 부여하여 골고루 분배하세요. day 값은 반드시 숫자(1, 2, 3)로만 작성하고, ${dayCount}일이면 day:1과 day:${dayCount} 항목이 반드시 하나 이상 포함되어야 합니다.
+10. title은 "${dayCount === 1 ? '당일' : dayCount + '일'}" 키워드를 반드시 포함하세요. (예: 당일이면 "강릉 당일 코스", 2일이면 "강릉 2일 코스")
 
 ## JSON 형식 (JSON만 출력)
 {
@@ -57,6 +59,7 @@ export const geminiService = {
   "estimated_cost": "교통 2만+식비 3만+입장 1만 = 약 6만원",
   "schedule": [
     {
+      "day": 1,
       "time": "10:00 AM",
       "place_name": "장소명",
       "type": "attraction",

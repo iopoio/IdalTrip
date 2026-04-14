@@ -26,6 +26,7 @@ export interface Place {
 }
 
 export interface CourseItem {
+  day: number;
   time: string;
   place_name: string;
   type: 'festival' | 'attraction' | 'food' | 'coffee';

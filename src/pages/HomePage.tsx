@@ -10,6 +10,7 @@ const HomePage = () => {
   const navigate = useNavigate();
   const [festivals, setFestivals] = useState<Festival[]>([]);
   const [currentMonth, setCurrentMonth] = useState<number>(new Date().getMonth() + 1);
+  const [selectedRegion, setSelectedRegion] = useState("전체");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -21,6 +22,28 @@ const HomePage = () => {
     };
     loadFestivals();
   }, [currentMonth]);
+
+  const regions = ["전체", "서울/경기", "강원", "충청", "전라", "경상", "제주"];
+
+  const filteredFestivals = festivals.filter(festival => {
+    if (selectedRegion === "전체") return true;
+    const addr = festival.addr1 || "";
+    const regionPrefix = addr.split(' ')[0];
+    
+    if (selectedRegion === "서울/경기") {
+      return ["서울", "경기", "인천"].some(r => regionPrefix.includes(r));
+    }
+    if (selectedRegion === "충청") {
+      return ["충청", "대전", "세종"].some(r => regionPrefix.includes(r));
+    }
+    if (selectedRegion === "전라") {
+      return ["전라", "광주"].some(r => regionPrefix.includes(r));
+    }
+    if (selectedRegion === "경상") {
+      return ["경상", "부산", "대구", "울산"].some(r => regionPrefix.includes(r));
+    }
+    return regionPrefix.includes(selectedRegion);
+  });
 
   return (
     <div className="bg-surface text-on-surface">
@@ -65,8 +88,23 @@ const HomePage = () => {
         {/* Festival Grid - High-End Editorial Style */}
         <section id="festivals" className="py-24 bg-surface">
           <div className="max-w-[1920px] mx-auto px-8">
-            <div className="flex items-end justify-between mb-16">
+            <div className="flex items-end justify-between mb-8">
               <div>
+                <div className="flex gap-6 mb-8 overflow-x-auto pb-2 scrollbar-hide">
+                  {regions.map(region => (
+                    <button
+                      key={region}
+                      onClick={() => setSelectedRegion(region)}
+                      className={`whitespace-nowrap pb-2 text-lg transition-all ${
+                        selectedRegion === region 
+                        ? "text-primary font-bold border-b-2 border-primary" 
+                        : "text-slate-400 hover:text-slate-600"
+                      }`}
+                    >
+                      {region}
+                    </button>
+                  ))}
+                </div>
                 <h2 className="font-headline text-4xl font-bold text-on-surface mb-4">현재 진행 중인 축제</h2>
                 <p className="text-slate-500 text-lg">전국 각지의 생생한 축제 소식을 전해드립니다.</p>
               </div>
@@ -84,7 +122,7 @@ const HomePage = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {festivals.slice(0, 8).map((festival) => (
+                {filteredFestivals.slice(0, 8).map((festival) => (
                   <FestivalCard 
                     key={festival.contentid} 
                     festival={festival} 

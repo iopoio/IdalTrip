@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { kakaoMapService } from '../services/kakaoMap';
 import { 
   LocationOn, 
   NearMe, 
@@ -19,6 +20,13 @@ const CourseMapPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { course } = (location.state as { course: CourseResponse }) || {};
+  const mapRef = useRef<any>(null);
+  const [bubbleBouncing, setBubbleBouncing] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setBubbleBouncing(false), 3000);
+    return () => clearTimeout(t);
+  }, []);
 
   useEffect(() => {
     if (!course || !course.schedule || course.schedule.length === 0) return;
@@ -32,6 +40,7 @@ const CourseMapPage = () => {
     };
 
     const map = new (window as any).kakao.maps.Map(container, options);
+    mapRef.current = map;
 
     // Create markers for schedule items
     const linePath: any[] = [];
@@ -111,10 +120,10 @@ const CourseMapPage = () => {
             <LocationOn className="w-6 h-6 text-slate-600" />
           </button>
           <div className="flex flex-col glass-panel rounded-2xl shadow-lg border border-white/40 overflow-hidden">
-            <button className="w-12 h-12 flex items-center justify-center hover:bg-white transition-all border-b border-white/20">
+            <button onClick={() => mapRef.current?.setLevel(mapRef.current.getLevel() - 1)} className="w-12 h-12 flex items-center justify-center hover:bg-white transition-all border-b border-white/20">
               <span className="text-xl font-bold text-slate-600">+</span>
             </button>
-            <button className="w-12 h-12 flex items-center justify-center hover:bg-white transition-all">
+            <button onClick={() => mapRef.current?.setLevel(mapRef.current.getLevel() + 1)} className="w-12 h-12 flex items-center justify-center hover:bg-white transition-all">
               <span className="text-xl font-bold text-slate-600">-</span>
             </button>
           </div>
@@ -146,7 +155,10 @@ const CourseMapPage = () => {
                   <p className="text-[11px] text-slate-500 line-clamp-1 font-medium">{item.description}</p>
                 </div>
                 <div className="flex items-center gap-2 mt-3">
-                  <button className="flex-1 py-2.5 bg-secondary text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-md">
+                  <button
+                    onClick={() => window.open(kakaoMapService.getDirectionUrl(item.place_name, item.lat, item.lng), '_blank')}
+                    className="flex-1 py-2.5 bg-secondary text-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-md"
+                  >
                     <NearMe className="w-4 h-4 fill-current" />
                     카카오맵 네비
                   </button>
@@ -162,7 +174,7 @@ const CourseMapPage = () => {
 
       {/* Floating AI Prompt - Mockup 1:1 Signature */}
       <div className="fixed bottom-36 right-8 pointer-events-auto z-20">
-        <div className="flex items-center gap-3 p-4 glass-panel rounded-2xl shadow-xl border border-primary/20 max-w-xs animate-bounce cursor-help hover:animate-none group hover:bg-white transition-colors duration-500">
+        <div className={`flex items-center gap-3 p-4 glass-panel rounded-2xl shadow-xl border border-primary/20 max-w-xs cursor-help group hover:bg-white transition-colors duration-500 ${bubbleBouncing ? 'animate-bounce' : 'animate-pulse'}`}>
           <div className="w-10 h-10 bg-primary-container rounded-full flex items-center justify-center text-white shrink-0 shadow-lg">
             <AutoAwesome className="w-6 h-6 fill-current" />
           </div>
