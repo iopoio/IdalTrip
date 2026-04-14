@@ -17,7 +17,7 @@ export const tourApi = {
           _type: 'json',
           MobileOS: 'ETC',
           MobileApp: 'IdalTrip',
-          arrange: 'A',
+          arrange: 'O',
           eventStartDate: startDate,
           numOfRows: 20,
           pageNo: 1
