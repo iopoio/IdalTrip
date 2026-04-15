@@ -128,7 +128,7 @@ const CourseResultPage = () => {
       objectType: 'feed',
       content: {
         title: course?.title || '이달의 여행 코스',
-        description: `${course?.theme} · ${course?.total_duration}\n\n${placeList}\n\n이달여행에서 직접 검색해보세요!`,
+        description: `${course?.theme} · ${course?.total_duration}\n\n${placeList}\n\n이달여행에서 직접 검색해보세요!\n※ 추후 바로 공유할 수 있는 서비스를 구현 중입니다.`,
         imageUrl: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?q=80&w=800&auto=format&fit=crop',
         link: {
           mobileWebUrl: window.location.origin,
