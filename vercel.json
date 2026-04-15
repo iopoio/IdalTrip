@@ -11,6 +11,10 @@
     {
       "source": "/kakao-local/:path*",
       "destination": "https://dapi.kakao.com/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
