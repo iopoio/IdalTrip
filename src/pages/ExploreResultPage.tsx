@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { tourApi } from '../services/tourApi';
 import { geminiService } from '../services/gemini';
+import { kakaoMapService } from '../services/kakaoMap';
 import type { SpotWithStatus, Place } from '../types';
 
 const checkIsOpen = (intro: any, contentTypeId: string, selectedDate: string): boolean => {
@@ -78,7 +79,53 @@ const ExploreResultPage = () => {
         checkIntro(foods, '39'),
       ]);
 
-      const allSpots = [...festivalSpots, ...attractionSpots, ...foodSpots];
+      // 카카오 fallback — 관광지 3개 미만이면 보완
+      let finalAttractionSpots = attractionSpots;
+      if (attractionSpots.length < 3) {
+        const kakaoResults = await kakaoMapService.searchLocal(`${region} 관광명소`, 'AT4', 8);
+        const kakaoSpots: SpotWithStatus[] = kakaoResults
+          .filter(doc => !attractionSpots.some(a => a.title === doc.place_name)) // 중복 제거
+          .slice(0, 8 - attractionSpots.length)
+          .map(doc => ({
+            contentid: `kakao_${doc.id}`,
+            title: doc.place_name,
+            addr1: doc.road_address_name || doc.address_name,
+            mapx: doc.x,
+            mapy: doc.y,
+            firstimage: '',
+            contenttypeid: '12',
+            isOpen: true,
+            openTime: undefined,
+            restDate: undefined,
+            firstMenu: undefined,
+          }));
+        finalAttractionSpots = [...attractionSpots, ...kakaoSpots];
+      }
+
+      // 카카오 fallback — 맛집 3개 미만이면 보완
+      let finalFoodSpots = foodSpots;
+      if (foodSpots.length < 3) {
+        const kakaoResults = await kakaoMapService.searchLocal(`${region} 맛집`, 'FD6', 8);
+        const kakaoSpots: SpotWithStatus[] = kakaoResults
+          .filter(doc => !foodSpots.some(f => f.title === doc.place_name)) // 중복 제거
+          .slice(0, 8 - foodSpots.length)
+          .map(doc => ({
+            contentid: `kakao_${doc.id}`,
+            title: doc.place_name,
+            addr1: doc.road_address_name || doc.address_name,
+            mapx: doc.x,
+            mapy: doc.y,
+            firstimage: '',
+            contenttypeid: '39',
+            isOpen: true,
+            openTime: undefined,
+            restDate: undefined,
+            firstMenu: doc.category_name.split('>').pop()?.trim() || undefined,
+          }));
+        finalFoodSpots = [...foodSpots, ...kakaoSpots];
+      }
+
+      const allSpots = [...festivalSpots, ...finalAttractionSpots, ...finalFoodSpots];
       setSpots(allSpots);
 
       // 기본 선택: 운영중인 것들 중 상위 3개
@@ -149,6 +196,23 @@ const ExploreResultPage = () => {
         </h1>
       </div>
 
+      {/* 출발지 + 교통수단 */}
+      <div className="flex gap-2 px-4 pb-4">
+        <input
+          type="text"
+          placeholder="출발지 (예: 서울역)"
+          value={origin}
+          onChange={e => setOrigin(e.target.value)}
+          className="flex-1 bg-surface-container-low rounded-xl px-4 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primary/30"
+        />
+        <button
+          onClick={() => setTransport(t => t === 'car' ? 'public' : 'car')}
+          className="px-4 py-2.5 bg-surface-container rounded-xl text-sm font-bold text-slate-600 transition-colors hover:bg-slate-200 flex-shrink-0"
+        >
+          {transport === 'car' ? '🚗 자가용' : '🚌 대중교통'}
+        </button>
+      </div>
+
       {/* 탭 */}
       <div className="flex gap-4 px-4 pb-4 overflow-x-auto scrollbar-hide">
         {(['전체', '축제', '관광지', '맛집'] as const).map(tab => (
@@ -176,6 +240,30 @@ const ExploreResultPage = () => {
       ) : error ? (
         <div className="px-4 py-8 text-center">
           <p className="text-sm text-red-500">{error}</p>
+        </div>
+      ) : filteredSpots.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-20 px-8 text-center gap-3">
+          <span className="text-5xl">
+            {activeTab === '축제' ? '🎪' :
+             activeTab === '관광지' ? '🏞️' :
+             activeTab === '맛집' ? '🍽️' : '🗺️'}
+          </span>
+          <p className="text-base font-bold text-on-surface">
+            {activeTab === '축제' ? '이 날짜에 진행 중인 축제가 없어요' :
+             activeTab === '관광지' ? '등록된 관광지 정보가 없습니다' :
+             activeTab === '맛집' ? '등록된 맛집 정보가 없습니다' :
+             '이 날짜에 해당 지역 정보가 없습니다'}
+          </p>
+          <p className="text-sm text-slate-400">
+            {activeTab === '축제' ? '다른 날짜나 지역을 탐색해보세요' :
+             '다른 지역을 선택하거나 홈으로 돌아가세요'}
+          </p>
+          <button
+            onClick={() => navigate('/')}
+            className="mt-2 px-6 py-2.5 bg-surface-container rounded-xl text-sm font-bold text-slate-600"
+          >
+            홈으로
+          </button>
         </div>
       ) : (
         <div className="flex flex-col gap-3 px-4">
@@ -244,23 +332,8 @@ const ExploreResultPage = () => {
         </div>
       )}
 
-      {/* 하단 고정 CTA */}
-      <div className="fixed bottom-0 left-0 right-0 max-w-[430px] mx-auto bg-white/95 backdrop-blur-sm border-t border-surface-container px-4 pt-4 pb-8 z-40">
-        <div className="flex gap-2 mb-3">
-          <input
-            type="text"
-            placeholder="출발지 (예: 서울역)"
-            value={origin}
-            onChange={e => setOrigin(e.target.value)}
-            className="flex-1 bg-surface-container-low rounded-xl px-4 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primary/30"
-          />
-          <button
-            onClick={() => setTransport(t => t === 'car' ? 'public' : 'car')}
-            className="px-4 py-2.5 bg-surface-container rounded-xl text-sm font-bold text-slate-600 transition-colors hover:bg-slate-200"
-          >
-            {transport === 'car' ? '🚗 자가용' : '🚌 대중교통'}
-          </button>
-        </div>
+      {/* 하단 고정 CTA — BottomNav(z-50, ~72px) 위에 표시 */}
+      <div className="fixed bottom-[72px] left-0 right-0 max-w-[430px] mx-auto bg-white/95 backdrop-blur-sm border-t border-surface-container px-4 pt-4 pb-4 z-40">
         <button
           onClick={handleGenerateCourse}
           disabled={selectedIds.length === 0 || generating}
