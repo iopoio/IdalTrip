@@ -41,7 +41,7 @@ const CourseResultPage = () => {
     if (!stateData) navigate('/');
   }, [stateData, navigate]);
 
-  const { course, transport, places } = stateData || {};
+  const { course, transport, places, origin } = stateData || {} as any;
 
   const dayCount = course
     ? Math.max(1, ...course.schedule.map((i: CourseItem) =>
@@ -51,7 +51,7 @@ const CourseResultPage = () => {
 
   const getPlaceImage = (placeName: string) => {
     if (!places) return null;
-    const match = places.find(p => placeName.includes(p.title) || p.title.includes(placeName));
+    const match = places.find((p: Place) => placeName.includes(p.title) || p.title.includes(placeName));
     return match?.firstimage || null;
   };
 
@@ -130,7 +130,7 @@ const CourseResultPage = () => {
       content: {
         title: course?.title || '이달의 여행 코스',
         description: `${course?.theme} · ${course?.total_duration}\n${placeList} 외\n\n이달여행에서 직접 검색해보세요!\n※ 추후 바로 공유할 수 있는 서비스를 구현 중입니다.`,
-        imageUrl: places?.find(p => p.firstimage)?.firstimage ||
+        imageUrl: places?.find((p: Place) => p.firstimage)?.firstimage ||
           'https://images.unsplash.com/photo-1517154421773-0529f29ea451?q=80&w=800&auto=format&fit=crop',
         link: {
           mobileWebUrl: window.location.origin,
@@ -215,6 +215,23 @@ const CourseResultPage = () => {
 
       {/* 세로 타임라인 */}
       <div className="px-4 py-4">
+        {/* 출발지 블록 */}
+        {origin && (
+          <div className="flex gap-3 mb-2">
+            <div className="flex flex-col items-center">
+              <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-base">📍</div>
+              <div className="w-[2px] flex-1 bg-slate-200 mt-1" />
+            </div>
+            <div className="flex-1 pb-3 pt-1.5">
+              <p className="text-xs text-slate-400 font-bold">출발</p>
+              <p className="text-sm font-bold text-slate-700">{origin}</p>
+              {currentSchedule[0]?.move_time && (
+                <p className="text-xs text-slate-400 mt-1">🚗 {currentSchedule[0].move_time}</p>
+              )}
+            </div>
+          </div>
+        )}
+
         {currentSchedule.map((item: CourseItem, idx: number) => {
           const placeImage = getPlaceImage(item.place_name);
           const isLast = idx === currentSchedule.length - 1;

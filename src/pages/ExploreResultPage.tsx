@@ -171,7 +171,7 @@ const ExploreResultPage = () => {
       });
       if (response) {
         navigate(`/course/${selected[0]?.contentid || 'result'}`, {
-          state: { course: response, transport, places: selected, duration: 'day' }
+          state: { course: response, transport, places: selected, duration: 'day', origin: origin || '서울역' }
         });
       }
     } catch (e) {
