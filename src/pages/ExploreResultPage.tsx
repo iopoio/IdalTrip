@@ -194,6 +194,7 @@ const ExploreResultPage = () => {
         <h1 className="text-2xl font-headline font-bold mt-1">
           {loading ? '탐색 중...' : `${spots.length}곳을 찾았어요`}
         </h1>
+        <p className="text-[11px] text-slate-400 mt-1">한국관광공사 TourAPI 공공데이터 기준</p>
       </div>
 
       {/* 출발지 + 교통수단 */}
