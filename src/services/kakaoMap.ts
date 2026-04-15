@@ -85,5 +85,33 @@ export const kakaoMapService = {
       console.error('Failed to search Kakao place:', error);
       return [];
     }
+  },
+  /**
+   * 카카오 키워드 검색 — 지역 관광지/맛집 fallback용
+   */
+  searchLocal: async (query: string, categoryCode: 'AT4' | 'FD6', size = 8) => {
+    try {
+      const response = await axios.get('/kakao-local/v2/local/search/keyword.json', {
+        params: {
+          query,
+          category_group_code: categoryCode,
+          size,
+        },
+        headers: { Authorization: `KakaoAK ${REST_API_KEY}` }
+      });
+      return response.data.documents as Array<{
+        id: string;
+        place_name: string;
+        address_name: string;
+        road_address_name: string;
+        category_name: string;
+        x: string; // 경도(lng)
+        y: string; // 위도(lat)
+        place_url: string;
+      }>;
+    } catch (error) {
+      console.error('카카오 로컬 검색 실패:', error);
+      return [];
+    }
   }
 };

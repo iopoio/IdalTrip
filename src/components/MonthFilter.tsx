@@ -4,7 +4,9 @@ interface MonthFilterProps {
 }
 
 const MonthFilter = ({ currentMonth, onMonthChange }: MonthFilterProps) => {
-  const months = Array.from({ length: 12 }, (_, i) => i + 1);
+  const today = new Date();
+  const thisMonth = today.getMonth() + 1;
+  const months = Array.from({ length: 12 - thisMonth + 1 }, (_, i) => thisMonth + i);
 
   return (
     <div className="overflow-x-auto no-scrollbar" style={{ overflow: 'clip visible', overflowX: 'auto', overflowY: 'visible' }}>

@@ -16,7 +16,9 @@ const FestivalCard: React.FC<FestivalCardProps> = ({ festival, onClick }) => {
   return (
     <div 
       onClick={onClick}
-      className="group cursor-pointer relative bg-surface-container-high rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-500 aspect-[3/4]"
+      className={`group cursor-pointer relative bg-surface-container-high rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-500 aspect-[3/4] ${
+        status === '종료' ? 'opacity-50' : ''
+      }`}
     >
       {festival.firstimage ? (
         <img 
@@ -32,14 +34,16 @@ const FestivalCard: React.FC<FestivalCardProps> = ({ festival, onClick }) => {
             <CalendarToday className="w-16 h-16 text-primary opacity-20" />
         </div>
       )}
-      <div className={`absolute top-3 right-3 px-2 py-1 bg-white/90 backdrop-blur rounded text-[10px] font-bold shadow-sm z-10 ${
-        status === '진행중' ? 'text-primary' : status === '예정' ? 'text-secondary' : 'text-slate-400'
+      <div className={`absolute top-3 right-3 px-2 py-1 rounded text-[10px] font-bold shadow-sm z-10 text-white ${
+        status === '진행중' ? 'bg-green-500' :
+        status === '예정' ? 'bg-primary-container' :
+        'bg-slate-400'
       }`}>
         {status}
       </div>
       
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-4 flex flex-col justify-end">
-        <p className="text-secondary font-bold text-[10px] mb-1">{region}</p>
+        <p className="text-white/90 font-bold text-xs mb-1">{region}</p>
         <h3 className="text-sm font-bold mb-2 text-white leading-tight group-hover:text-primary-container transition-colors line-clamp-2">
           {festival.title}
         </h3>

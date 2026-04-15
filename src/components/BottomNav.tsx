@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Calendar, Sparkles, User } from 'lucide-react';
+import { Home, Calendar, MapPin } from 'lucide-react';
 
 const BottomNav: React.FC = () => {
   const location = useLocation();
@@ -8,8 +8,7 @@ const BottomNav: React.FC = () => {
   const navItems = [
     { name: '홈', path: '/', icon: Home },
     { name: '축제 소식', path: '/festivals', icon: Calendar },
-    { name: 'AI 추천', path: '/course-gen', icon: Sparkles },
-    { name: '내 정보', path: '/mypage', icon: User },
+    { name: '최근 코스', path: '/recent-course', icon: MapPin },
   ];
 
   return (

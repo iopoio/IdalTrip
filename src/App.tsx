@@ -3,6 +3,8 @@ import HomePage from './pages/HomePage';
 import FestivalDetailPage from './pages/FestivalDetailPage';
 import CourseResultPage from './pages/CourseResultPage';
 import ExploreResultPage from './pages/ExploreResultPage';
+import FestivalsPage from './pages/FestivalsPage';
+import RecentCoursePage from './pages/RecentCoursePage';
 
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
@@ -28,7 +30,8 @@ function App() {
               <Route path="/explore" element={<ExploreResultPage />} />
               <Route path="/festival/:id" element={<FestivalDetailPage />} />
               <Route path="/course/:id" element={<CourseResultPage />} />
-              <Route path="/festivals" element={<ComingSoon title="축제 소식" />} />
+              <Route path="/festivals" element={<FestivalsPage />} />
+              <Route path="/recent-course" element={<RecentCoursePage />} />
               <Route path="/course-gen" element={<ComingSoon title="AI 추천" />} />
               <Route path="/mypage" element={<ComingSoon title="내 정보" />} />
             </Routes>
