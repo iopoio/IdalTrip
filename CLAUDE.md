@@ -1,5 +1,7 @@
 등급: 스몰
 
+⚠️ 세션 시작 시 `~/.claude/CLAUDE.md` 반드시 읽고 따를 것. 글로벌 규칙(gstack 워크플로우 포함)이 모든 프로젝트에 적용됨.
+
 # CLAUDE.md — 이달트립 (IdalTrip)
 
 ## 프로젝트 개요
@@ -60,3 +62,11 @@
 ## 후추님 대기 액션 (완료됨)
 - [x] TourAPI 인증키 발급 (공공데이터포털) - KorService2 연동 성공
 - [x] 카카오 개발자 앱 생성 + REST API 키 발급 - 연동 완료
+
+---
+
+## gstack (프로젝트 특화)
+공통 규칙은 글로벌 CLAUDE.md 참조.
+
+- QA URL: `https://idaltrip.vercel.app`
+- 남은 스프린트: `/qa https://idaltrip.vercel.app` → `/investigate` → `/review` → `/ship` → `/retro`

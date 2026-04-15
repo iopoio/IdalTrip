@@ -34,6 +34,7 @@ const ExploreResultPage = () => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [origin, setOrigin] = useState('');
   const [transport, setTransport] = useState<'car' | 'public'>('car');
+  const [duration, setDuration] = useState<'day' | '1night' | '2night'>('day');
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -165,13 +166,13 @@ const ExploreResultPage = () => {
         festivalLng: parseFloat(selected[0]?.mapx || '127.0'),
         places: selected as any,
         transportation: transport,
-        duration: 'day',
+        duration: duration,
         origin: origin || '서울역',
         travelDate: date, // 날짜 추가
       });
       if (response) {
         navigate(`/course/${selected[0]?.contentid || 'result'}`, {
-          state: { course: response, transport, places: selected, duration: 'day', origin: origin || '서울역' }
+          state: { course: response, transport, places: selected, duration: duration, origin: origin || '서울역' }
         });
       }
     } catch (e) {
@@ -197,21 +198,38 @@ const ExploreResultPage = () => {
         <p className="text-[11px] text-slate-400 mt-1">한국관광공사 TourAPI 공공데이터 기준</p>
       </div>
 
-      {/* 출발지 + 교통수단 */}
-      <div className="flex gap-2 px-4 pb-4">
-        <input
-          type="text"
-          placeholder="출발지 (예: 서울역)"
-          value={origin}
-          onChange={e => setOrigin(e.target.value)}
-          className="flex-1 bg-surface-container-low rounded-xl px-4 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primary/30"
-        />
-        <button
-          onClick={() => setTransport(t => t === 'car' ? 'public' : 'car')}
-          className="px-4 py-2.5 bg-surface-container rounded-xl text-sm font-bold text-slate-600 transition-colors hover:bg-slate-200 flex-shrink-0"
-        >
-          {transport === 'car' ? '🚗 자가용' : '🚌 대중교통'}
-        </button>
+      {/* 출발지 + 교통수단 + 일정 */}
+      <div className="flex flex-col gap-2 px-4 pb-4">
+        <div className="flex gap-2">
+          <input
+            type="text"
+            placeholder="출발지 (예: 서울역)"
+            value={origin}
+            onChange={e => setOrigin(e.target.value)}
+            className="flex-1 bg-surface-container-low rounded-xl px-4 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primary/30"
+          />
+          <button
+            onClick={() => setTransport(t => t === 'car' ? 'public' : 'car')}
+            className="px-4 py-2.5 bg-surface-container rounded-xl text-sm font-bold text-slate-600 transition-colors hover:bg-slate-200 flex-shrink-0"
+          >
+            {transport === 'car' ? '🚗 자차' : '🚌 대중'}
+          </button>
+        </div>
+        <div className="flex gap-2">
+          {(['day', '1night', '2night'] as const).map(d => (
+            <button
+              key={d}
+              onClick={() => setDuration(d)}
+              className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${
+                duration === d
+                  ? 'bg-slate-800 text-white'
+                  : 'bg-surface-container text-slate-500'
+              }`}
+            >
+              {d === 'day' ? '당일치기' : d === '1night' ? '1박 2일' : '2박 3일'}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* 탭 */}
