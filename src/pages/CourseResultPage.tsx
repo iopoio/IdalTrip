@@ -17,6 +17,7 @@ import {
   Hotel,
 } from 'lucide-react';
 import type { CourseResponse, CourseItem, PlaceType } from '../types';
+import LogoLight from '../assets/logo/이달여행.svg';
 
 declare global {
   interface Window {
@@ -118,7 +119,7 @@ const CourseResultPage = () => {
         >
           <ArrowLeft className="w-6 h-6" />
         </button>
-        <span className="font-headline font-black text-primary text-xl">이달트립</span>
+        <img src={LogoLight} className="h-6 w-auto" alt="이달여행" />
         <button
           onClick={handleShare}
           className="text-on-surface p-1"

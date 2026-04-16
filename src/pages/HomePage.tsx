@@ -1,7 +1,9 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Menu, MapPin, CalendarDays, ArrowRight } from 'lucide-react';
 import LogoLight from '../assets/logo/이달여행.svg';
+import { tourApi } from '../services/tourApi';
+import type { Festival } from '../types';
 
 interface Destination {
   id: string;
@@ -13,40 +15,37 @@ interface Destination {
   imageUrl: string;
 }
 
-const DESTINATIONS: Destination[] = [
-  {
-    id: '1',
-    title: '강릉 봄 여행',
-    subtitle: '경포호수 벚꽃길과 안목해변 커피거리',
-    region: '강원',
-    badge: '지금 축제중',
-    badgeType: 'festival',
-    imageUrl: 'https://images.unsplash.com/photo-1600298882525-1d5a4b4e99d9?w=800&q=80',
-  },
-  {
-    id: '2',
-    title: '경주 벚꽃',
-    subtitle: '천년 고도의 봄',
-    region: '경상',
-    badge: '이달 추천',
-    badgeType: 'recommend',
-    imageUrl: 'https://images.unsplash.com/photo-1522383225653-ed111181a951?w=800&q=80',
-  },
-  {
-    id: '3',
-    title: '여수 밤바다',
-    subtitle: '낭만적인 야경과 해산물',
-    region: '전라',
-    badge: undefined,
-    imageUrl: 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&q=80',
-  },
-];
-
 const REGIONS = ['전체', '서울/경기', '강원', '충청', '전라', '경상', '제주'];
+
+const AREA_CODE_TO_REGION: Record<string, string> = {
+  '1': '서울/경기', '2': '서울/경기', '31': '서울/경기',
+  '32': '강원',
+  '3': '충청', '8': '충청', '33': '충청', '34': '충청',
+  '5': '전라', '37': '전라', '38': '전라',
+  '4': '경상', '6': '경상', '7': '경상', '35': '경상', '36': '경상',
+  '39': '제주',
+};
+
+function toHttps(url: string): string {
+  return url ? url.replace(/^http:\/\//, 'https://') : '';
+}
+
+function festivalToDestination(f: Festival, idx: number): Destination {
+  const region = AREA_CODE_TO_REGION[f.areacode ?? ''] ?? '전국';
+  return {
+    id: f.contentid,
+    title: f.title,
+    subtitle: f.addr1 || region,
+    region,
+    badge: idx === 0 ? '지금 축제중' : '이달 추천',
+    badgeType: idx === 0 ? 'festival' : 'recommend',
+    imageUrl: toHttps(f.firstimage || f.firstimage2 || ''),
+  };
+}
 
 function getNextSaturday(): string {
   const today = new Date();
-  const dayOfWeek = today.getDay(); // 0=Sun, 6=Sat
+  const dayOfWeek = today.getDay();
   const daysUntilSaturday = dayOfWeek === 6 ? 0 : 6 - dayOfWeek;
   const sat = new Date(today);
   sat.setDate(today.getDate() + daysUntilSaturday);
@@ -69,6 +68,17 @@ export default function HomePage() {
   const [selectedRegion, setSelectedRegion] = useState('강원');
   const [travelDate, setTravelDate] = useState<string>(getNextSaturday());
   const [departure, setDeparture] = useState('');
+  const [destinations, setDestinations] = useState<Destination[]>([]);
+  const [loadingDest, setLoadingDest] = useState(true);
+
+  useEffect(() => {
+    const month = String(new Date().getMonth() + 1);
+    tourApi.fetchFestivals(month).then((festivals) => {
+      const withImage = (festivals as unknown as Festival[]).filter((f) => f.firstimage || f.firstimage2);
+      setDestinations(withImage.slice(0, 3).map(festivalToDestination));
+      setLoadingDest(false);
+    }).catch(() => setLoadingDest(false));
+  }, []);
 
   const handleSearch = () => {
     const params = new URLSearchParams({
@@ -94,8 +104,8 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-surface text-on-surface font-body">
       {/* Fixed Header */}
-      <nav className="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-xl flex justify-between items-center px-6 h-16 border-b border-outline-variant/10">
-        <img src={LogoLight} className="h-7 w-auto" alt="이달트립" />
+      <nav className="fixed top-0 w-full max-w-[430px] left-1/2 -translate-x-1/2 z-50 bg-surface/90 backdrop-blur-xl flex justify-between items-center px-6 h-16 border-b border-outline-variant/10">
+        <img src={LogoLight} className="h-7 w-auto" alt="이달여행" />
         <div className="flex items-center gap-4">
           <button
             aria-label="검색"
@@ -200,89 +210,107 @@ export default function HomePage() {
             <p className="text-secondary text-sm mt-1">클릭하면 자동으로 설정됩니다</p>
           </div>
 
-          {/* Bento Grid */}
-          <div className="grid grid-cols-2 gap-4">
-            {/* Large card — col-span-2 */}
-            <button
-              onClick={() => handleDestinationClick(DESTINATIONS[0])}
-              className="col-span-2 relative rounded-[24px] overflow-hidden aspect-[16/9] group text-left"
-            >
-              <img
-                src={DESTINATIONS[0].imageUrl}
-                alt={DESTINATIONS[0].title}
-                loading="lazy"
-                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 p-5">
-                {DESTINATIONS[0].badge && (
-                  <span
-                    className={`inline-block px-3 py-1 rounded-full text-xs font-bold mb-2 ${
-                      DESTINATIONS[0].badgeType === 'festival'
-                        ? 'bg-primary text-on-primary'
-                        : 'bg-white/20 text-white backdrop-blur-sm'
-                    }`}
-                  >
-                    {DESTINATIONS[0].badge}
-                  </span>
-                )}
-                <h3 className="font-headline text-xl font-bold text-white leading-tight">
-                  {DESTINATIONS[0].title}
-                </h3>
-                <p className="text-white/70 text-sm mt-1">{DESTINATIONS[0].subtitle}</p>
-              </div>
-              <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                <ArrowRight size={16} className="text-white" />
-              </div>
-            </button>
-
-            {/* Small cards */}
-            {DESTINATIONS.slice(1).map((dest) => (
+          {loadingDest ? (
+            <div className="grid grid-cols-2 gap-4">
+              <div className="col-span-2 rounded-[24px] bg-surface-container-high aspect-[16/9] animate-pulse" />
+              <div className="rounded-[24px] bg-surface-container-high aspect-[3/4] animate-pulse" />
+              <div className="rounded-[24px] bg-surface-container-high aspect-[3/4] animate-pulse" />
+            </div>
+          ) : destinations.length === 0 ? (
+            <div className="text-center py-10 text-secondary text-sm">이달의 축제 정보를 불러오는 중...</div>
+          ) : (
+            /* Bento Grid */
+            <div className="grid grid-cols-2 gap-4">
+              {/* Large card — col-span-2 */}
               <button
-                key={dest.id}
-                onClick={() => handleDestinationClick(dest)}
-                className="relative rounded-[24px] overflow-hidden aspect-[3/4] group text-left"
+                onClick={() => handleDestinationClick(destinations[0])}
+                className="col-span-2 relative rounded-[24px] overflow-hidden aspect-[16/9] group text-left"
               >
-                <img
-                  src={dest.imageUrl}
-                  alt={dest.title}
-                  loading="lazy"
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-4">
-                  {dest.badge && (
+                {destinations[0].imageUrl ? (
+                  <img
+                    src={destinations[0].imageUrl}
+                    alt={destinations[0].title}
+                    loading="lazy"
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/60 to-primary-container/80" />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-5">
+                  {destinations[0].badge && (
                     <span
-                      className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-bold mb-1.5 ${
-                        dest.badgeType === 'festival'
+                      className={`inline-block px-3 py-1 rounded-full text-xs font-bold mb-2 ${
+                        destinations[0].badgeType === 'festival'
                           ? 'bg-primary text-on-primary'
                           : 'bg-white/20 text-white backdrop-blur-sm'
                       }`}
                     >
-                      {dest.badge}
+                      {destinations[0].badge}
                     </span>
                   )}
-                  <h3 className="font-headline text-base font-bold text-white leading-tight">
-                    {dest.title}
+                  <h3 className="font-headline text-xl font-bold text-white leading-tight">
+                    {destinations[0].title}
                   </h3>
-                  <p className="text-white/60 text-xs mt-0.5">{dest.subtitle}</p>
+                  <p className="text-white/70 text-sm mt-1">{destinations[0].subtitle}</p>
+                </div>
+                <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                  <ArrowRight size={16} className="text-white" />
                 </div>
               </button>
-            ))}
-          </div>
+
+              {/* Small cards */}
+              {destinations.slice(1).map((dest) => (
+                <button
+                  key={dest.id}
+                  onClick={() => handleDestinationClick(dest)}
+                  className="relative rounded-[24px] overflow-hidden aspect-[3/4] group text-left"
+                >
+                  {dest.imageUrl ? (
+                    <img
+                      src={dest.imageUrl}
+                      alt={dest.title}
+                      loading="lazy"
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/60 to-primary-container/80" />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                    {dest.badge && (
+                      <span
+                        className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-bold mb-1.5 ${
+                          dest.badgeType === 'festival'
+                            ? 'bg-primary text-on-primary'
+                            : 'bg-white/20 text-white backdrop-blur-sm'
+                        }`}
+                      >
+                        {dest.badge}
+                      </span>
+                    )}
+                    <h3 className="font-headline text-base font-bold text-white leading-tight">
+                      {dest.title}
+                    </h3>
+                    <p className="text-white/60 text-xs mt-0.5">{dest.subtitle}</p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
         </section>
       </main>
 
       {/* Footer */}
       <footer className="px-6 py-12 border-t border-outline-variant/10 bg-surface-container-low text-center">
-        <div className="font-headline font-black text-outline text-lg opacity-40">이달트립</div>
+        <img src={LogoLight} className="h-6 w-auto opacity-40 mx-auto" alt="이달여행" />
         <div className="flex justify-center gap-6 text-secondary text-[11px] font-medium mb-6 mt-4">
           <span className="cursor-pointer hover:text-on-surface transition-colors">개인정보처리방침</span>
           <span className="cursor-pointer hover:text-on-surface transition-colors">이용약관</span>
           <span className="cursor-pointer hover:text-on-surface transition-colors">고객센터</span>
         </div>
         <p className="text-secondary/60 text-[10px] leading-relaxed">
-          ⓒ 2025 이달트립. 여행을 더 쉽게.
+          ⓒ 2025 이달여행. 여행을 더 쉽게.
         </p>
       </footer>
     </div>

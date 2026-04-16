@@ -164,7 +164,7 @@ const FestivalDetailPage = () => {
               <div className="space-y-3 text-sm text-on-surface-variant leading-relaxed font-body">
                 <div className="relative">
                   <p className={showFullOverview ? "" : "line-clamp-3"}>
-                    {festival.overview || "축제에 대한 풍성한 이야기가 곧 업데이트될 예정입니다. IdalTrip과 함께 계절의 정취를 만끽해 보세요."}
+                    {festival.overview || "축제에 대한 풍성한 이야기가 곧 업데이트될 예정입니다. 이달여행과 함께 계절의 정취를 만끽해 보세요."}
                   </p>
                   {festival.overview && festival.overview.length > 150 && (
                     <button 

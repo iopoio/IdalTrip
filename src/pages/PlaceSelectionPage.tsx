@@ -462,7 +462,21 @@ export default function PlaceSelectionPage() {
       </main>
 
       {/* Fixed Bottom Bar */}
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50 bg-surface/90 backdrop-blur-2xl rounded-t-[32px] shadow-lg border-t border-outline-variant/20 px-6 pb-10 pt-6">
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50 bg-surface/90 backdrop-blur-2xl rounded-t-[32px] shadow-lg border-t border-outline-variant/20 px-6 pb-10 pt-4">
+        {/* 당일 초과 경고 */}
+        {duration === 'day' && selectedCount > 6 && (
+          <div className="mb-3 flex items-center justify-between gap-2 bg-primary/10 border border-primary/20 rounded-[14px] px-4 py-2.5">
+            <p className="text-xs text-primary font-medium leading-snug">
+              당일치기엔 {selectedCount}곳이 빠듯해요. 1박2일로 바꿀까요?
+            </p>
+            <button
+              onClick={() => setDuration('1night')}
+              className="text-xs font-bold text-primary border border-primary/40 rounded-full px-3 py-1 shrink-0 hover:bg-primary/10 transition-colors"
+            >
+              1박2일로
+            </button>
+          </div>
+        )}
         <div className="flex items-center justify-between gap-4">
           <div className="flex flex-col">
             <span className="text-[10px] font-bold text-secondary uppercase tracking-wide">Selected</span>

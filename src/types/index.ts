@@ -13,6 +13,7 @@ export interface Festival {
   cat1?: string;
   cat2?: string;
   cat3?: string;
+  areacode?: string;
 }
 
 export interface Place {
