@@ -57,19 +57,21 @@ export const geminiService = {
 ## 입력
 - 출발지: ${req.origin || '서울역'}
 - 여행 날짜: ${travelDate}(${dow})
-- 총 관광 가능 시간: ${availableMinutes}분
+- 총 관광 가능 시간: ${availableMinutes}분 (출발지→목적지 이동 후 실제 관광 가능 시간)
 - 축제: ${req.festivalTitle} (${req.festivalAddr})
+- 축제 좌표: 위도 ${req.festivalLat}, 경도 ${req.festivalLng}
 - 이동수단: ${transportLabel}
+- 이동 속도 기준: ${req.transportation === 'car' ? '자차 평균 60km/h (고속도로 제외 시 40km/h)' : '대중교통 평균 30km/h (환승 대기 포함)'}
 - 일정: ${dayCount === 1 ? '당일치기' : dayCount + '일'}
 - 후보 장소: ${JSON.stringify(placeList)}
 
 ## 규칙
 1. 여행 날짜가 ${travelDate}(${dow})이므로 이 날 휴무인 장소는 반드시 제외하세요 (restdate 확인)
-2. 총 관광 가능 시간은 ${availableMinutes}분입니다. 이 시간 안에 소요시간 합계가 들어오도록 장소 수를 조정하세요
-3. 축제를 반드시 포함하고 후보 장소 중 ${dayCount === 1 ? '3~4개' : dayCount === 2 ? '5~7개' : '8~10개'}를 선택
-4. 맛집은 하루 1~2개 배치 (점심/저녁)
-5. 시간은 "10:00 AM" 형식, 장소 간 이동시간 고려
-6. ${transportLabel} 기준 현실적 동선 (가까운 곳끼리)
+2. 총 관광 가능 시간은 ${availableMinutes}분입니다. stay_duration 합계 + move_time 합계가 이 시간을 초과하지 않도록 장소 수를 조정하세요
+3. 축제를 반드시 첫 번째 또는 오전에 배치하고, 나머지 장소는 축제 좌표(위도 ${req.festivalLat}, 경도 ${req.festivalLng})에서 가까운 순으로 선택하세요. 먼 거리 이동은 최소화하세요
+4. 후보 장소 중 ${dayCount === 1 ? '3~4개' : dayCount === 2 ? '5~7개' : '8~10개'}를 선택 (축제 포함)
+5. 맛집은 하루 1~2개 배치 (점심/저녁)
+6. 시간은 "10:00 AM" 형식. 이동 속도 기준을 반드시 적용해 move_time과 distance를 현실적으로 계산하세요
 7. description은 15자 이내로 간결하게
 8. estimated_cost는 교통비+식비+입장료 항목별 근거를 간단히 포함 (예: "교통 2만+식비 3만+입장 1만 = 약 6만원")
 9. 축제는 type:"festival"로, 문화시설은 type:"culture"로, 레포츠는 type:"leisure"로 표시
