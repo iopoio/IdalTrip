@@ -1,307 +1,292 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { NearMe, LocationOn } from '../components/Icons';
-import { kakaoMapService } from '../services/kakaoMap';
-import type { CourseResponse, Place, CourseItem } from '../types';
+import {
+  ArrowLeft,
+  Sparkles,
+  Car,
+  Clock,
+  DollarSign,
+  MapPin,
+  Navigation,
+  Share2,
+  RefreshCw,
+  UtensilsCrossed,
+  Ticket,
+  Building2,
+  Activity,
+  Hotel,
+} from 'lucide-react';
+import type { CourseResponse, CourseItem, PlaceType } from '../types';
 
 declare global {
   interface Window {
-    kakao: any;
-    Kakao: any;
+    kakao: unknown;
+    Kakao: unknown;
   }
 }
+
+const TYPE_ICONS: Record<PlaceType, React.ReactNode> = {
+  festival: <Ticket className="w-5 h-5 text-primary" />,
+  attraction: <MapPin className="w-5 h-5 text-secondary" />,
+  food: <UtensilsCrossed className="w-5 h-5 text-primary-container" />,
+  culture: <Building2 className="w-5 h-5 text-tertiary" />,
+  leisure: <Activity className="w-5 h-5 text-tertiary" />,
+  stay: <Hotel className="w-5 h-5 text-secondary" />,
+};
+
+const TYPE_ICONS_LARGE: Record<PlaceType, React.ReactNode> = {
+  festival: <Ticket className="w-10 h-10 text-primary opacity-30" />,
+  attraction: <MapPin className="w-10 h-10 text-secondary opacity-30" />,
+  food: <UtensilsCrossed className="w-10 h-10 text-primary-container opacity-30" />,
+  culture: <Building2 className="w-10 h-10 text-tertiary opacity-30" />,
+  leisure: <Activity className="w-10 h-10 text-tertiary opacity-30" />,
+  stay: <Hotel className="w-10 h-10 text-secondary opacity-30" />,
+};
+
+const openKakaoNavi = (item: CourseItem) => {
+  window.open(
+    `https://map.kakao.com/link/to/${encodeURIComponent(item.place_name)},${item.lat},${item.lng}`,
+    '_blank'
+  );
+};
 
 const CourseResultPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const mapRef = useRef<HTMLDivElement>(null);
   const [activeDay, setActiveDay] = useState(1);
-  const [mapReady, setMapReady] = useState(false);
 
-  // localStorage + sessionStorage 복원
-  useEffect(() => {
-    if (location.state?.course) {
-      const dataToSave = JSON.stringify({
-        ...location.state,
-        savedAt: new Date().toISOString(),
-      });
-      sessionStorage.setItem('lastCourse', dataToSave);
-      localStorage.setItem('idaltrip_last_course', dataToSave);
-    }
-  }, [location.state]);
-
-  const stateData = (location.state || JSON.parse(sessionStorage.getItem('lastCourse') || 'null')) as {
-    course: CourseResponse;
-    places?: Place[];
-    duration?: string;
-    transport?: string;
-  } | null;
-
-  useEffect(() => {
-    if (!stateData) navigate('/');
-  }, [stateData, navigate]);
-
-  const { course, transport, places, origin } = stateData || {} as any;
-
-  const dayCount = course
-    ? Math.max(1, ...course.schedule.map((i: CourseItem) =>
-        typeof i.day === 'number' ? i.day : parseInt(String(i.day)) || 1
-      ))
-    : 1;
-
-  const getPlaceImage = (placeName: string) => {
-    if (!places) return null;
-    const match = places.find((p: Place) => placeName.includes(p.title) || p.title.includes(placeName));
-    return match?.firstimage || null;
+  const state = (location.state || {}) as {
+    course?: CourseResponse;
+    region?: string;
+    date?: string;
+    departure?: string;
+    transport?: 'car' | 'public';
+    duration?: 'day' | '1night' | '2night';
   };
 
-  // 카카오맵 초기화 — SDK 로드 완료 대기
-  useEffect(() => {
-    if (!course || !mapRef.current) return;
-
-    const initMap = () => {
-      if (!window.kakao?.maps) return;
-
-      const daySchedule = course.schedule.filter(
-        (item: CourseItem) => (typeof item.day === 'number' ? item.day : parseInt(String(item.day)) || 1) === activeDay
-      );
-      const firstItem = daySchedule[0] || course.schedule[0];
-      if (!firstItem?.lat || !firstItem?.lng) return;
-
-      window.kakao.maps.load(() => {
-        if (!mapRef.current) return;
-        const map = new window.kakao.maps.Map(mapRef.current, {
-          center: new window.kakao.maps.LatLng(firstItem.lat, firstItem.lng),
-          level: 7,
-        });
-
-        const linePath: any[] = [];
-        daySchedule.forEach((item: CourseItem, idx: number) => {
-          if (!item.lat || !item.lng) return;
-          const position = new window.kakao.maps.LatLng(item.lat, item.lng);
-          linePath.push(position);
-          new window.kakao.maps.CustomOverlay({
-            position,
-            content: `<div style="width:28px;height:28px;background:#ff6b35;color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:12px;border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.2);">${idx + 1}</div>`,
-            yAnchor: 0.5,
-          }).setMap(map);
-        });
-
-        if (linePath.length > 1) {
-          new window.kakao.maps.Polyline({
-            path: linePath,
-            strokeWeight: 3,
-            strokeColor: '#ff6b35',
-            strokeOpacity: 0.7,
-            strokeStyle: 'dashed',
-          }).setMap(map);
-
-          const bounds = new window.kakao.maps.LatLngBounds();
-          linePath.forEach(p => bounds.extend(p));
-          map.setBounds(bounds);
-        }
-
-        setMapReady(true);
-      });
-    };
-
-    // SDK 이미 로드된 경우 바로 실행, 아니면 1초 후 재시도
-    if (window.kakao?.maps) {
-      initMap();
-    } else {
-      const timer = setTimeout(initMap, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [course, activeDay]);
+  const { course, region, date } = state;
 
   const handleShare = () => {
-    if (!window.Kakao?.isInitialized()) {
-      alert('카카오톡 공유 기능을 불러오는 중입니다. 잠시 후 다시 시도해 주세요.');
-      return;
+    if (!course) return;
+    if (navigator.share) {
+      navigator.share({
+        title: course.title,
+        text: course.summary,
+        url: window.location.href,
+      });
+    } else {
+      alert('공유 기능은 모바일에서 사용 가능합니다.');
     }
-
-    const placeList = currentSchedule
-      .slice(0, 3)
-      .map((item: CourseItem, idx: number) => `${idx + 1}. ${item.place_name}`)
-      .join(' · ');
-
-    window.Kakao.Share.sendDefault({
-      objectType: 'feed',
-      content: {
-        title: course?.title || '이달의 여행 코스',
-        description: `${course?.theme} · ${course?.total_duration}\n${placeList} 외\n\n이달여행에서 직접 검색해보세요!\n※ 추후 바로 공유할 수 있는 서비스를 구현 중입니다.`,
-        imageUrl: places?.find((p: Place) => p.firstimage)?.firstimage ||
-          'https://images.unsplash.com/photo-1517154421773-0529f29ea451?q=80&w=800&auto=format&fit=crop',
-        link: {
-          mobileWebUrl: window.location.origin,
-          webUrl: window.location.origin,
-        },
-      },
-      buttons: [
-        {
-          title: '이달여행에서 검색하기',
-          link: {
-            mobileWebUrl: window.location.origin,
-            webUrl: window.location.origin,
-          },
-        },
-      ],
-    });
   };
 
-  if (!course) return null;
+  const handleRetry = () => {
+    navigate(-2);
+  };
 
-  const currentSchedule = course.schedule.filter(
-    (item: CourseItem) => (typeof item.day === 'number' ? item.day : parseInt(String(item.day)) || 1) === activeDay
+  if (!course) {
+    return (
+      <div className="min-h-screen bg-surface flex flex-col items-center justify-center gap-6 px-6">
+        <MapPin className="w-16 h-16 text-outline-variant" />
+        <p className="text-on-surface-variant text-center font-body">
+          코스 정보를 불러올 수 없습니다.
+        </p>
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 px-6 py-3 rounded-[16px] border-2 border-outline-variant text-on-surface font-bold font-body"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          돌아가기
+        </button>
+      </div>
+    );
+  }
+
+  const schedule = course.schedule;
+  const maxDay = Math.max(...schedule.map((i) => i.day));
+  const filteredSchedule = schedule.filter(
+    (i) => maxDay === 1 || i.day === activeDay
   );
 
   return (
-    <div className="bg-surface min-h-screen pb-24">
-      {/* 지도 — 상단, 세로 스크롤하면 올라감 */}
-      <div className="relative w-full h-[40vh] bg-surface-container-low">
-        <div ref={mapRef} className="w-full h-full" />
-        {!mapReady && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full" />
+    <div className="bg-surface min-h-screen">
+      {/* 고정 헤더 */}
+      <header className="fixed top-0 w-full max-w-[430px] left-0 right-0 mx-auto z-50 bg-surface/90 backdrop-blur-md flex items-center justify-between px-6 h-16">
+        <button
+          onClick={() => navigate(-1)}
+          className="text-on-surface p-1"
+          aria-label="뒤로가기"
+        >
+          <ArrowLeft className="w-6 h-6" />
+        </button>
+        <span className="font-headline font-black text-primary text-xl">이달트립</span>
+        <button
+          onClick={handleShare}
+          className="text-on-surface p-1"
+          aria-label="공유"
+        >
+          <Share2 className="w-6 h-6" />
+        </button>
+      </header>
+
+      <main className="pt-20 px-5 pb-40">
+        {/* AI 인사 섹션 */}
+        <section className="mb-8">
+          {/* 지역/날짜 부제목 */}
+          {(region || date) && (
+            <p className="text-xs text-on-surface-variant font-label mb-3">
+              {[region, date].filter(Boolean).join(' · ')}
+            </p>
+          )}
+
+          <div className="flex items-start gap-4 mb-6">
+            <div className="w-12 h-12 rounded-[14px] bg-gradient-to-br from-primary to-primary-container flex items-center justify-center shadow-lg shadow-primary/20 flex-shrink-0">
+              <Sparkles className="text-white w-6 h-6" />
+            </div>
+            <div className="flex-1">
+              <h2 className="text-2xl font-bold font-headline text-on-surface mb-2 leading-tight">
+                AI가 최적의 코스를 만들었습니다!
+              </h2>
+              <div className="bg-surface-container-lowest p-4 rounded-[16px] rounded-tl-none border border-outline-variant/20 shadow-sm">
+                <p className="text-on-surface-variant text-sm leading-relaxed font-body">
+                  {course.summary}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* 통계 그리드 */}
+          <div className="grid grid-cols-3 gap-3">
+            <div className="bg-surface-container-lowest p-4 rounded-[16px] flex flex-col items-center text-center">
+              <Clock className="text-secondary w-4 h-4 mb-1" />
+              <span className="text-[10px] text-secondary mb-1 font-label">총 소요</span>
+              <span className="font-bold text-primary text-sm font-body">{course.total_duration}</span>
+            </div>
+            <div className="bg-surface-container-lowest p-4 rounded-[16px] flex flex-col items-center text-center">
+              <DollarSign className="text-secondary w-4 h-4 mb-1" />
+              <span className="text-[10px] text-secondary mb-1 font-label">예상 비용</span>
+              <span className="font-bold text-secondary text-sm font-body">{course.estimated_cost}</span>
+            </div>
+            <div className="bg-surface-container-lowest p-4 rounded-[16px] flex flex-col items-center text-center">
+              <MapPin className="text-secondary w-4 h-4 mb-1" />
+              <span className="text-[10px] text-secondary mb-1 font-label">방문 장소</span>
+              <span className="font-bold text-on-surface text-sm font-body">{schedule.length}곳</span>
+            </div>
+          </div>
+        </section>
+
+        {/* 일자 탭 (다일정인 경우) */}
+        {maxDay > 1 && (
+          <div className="flex gap-4 border-b border-surface-container mb-6">
+            {Array.from({ length: maxDay }, (_, i) => i + 1).map((d) => (
+              <button
+                key={d}
+                onClick={() => setActiveDay(d)}
+                className={
+                  activeDay === d
+                    ? 'pb-3 px-2 text-lg font-bold font-headline text-primary border-b-2 border-primary'
+                    : 'pb-3 px-2 text-lg font-medium font-headline text-secondary'
+                }
+              >
+                Day {d}
+              </button>
+            ))}
           </div>
         )}
-      </div>
 
-      {/* 코스 제목 + 정보 */}
-      <div className="px-5 pt-6 pb-4 bg-white">
-        <h1 className="text-2xl font-headline font-extrabold text-on-surface">{course.title}</h1>
-        <div className="flex items-center justify-between mt-3">
-          <p className="text-sm font-semibold text-primary">{course.theme} · {course.total_duration}</p>
+        {/* 타임라인 */}
+        <section className="relative">
+          <div className="absolute left-5 top-4 bottom-0 w-0.5 bg-gradient-to-b from-primary-container via-surface-container-high to-transparent" />
+          <div className="flex flex-col gap-8">
+            {filteredSchedule.map((item, i) => (
+              <div key={`${item.day}-${i}`}>
+                {/* 타임라인 아이템 */}
+                <div className="relative flex gap-5 group">
+                  {/* 원형 아이콘 */}
+                  <div className="z-10 w-10 h-10 rounded-full bg-surface-container-lowest border-2 border-primary-container flex items-center justify-center shadow-sm flex-shrink-0">
+                    {TYPE_ICONS[item.type] ?? <MapPin className="w-5 h-5 text-secondary" />}
+                  </div>
+
+                  {/* 카드 내용 */}
+                  <div className="flex-1 pb-2">
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <span className="text-xs font-medium text-primary mb-1 block font-label">
+                          {item.time} · {item.stay_duration}
+                        </span>
+                        <h3 className="text-xl font-bold text-on-surface font-headline">
+                          {item.place_name}
+                        </h3>
+                      </div>
+                      {/* 카카오내비 버튼 */}
+                      <button
+                        onClick={() => openKakaoNavi(item)}
+                        className="flex items-center gap-1 px-3 py-1.5 rounded-[8px] bg-[#FEE500] text-[#1A1A1A] text-xs font-bold hover:opacity-90 transition-opacity flex-shrink-0 ml-2"
+                      >
+                        <Navigation className="w-3 h-3" />
+                        카카오내비
+                      </button>
+                    </div>
+
+                    {/* 사진 */}
+                    {item.image_url ? (
+                      <div className="rounded-[16px] overflow-hidden mb-3 aspect-video">
+                        <img
+                          src={item.image_url}
+                          alt={item.place_name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                      </div>
+                    ) : (
+                      <div className="rounded-[16px] bg-surface-container-high mb-3 aspect-video flex items-center justify-center">
+                        {TYPE_ICONS_LARGE[item.type] ?? <MapPin className="w-10 h-10 text-secondary opacity-30" />}
+                      </div>
+                    )}
+
+                    <p className="text-sm text-on-surface-variant leading-relaxed font-body">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+
+                {/* 이동 시간 (마지막 항목 제외) */}
+                {item.move_time && i < filteredSchedule.length - 1 && (
+                  <div className="relative flex gap-5 items-center mt-2">
+                    <div className="w-10 flex justify-center z-10">
+                      <div className="w-2 h-2 rounded-full bg-surface-container-high" />
+                    </div>
+                    <div className="bg-surface-container-low px-4 py-2 rounded-full flex items-center gap-2">
+                      <Car className="w-3 h-3 text-secondary" />
+                      <span className="text-xs text-secondary font-medium font-label">
+                        이동 {item.move_time}
+                        {item.distance ? ` (${item.distance})` : ''}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      </main>
+
+      {/* 고정 하단 바 */}
+      <div className="fixed bottom-0 left-0 right-0 max-w-[430px] mx-auto z-50 p-5 bg-gradient-to-t from-surface via-surface to-transparent">
+        <div className="flex gap-3">
+          <button
+            onClick={handleRetry}
+            className="flex-1 py-4 border-2 border-outline-variant rounded-[16px] font-bold text-on-surface flex items-center justify-center gap-2 font-body"
+          >
+            <RefreshCw className="w-4 h-4" />
+            다른 코스 추천받기
+          </button>
           <button
             onClick={handleShare}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#FEE500] text-[#371d1e] rounded-xl text-xs font-extrabold active:scale-95 transition-transform shadow-sm"
+            className="flex-1 py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-[16px] font-bold flex items-center justify-center gap-2 shadow-lg font-body"
           >
-            <span>💬</span>
+            <Share2 className="w-4 h-4" />
             카카오톡 공유
           </button>
         </div>
-      </div>
-
-      {/* 여행 브리핑 + 예상비용 */}
-      <div className="mx-4 my-4 bg-surface-container-lowest p-5 rounded-2xl border border-slate-100 shadow-sm flex flex-col gap-4">
-        <div>
-          <h4 className="font-extrabold text-sm mb-1 text-slate-800">여행 브리핑</h4>
-          <p className="text-xs text-slate-600 leading-relaxed">{course.summary}</p>
-        </div>
-        <div className="border-t border-slate-100 pt-4">
-          <h4 className="font-extrabold text-sm mb-1 text-slate-800">예상 비용</h4>
-          <p className="text-xs text-slate-600 leading-relaxed">{course.estimated_cost}</p>
-        </div>
-      </div>
-
-      {/* 1일차/2일차 탭 */}
-      {dayCount > 1 && (
-        <div className="px-4 mb-2 flex gap-2 overflow-x-auto scrollbar-hide">
-          {Array.from({ length: dayCount }).map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setActiveDay(i + 1)}
-              className={`flex-shrink-0 px-5 py-2.5 rounded-full text-sm font-bold transition-all ${
-                activeDay === i + 1
-                  ? 'bg-slate-800 text-white'
-                  : 'bg-surface-container text-slate-500'
-              }`}
-            >
-              {i + 1}일차
-            </button>
-          ))}
-        </div>
-      )}
-
-      {/* 세로 타임라인 */}
-      <div className="px-4 py-4">
-        {/* 출발지 블록 */}
-        {origin && (
-          <div className="flex gap-3 mb-2">
-            <div className="flex flex-col items-center">
-              <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-base">📍</div>
-              <div className="w-[2px] flex-1 bg-slate-200 mt-1" />
-            </div>
-            <div className="flex-1 pb-3 pt-1.5">
-              <p className="text-xs text-slate-400 font-bold">출발</p>
-              <p className="text-sm font-bold text-slate-700">{origin}</p>
-              {currentSchedule[0]?.move_time && (
-                <p className="text-xs text-slate-400 mt-1">🚗 {currentSchedule[0].move_time}</p>
-              )}
-            </div>
-          </div>
-        )}
-
-        {currentSchedule.map((item: CourseItem, idx: number) => {
-          const placeImage = getPlaceImage(item.place_name);
-          const isLast = idx === currentSchedule.length - 1;
-
-          return (
-            <div key={idx}>
-              {/* 이동시간 (첫 번째 제외) */}
-              {idx > 0 && item.move_time && (
-                <div className="flex items-center gap-2 py-1 pl-[22px] text-slate-400 text-xs">
-                  <div className="w-px h-6 bg-slate-200 -ml-px" />
-                  <span>🚗 {item.move_time}</span>
-                </div>
-              )}
-
-              {/* 장소 카드 */}
-              <div className="flex gap-3 relative">
-                {/* 세로선 */}
-                {!isLast && (
-                  <div className="absolute left-[18px] top-[38px] bottom-[-16px] w-[2px] bg-slate-200 z-0" />
-                )}
-
-                {/* 번호 마커 */}
-                <div className="relative z-10 flex-shrink-0">
-                  <div className="w-9 h-9 rounded-full bg-primary-container text-white flex items-center justify-center font-bold text-sm shadow-sm">
-                    {idx + 1}
-                  </div>
-                </div>
-
-                {/* 카드 내용 */}
-                <div className="flex-1 mb-4 bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
-                  <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <p className="text-xs text-primary font-bold">{item.time}</p>
-                      <h3 className="font-bold text-sm text-slate-800 mt-0.5">{item.place_name}</h3>
-                    </div>
-                    <span className="text-[10px] text-slate-400 bg-slate-50 px-2 py-0.5 rounded font-bold">
-                      {item.stay_duration}
-                    </span>
-                  </div>
-
-                  {placeImage && (
-                    <div className="w-full h-28 rounded-xl overflow-hidden mb-2">
-                      <img src={placeImage} alt={item.place_name} className="w-full h-full object-cover" />
-                    </div>
-                  )}
-
-                  {!placeImage && (
-                    <div className="w-full h-16 rounded-xl bg-surface-container-low flex items-center justify-center mb-2">
-                      <LocationOn className="w-6 h-6 text-primary opacity-30" />
-                    </div>
-                  )}
-
-                  <p className="text-xs text-slate-500 mb-3 leading-relaxed">{item.description}</p>
-
-                  <a
-                    href={transport === 'public'
-                      ? `https://map.kakao.com/link/to/${encodeURIComponent(item.place_name)},${item.lat},${item.lng}`
-                      : kakaoMapService.getDirectionUrl(item.place_name, item.lat, item.lng)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full bg-[#fae100] text-[#371d1e] py-2.5 rounded-xl text-xs font-extrabold flex items-center justify-center gap-1.5 active:scale-95 transition-transform"
-                  >
-                    <NearMe className="w-3.5 h-3.5" />
-                    {transport === 'public' ? '카카오맵 길찾기' : '카카오내비 안내'}
-                  </a>
-                </div>
-              </div>
-            </div>
-          );
-        })}
       </div>
     </div>
   );

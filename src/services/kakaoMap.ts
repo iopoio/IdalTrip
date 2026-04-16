@@ -1,4 +1,5 @@
 import axios from 'axios';
+import type { KakaoPlace } from '../types';
 
 const REST_API_KEY = import.meta.env.VITE_KAKAO_REST_KEY;
 const NAVI_URL = '/kakao-navi/v1/directions';
@@ -113,5 +114,28 @@ export const kakaoMapService = {
       console.error('카카오 로컬 검색 실패:', error);
       return [];
     }
-  }
+  },
+
+  /**
+   * 카카오 키워드로 맛집 검색 (TourAPI 음식점 보완용)
+   */
+  searchRestaurants: async (keyword: string, lat: number, lng: number, radius: number = 5000): Promise<KakaoPlace[]> => {
+    try {
+      const response = await axios.get('/kakao-local/v2/local/search/keyword.json', {
+        params: {
+          query: keyword,
+          category_group_code: 'FD6',
+          x: String(lng),
+          y: String(lat),
+          radius,
+          size: 15,
+        },
+        headers: { Authorization: `KakaoAK ${REST_API_KEY}` }
+      });
+      return response.data.documents as KakaoPlace[];
+    } catch (error) {
+      console.error('카카오 맛집 검색 실패:', error);
+      return [];
+    }
+  },
 };

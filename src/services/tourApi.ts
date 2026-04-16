@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Festival, Place } from '../types';
+import type { Festival, Place, PlaceDetail } from '../types';
 
 const BASE_URL = '/B551011/KorService2';
 const API_KEY = import.meta.env.VITE_TOUR_API_KEY;
@@ -184,5 +184,135 @@ export const tourApi = {
       console.error('Failed to fetch detail intro:', error);
       return null;
     }
-  }
+  },
+
+  // detailIntro2 — 영업시간/휴무일/요금 조회
+  fetchPlaceDetail: async (contentId: string, contentTypeId: string): Promise<PlaceDetail | null> => {
+    try {
+      const response = await axios.get(`${BASE_URL}/detailIntro2`, {
+        params: {
+          serviceKey: API_KEY,
+          _type: 'json',
+          MobileOS: 'ETC',
+          MobileApp: 'IdalTrip',
+          contentId,
+          contentTypeId,
+        }
+      });
+      const item = response.data?.response?.body?.items?.item;
+      return (Array.isArray(item) ? item[0] : item) || null;
+    } catch (error) {
+      console.error('Failed to fetch place detail:', error);
+      return null;
+    }
+  },
+
+  // 문화시설(14) 위치기반 조회
+  fetchNearbyCulture: async (mapx: string, mapy: string, radius: number = 10000): Promise<Place[]> => {
+    try {
+      const response = await axios.get(`${BASE_URL}/locationBasedList2`, {
+        params: {
+          serviceKey: API_KEY,
+          _type: 'json',
+          MobileOS: 'ETC',
+          MobileApp: 'IdalTrip',
+          mapX: mapx,
+          mapY: mapy,
+          radius,
+          contentTypeId: '14',
+          arrange: 'A',
+          numOfRows: 20,
+        }
+      });
+      const items = response.data?.response?.body?.items?.item;
+      if (!items) return [];
+      return Array.isArray(items) ? items : [items];
+    } catch (error) {
+      console.error('Failed to fetch nearby culture:', error);
+      return [];
+    }
+  },
+
+  // 레포츠(28) 위치기반 조회
+  fetchNearbyLeisure: async (mapx: string, mapy: string, radius: number = 10000): Promise<Place[]> => {
+    try {
+      const response = await axios.get(`${BASE_URL}/locationBasedList2`, {
+        params: {
+          serviceKey: API_KEY,
+          _type: 'json',
+          MobileOS: 'ETC',
+          MobileApp: 'IdalTrip',
+          mapX: mapx,
+          mapY: mapy,
+          radius,
+          contentTypeId: '28',
+          arrange: 'A',
+          numOfRows: 20,
+        }
+      });
+      const items = response.data?.response?.body?.items?.item;
+      if (!items) return [];
+      return Array.isArray(items) ? items : [items];
+    } catch (error) {
+      console.error('Failed to fetch nearby leisure:', error);
+      return [];
+    }
+  },
+
+  // 숙박(32) 지역기반 조회
+  fetchStayByRegion: async (region: string): Promise<Place[]> => {
+    const areaCodes = REGION_AREA_CODES[region] || [];
+    try {
+      const results = await Promise.all(
+        areaCodes.map(areaCode =>
+          axios.get(`${BASE_URL}/searchStay2`, {
+            params: {
+              serviceKey: API_KEY,
+              _type: 'json',
+              MobileOS: 'ETC',
+              MobileApp: 'IdalTrip',
+              arrange: 'C',
+              areaCode,
+              numOfRows: 10,
+              pageNo: 1,
+            }
+          })
+        )
+      );
+      const items = results.flatMap(r => {
+        const raw = r.data?.response?.body?.items?.item;
+        if (!raw) return [];
+        return Array.isArray(raw) ? raw : [raw];
+      });
+      return items.slice(0, 20);
+    } catch (error) {
+      console.error('Failed to fetch stay by region:', error);
+      return [];
+    }
+  },
+
+  // 이달의 추천 여행지 — areaBasedList2 contentTypeId=25 (여행코스)
+  fetchRecommendedCourses: async (areaCode?: number): Promise<Place[]> => {
+    try {
+      const response = await axios.get(`${BASE_URL}/areaBasedList2`, {
+        params: {
+          serviceKey: API_KEY,
+          _type: 'json',
+          MobileOS: 'ETC',
+          MobileApp: 'IdalTrip',
+          contentTypeId: '25',
+          arrange: 'C',
+          numOfRows: 10,
+          pageNo: 1,
+          ...(areaCode ? { areaCode } : {}),
+        }
+      });
+      const items = response.data?.response?.body?.items?.item;
+      if (!items) return [];
+      return Array.isArray(items) ? items : [items];
+    } catch (error) {
+      console.error('Failed to fetch recommended courses:', error);
+      return [];
+    }
+  },
 };
