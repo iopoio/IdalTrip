@@ -151,7 +151,7 @@ export default function PlaceSelectionPage() {
 
   const region = searchParams.get('region') || '';
   const date = searchParams.get('date') || '';
-  const departure = searchParams.get('departure') || '';
+  const [departure, setDeparture] = useState(searchParams.get('departure') || '');
   const [transport, setTransport] = useState<'car' | 'public'>(
     (searchParams.get('transport') as 'car' | 'public') || 'car'
   );
@@ -349,10 +349,16 @@ export default function PlaceSelectionPage() {
 
         {/* Trip Options Bar */}
         <div className="flex items-center gap-2 overflow-x-auto py-1 scrollbar-hide">
-          {/* Departure pill */}
-          <div className="flex items-center gap-1.5 px-4 py-2 bg-surface-container-low rounded-full shrink-0">
-            <span className="text-[10px] font-bold text-secondary uppercase tracking-wide">출발지</span>
-            <span className="text-sm font-semibold text-on-surface">{departure || '미설정'}</span>
+          {/* Departure pill - editable */}
+          <div className="flex items-center gap-1.5 px-4 py-2 bg-surface-container-low rounded-full shrink-0 min-w-0">
+            <span className="text-[10px] font-bold text-secondary uppercase tracking-wide whitespace-nowrap">출발지</span>
+            <input
+              type="text"
+              value={departure}
+              onChange={(e) => setDeparture(e.target.value)}
+              placeholder="입력"
+              className="text-sm font-semibold text-on-surface bg-transparent border-none outline-none p-0 w-20 placeholder:text-secondary/50"
+            />
           </div>
 
           {/* Transport toggle */}
