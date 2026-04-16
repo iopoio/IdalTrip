@@ -101,35 +101,59 @@ export default function HomePage() {
   const ctaRegionLabel = selectedRegion === '전체' ? '전국' : selectedRegion;
   const formattedDate = formatDateKorean(travelDate);
 
+  const heroBg = destinations[0]?.imageUrl || '';
+
   return (
     <div className="min-h-screen bg-surface text-on-surface font-body">
       {/* Fixed Header */}
-      <nav className="fixed top-0 w-full max-w-[430px] left-1/2 -translate-x-1/2 z-50 bg-surface/90 backdrop-blur-xl flex justify-between items-center px-6 h-16 border-b border-outline-variant/10">
+      <nav className="fixed top-0 w-full max-w-[430px] left-1/2 -translate-x-1/2 z-50 flex justify-between items-center px-6 h-16 z-50">
         <img src={LogoLight} className="h-7 w-auto" alt="이달여행" />
         <div className="flex items-center gap-4">
           <button
             aria-label="검색"
-            className="w-9 h-9 flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors"
+            className="w-9 h-9 flex items-center justify-center text-white/80 hover:text-white transition-colors"
           >
             <Search size={20} />
           </button>
           <button
             aria-label="메뉴"
-            className="w-9 h-9 flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors"
+            className="w-9 h-9 flex items-center justify-center text-white/80 hover:text-white transition-colors"
           >
             <Menu size={20} />
           </button>
         </div>
       </nav>
 
-      <main className="pt-20 pb-12 px-5">
+      {/* Hero Section */}
+      <section className="relative min-h-[520px] flex flex-col justify-end">
+        {/* 배경 이미지 */}
+        {heroBg ? (
+          <img
+            src={heroBg}
+            alt="배경"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-[#2d1a0e] via-[#5c2e1a] to-[#a63415]" />
+        )}
+        {/* 그라데이션 오버레이 */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-surface" />
+
+        {/* 히어로 텍스트 */}
+        <div className="relative px-6 pt-24 pb-4">
+          <p className="text-white/60 text-xs font-label uppercase tracking-widest mb-1">
+            {new Date().getMonth() + 1}월의 여행
+          </p>
+          <h1 className="font-headline text-4xl font-black text-white leading-tight">
+            어디로<br />떠날까요?
+          </h1>
+        </div>
+      </section>
+
+      <main className="pb-12 px-5 -mt-6 relative z-10">
         {/* Hero Search Card */}
         <section className="mb-12">
-          <div className="bg-surface-container-lowest rounded-[32px] p-6 shadow-lg border border-outline-variant/10">
-            <h1 className="font-headline text-3xl font-bold text-on-surface mb-6 leading-tight">
-              어디로 떠날까요?
-            </h1>
-
+          <div className="bg-surface-container-lowest rounded-[32px] p-6 shadow-xl border border-outline-variant/10">
             {/* Region Chips */}
             <div
               className="flex gap-2 overflow-x-auto mb-8"

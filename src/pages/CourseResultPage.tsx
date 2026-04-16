@@ -212,7 +212,7 @@ const CourseResultPage = () => {
                     <div className="flex justify-between items-start mb-2">
                       <div>
                         <span className="text-xs font-medium text-primary mb-1 block font-label">
-                          {item.time} · {item.stay_duration}
+                          {item.time}
                         </span>
                         <h3 className="text-xl font-bold text-on-surface font-headline">
                           {item.place_name}
@@ -249,18 +249,28 @@ const CourseResultPage = () => {
                   </div>
                 </div>
 
-                {/* 이동 시간 (마지막 항목 제외) */}
+                {/* 이동 시간 + 다음 장소 소요 시간 */}
                 {item.move_time && i < filteredSchedule.length - 1 && (
                   <div className="relative flex gap-5 items-center mt-2">
                     <div className="w-10 flex justify-center z-10">
                       <div className="w-2 h-2 rounded-full bg-surface-container-high" />
                     </div>
-                    <div className="bg-surface-container-low px-4 py-2 rounded-full flex items-center gap-2">
-                      <Car className="w-3 h-3 text-secondary" />
-                      <span className="text-xs text-secondary font-medium font-label">
-                        이동 {item.move_time}
-                        {item.distance ? ` (${item.distance})` : ''}
-                      </span>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <div className="bg-surface-container-low px-4 py-2 rounded-full flex items-center gap-2">
+                        <Car className="w-3 h-3 text-secondary" />
+                        <span className="text-xs text-secondary font-medium font-label">
+                          이동 {item.move_time}
+                          {item.distance ? ` (${item.distance})` : ''}
+                        </span>
+                      </div>
+                      {filteredSchedule[i + 1]?.stay_duration && (
+                        <div className="bg-primary/8 px-4 py-2 rounded-full flex items-center gap-2">
+                          <Clock className="w-3 h-3 text-primary" />
+                          <span className="text-xs text-primary font-medium font-label">
+                            체류 {filteredSchedule[i + 1].stay_duration}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
