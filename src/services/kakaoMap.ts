@@ -55,9 +55,10 @@ export const kakaoMapService = {
       const route = response.data?.routes?.[0]?.summary;
       if (!route) return null;
 
+      // TODO: 대중교통 API 미구현. Kakao Mobility transit API 별도 승인 필요. 현재 자동차 경로로 대체.
       return {
         distance: route.distance,
-        duration: Math.ceil(route.duration * 1.5), // Heuristic: Public transport takes roughly 1.5x car time
+        duration: route.duration,
       };
     } catch (error) {
       console.error('Failed to fetch Kakao public route:', error);

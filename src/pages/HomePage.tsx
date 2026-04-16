@@ -4,6 +4,7 @@ import { Search, Menu, MapPin, CalendarDays, ArrowRight } from 'lucide-react';
 import LogoLight from '../assets/logo/이달여행.svg';
 import { tourApi } from '../services/tourApi';
 import type { Festival } from '../types';
+import { seasonCopy } from '../data/seasonCopy';
 
 interface Destination {
   id: string;
@@ -140,15 +141,24 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black/60" />
         {/* 상단 헤더 영역 반투명 처리 */}
         <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-black/50 to-transparent" />
-
         {/* 히어로 텍스트 */}
         <div className="relative px-6 pt-24 pb-4">
-          <p className="text-white/60 text-xs font-label uppercase tracking-widest mb-1">
-            {new Date().getMonth() + 1}월의 여행
-          </p>
-          <h1 className="font-headline text-4xl font-black text-white leading-tight">
-            어디로<br />떠날까요?
-          </h1>
+          {(() => {
+            const month = new Date().getMonth() + 1;
+            const copy = (seasonCopy as Record<number, { title: string; subtitle: string }>)[month];
+            return (
+              <>
+                <p className="text-white/60 text-xs font-label uppercase tracking-widest mb-1">
+                  {copy.subtitle}
+                </p>
+                <h1 className="font-headline text-4xl font-black text-white leading-tight">
+                  {copy.title.split('\n').map((line, i) => (
+                    <span key={i}>{line}{i < copy.title.split('\n').length - 1 && <br />}</span>
+                  ))}
+                </h1>
+              </>
+            );
+          })()}
         </div>
       </section>
 

@@ -309,6 +309,7 @@ export default function PlaceSelectionPage() {
         throw new Error('코스 생성 결과가 없습니다');
       }
 
+      sessionStorage.setItem('lastCourse', JSON.stringify({ course, region, date, departure, transport, duration }));
       navigate('/course/result', {
         state: { course, region, date, departure, transport, duration },
       });

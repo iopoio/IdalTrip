@@ -56,14 +56,11 @@ const CourseResultPage = () => {
   const navigate = useNavigate();
   const [activeDay, setActiveDay] = useState(1);
 
-  const state = (location.state || {}) as {
-    course?: CourseResponse;
-    region?: string;
-    date?: string;
-    departure?: string;
-    transport?: 'car' | 'public';
-    duration?: 'day' | '1night' | '2night';
-  };
+  type CourseState = { course?: CourseResponse; region?: string; date?: string; departure?: string; transport?: 'car' | 'public'; duration?: 'day' | '1night' | '2night' };
+  const state = (location.state || (() => {
+    try { return JSON.parse(sessionStorage.getItem('lastCourse') || '{}'); }
+    catch { return {}; }
+  })()) as CourseState;
 
   const { course, region, date } = state;
 
