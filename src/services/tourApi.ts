@@ -146,20 +146,20 @@ export const tourApi = {
               arrange: 'C',
               contentTypeId,
               areaCode,
-              numOfRows: 10,
+              numOfRows: 20,
               pageNo: 1,
             }
           })
         )
       );
-  
+
       const items = results.flatMap(r => {
         const raw = r.data?.response?.body?.items?.item;
         if (!raw) return [];
         return Array.isArray(raw) ? raw : [raw];
       });
-  
-      return items.slice(0, 20);
+
+      return items.slice(0, 40);
     } catch (error) {
       console.error('Failed to fetch places by region:', error);
       return [];

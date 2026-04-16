@@ -105,7 +105,14 @@ function PlaceCard({ place, onToggle }: PlaceCardProps) {
         />
       ) : (
         <div className="w-24 h-24 rounded-[12px] bg-surface-container-high shrink-0 flex items-center justify-center">
-          <span className="text-2xl">🗺️</span>
+          <span className="text-2xl">
+            {place.contenttypeid === '15' ? '🎪'
+              : place.contenttypeid === '39' ? '🍽️'
+              : place.contenttypeid === '14' ? '🏛️'
+              : place.contenttypeid === '28' ? '🏄'
+              : place.contenttypeid === '32' ? '🏨'
+              : '🗺️'}
+          </span>
         </div>
       )}
 
@@ -221,10 +228,10 @@ export default function PlaceSelectionPage() {
 
       const all: Place[] = [
         ...festivalPlaces,
-        ...attractions.slice(0, 5),
-        ...culture.slice(0, 3),
-        ...leisure.slice(0, 3),
-        ...kakaoFood.slice(0, 3),
+        ...attractions.slice(0, 10),
+        ...culture.slice(0, 5),
+        ...leisure.slice(0, 5),
+        ...kakaoFood.slice(0, 5),
       ];
 
       // Deduplicate by contentid

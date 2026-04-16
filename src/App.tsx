@@ -6,7 +6,7 @@ import CourseResultPage from './pages/CourseResultPage';
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-[url('https://images.unsplash.com/photo-1538485399081-7191377e8241?q=80&w=2574')] bg-cover bg-center bg-fixed">
+      <div className="min-h-screen bg-[url('https://images.unsplash.com/photo-1528360983277-13d401cdc186?q=80&w=2574')] bg-cover bg-center bg-fixed">
         <div className="max-w-[430px] mx-auto min-h-screen bg-surface relative shadow-2xl text-on-surface font-body overflow-x-hidden">
           <Routes>
             <Route path="/" element={<HomePage />} />

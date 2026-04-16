@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Menu, MapPin, CalendarDays, ArrowRight } from 'lucide-react';
 import LogoLight from '../assets/logo/이달여행.svg';
@@ -65,6 +65,7 @@ function formatDateKorean(dateStr: string): string {
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const dateInputRef = useRef<HTMLInputElement>(null);
   const [selectedRegion, setSelectedRegion] = useState('강원');
   const [travelDate, setTravelDate] = useState<string>(getNextSaturday());
   const [departure, setDeparture] = useState('');
@@ -144,19 +145,23 @@ export default function HomePage() {
               <label className="block text-[10px] font-bold text-secondary tracking-widest uppercase mb-1 font-label">
                 TRAVEL DATE
               </label>
-              <label className="flex items-center gap-3 bg-surface-container-low p-4 rounded-[16px] cursor-pointer">
+              <div
+                className="flex items-center gap-3 bg-surface-container-low p-4 rounded-[16px] cursor-pointer relative"
+                onClick={() => dateInputRef.current?.showPicker()}
+              >
                 <CalendarDays size={20} className="text-secondary flex-shrink-0" />
                 <span className="text-on-surface text-sm font-medium flex-1">
                   {formattedDate}
                 </span>
                 <input
+                  ref={dateInputRef}
                   type="date"
                   value={travelDate}
                   min={new Date().toISOString().split('T')[0]}
                   onChange={(e) => setTravelDate(e.target.value)}
-                  className="sr-only"
+                  className="absolute inset-0 opacity-0 cursor-pointer w-full"
                 />
-              </label>
+              </div>
             </div>
 
             {/* Departure Input */}
