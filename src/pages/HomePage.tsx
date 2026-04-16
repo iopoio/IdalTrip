@@ -134,10 +134,12 @@ export default function HomePage() {
             className="absolute inset-0 w-full h-full object-cover"
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-[#2d1a0e] via-[#5c2e1a] to-[#a63415]" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#1a0e06] via-[#a63415] to-[#FF6B35]" />
         )}
         {/* 그라데이션 오버레이 */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-surface" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-surface" />
+        {/* 상단 헤더 영역 반투명 처리 */}
+        <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-black/50 to-transparent" />
 
         {/* 히어로 텍스트 */}
         <div className="relative px-6 pt-24 pb-4">
