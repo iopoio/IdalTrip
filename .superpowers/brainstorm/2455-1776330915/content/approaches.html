@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>접근 방법 선택</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Apple SD Gothic Neo', sans-serif; background: #0f1117; color: #e2e8f0; padding: 24px 20px; }
+  h2 { font-size: 1.4rem; font-weight: 800; color: #f8fafc; margin-bottom: 4px; }
+  .subtitle { font-size: 0.82rem; color: #94a3b8; margin-bottom: 24px; }
+
+  .options { display: flex; flex-direction: column; gap: 14px; margin-bottom: 24px; }
+
+  .option {
+    border-radius: 14px;
+    padding: 18px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: 2px solid transparent;
+    position: relative;
+  }
+  .option:hover { transform: translateY(-1px); }
+  .option.selected { border-color: #60a5fa !important; }
+
+  .opt-a { background: #0c1b36; border-color: #1e3a8a; }
+  .opt-b { background: #052e16; border-color: #166534; }
+  .opt-c { background: #1c1200; border-color: #78350f; }
+
+  .opt-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .opt-letter {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; font-weight: 800; flex-shrink: 0;
+  }
+  .la { background: #1e3a8a; color: #93c5fd; }
+  .lb { background: #14532d; color: #6ee7b7; }
+  .lc { background: #78350f; color: #fcd34d; }
+
+  .opt-name { font-size: 1rem; font-weight: 800; color: #f1f5f9; }
+  .opt-sub { font-size: 0.75rem; color: #64748b; }
+
+  .recommend-badge {
+    position: absolute; top: 14px; right: 14px;
+    font-size: 0.65rem; font-weight: 800;
+    padding: 3px 9px; border-radius: 10px;
+    background: #14532d; color: #6ee7b7;
+  }
+
+  .opt-body { display: flex; flex-direction: column; gap: 8px; }
+
+  .metric-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .metric {
+    font-size: 0.72rem; padding: 3px 9px; border-radius: 6px; font-weight: 600;
+  }
+  .m-time { background: #1e293b; color: #94a3b8; }
+  .m-risk { background: #450a0a; color: #fca5a5; }
+  .m-risk-mid { background: #422006; color: #fbbf24; }
+  .m-risk-low { background: #052e16; color: #6ee7b7; }
+  .m-quality { background: #1e1b4b; color: #a5b4fc; }
+
+  .opt-detail { font-size: 0.78rem; color: #94a3b8; line-height: 1.55; }
+
+  .keep-drop { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+  .kd-box { background: #0f172a; border-radius: 8px; padding: 8px 10px; }
+  .kd-title { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
+  .kd-keep .kd-title { color: #34d399; }
+  .kd-drop .kd-title { color: #f87171; }
+  .kd-item { font-size: 0.7rem; color: #64748b; line-height: 1.6; }
+
+  .timeline {
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 14px;
+    padding: 18px;
+  }
+  .tl-title { font-size: 0.85rem; font-weight: 700; color: #7dd3fc; margin-bottom: 14px; }
+  .tl-week { display: flex; gap: 3px; margin-bottom: 12px; }
+  .tl-day {
+    flex: 1; height: 28px; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.6rem; font-weight: 700; color: #fff;
+    position: relative;
+  }
+  .tl-label { font-size: 0.62rem; color: #475569; margin-bottom: 4px; text-align: center; }
+
+  .d-empty { background: #1f2937; }
+  .d-plan { background: #1e40af; }
+  .d-build { background: #065f46; }
+  .d-qa { background: #7c2d12; }
+  .d-deadline { background: #ef4444; }
+
+  .tl-legend { display: flex; gap: 12px; flex-wrap: wrap; }
+  .tl-leg-item { display: flex; align-items: center; gap: 5px; font-size: 0.7rem; color: #64748b; }
+  .tl-leg-dot { width: 10px; height: 10px; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<h2>접근 방법 선택</h2>
+<p class="subtitle">마감 5/6 — 오늘 4/16 기준 20일 남음</p>
+
+<div class="options">
+
+  <!-- A: 완전 재작성 -->
+  <div class="option opt-a" data-choice="a" onclick="toggleSelect(this)">
+    <div class="opt-header">
+      <div class="opt-letter la">A</div>
+      <div>
+        <div class="opt-name">완전 재작성</div>
+        <div class="opt-sub">새 구조로 처음부터 — 3페이지, 깔끔한 코드</div>
+      </div>
+    </div>
+    <div class="opt-body">
+      <div class="metric-row">
+        <span class="metric m-time">⏱ 소요 약 12~15일</span>
+        <span class="metric m-risk">🔴 리스크 높음</span>
+        <span class="metric m-quality">✨ 완성도 최상</span>
+      </div>
+      <div class="opt-detail">
+        새 플로우(홈→장소선택→코스결과)로 처음부터 작성. 기술 부채 없음. 하지만 20일 중 12일+ 쓰면 QA 시간이 3~5일밖에 안 남음. API 연동 이슈나 Gemini 프롬프트 튜닝에서 막히면 마감 위험.
+      </div>
+      <div class="keep-drop">
+        <div class="kd-box kd-keep">
+          <div class="kd-title">살리기</div>
+          <div class="kd-item">TourAPI 서비스 로직<br>Gemini 프롬프트 기반<br>카카오 연동 패턴<br>디자인 시스템</div>
+        </div>
+        <div class="kd-box kd-drop">
+          <div class="kd-title">버리기</div>
+          <div class="kd-item">모든 페이지 컴포넌트<br>라우팅 구조<br>BottomNav<br>제대리 지시서 12개</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B: 리팩토링 (추천) -->
+  <div class="option opt-b" data-choice="b" onclick="toggleSelect(this)">
+    <span class="recommend-badge">✅ 추천</span>
+    <div class="opt-header">
+      <div class="opt-letter lb">B</div>
+      <div>
+        <div class="opt-name">핵심 리팩토링</div>
+        <div class="opt-sub">ExploreResultPage를 메인으로 올리고, 플로우 재편</div>
+      </div>
+    </div>
+    <div class="opt-body">
+      <div class="metric-row">
+        <span class="metric m-time">⏱ 소요 약 7~9일</span>
+        <span class="metric m-risk-mid">🟡 리스크 중간</span>
+        <span class="metric m-quality">✨ 완성도 높음</span>
+      </div>
+      <div class="opt-detail">
+        기존 API 연동/Gemini/카카오 로직은 그대로 두고, 페이지 구조만 재편. FestivalDetailPage 해체 → 장소선택 페이지로 통합. 새 기능(운영시간, 숙박, 카카오 맛집) 추가. QA에 8~10일 확보 가능.
+      </div>
+      <div class="keep-drop">
+        <div class="kd-box kd-keep">
+          <div class="kd-title">살리기</div>
+          <div class="kd-item">TourAPI 전체 서비스<br>Gemini 코스 생성<br>카카오맵 서비스<br>디자인 시스템<br>타입 정의</div>
+        </div>
+        <div class="kd-box kd-drop">
+          <div class="kd-title">버리기/축소</div>
+          <div class="kd-item">FestivalsPage<br>RecentCoursePage<br>BottomNav 탭 4→없음<br>준비중 페이지들</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C: 최소 수정 -->
+  <div class="option opt-c" data-choice="c" onclick="toggleSelect(this)">
+    <div class="opt-header">
+      <div class="opt-letter lc">C</div>
+      <div>
+        <div class="opt-name">최소 수정</div>
+        <div class="opt-sub">현재 구조 유지, 핵심 문제만 패치</div>
+      </div>
+    </div>
+    <div class="opt-body">
+      <div class="metric-row">
+        <span class="metric m-time">⏱ 소요 약 3~4일</span>
+        <span class="metric m-risk-low">🟢 리스크 낮음</span>
+        <span class="metric m-quality">📦 완성도 중간</span>
+      </div>
+      <div class="opt-detail">
+        진입점 혼재 문제만 정리하고, 운영시간/휴무일 반영 + 카카오 맛집 보완만 추가. 구조는 그대로라 덕지덕지 느낌 남음. 공모전 제출은 가능하지만 심사에서 UX 완성도 감점 가능성.
+      </div>
+      <div class="keep-drop">
+        <div class="kd-box kd-keep">
+          <div class="kd-title">살리기</div>
+          <div class="kd-item">거의 모든 것</div>
+        </div>
+        <div class="kd-box kd-drop">
+          <div class="kd-title">추가</div>
+          <div class="kd-item">운영시간 반영<br>카카오 맛집 보완<br>홈 진입점 정리</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 타임라인 -->
+<div class="timeline">
+  <div class="tl-title">📅 B 선택 시 예상 타임라인</div>
+
+  <div style="margin-bottom:6px;">
+    <div class="tl-label">Week 1 (4/16~22) — 설계 + 구조 재편</div>
+    <div class="tl-week">
+      <div class="tl-day d-plan">설<br>계</div>
+      <div class="tl-day d-plan">홈<br>재편</div>
+      <div class="tl-day d-build">장소<br>선택</div>
+      <div class="tl-day d-build">장소<br>선택</div>
+      <div class="tl-day d-build">코스<br>결과</div>
+      <div class="tl-day d-build">API<br>보완</div>
+      <div class="tl-day d-build">Gem<br>프롬</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:6px;">
+    <div class="tl-label">Week 2 (4/23~29) — 기능 완성 + QA 시작</div>
+    <div class="tl-week">
+      <div class="tl-day d-build">카카<br>오맵</div>
+      <div class="tl-day d-build">운영<br>시간</div>
+      <div class="tl-day d-build">맛집<br>보완</div>
+      <div class="tl-day d-qa">QA</div>
+      <div class="tl-day d-qa">QA</div>
+      <div class="tl-day d-qa">버그<br>수정</div>
+      <div class="tl-day d-qa">버그<br>수정</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:12px;">
+    <div class="tl-label">Week 3 (4/30~5/6) — 마무리 + 제출</div>
+    <div class="tl-week">
+      <div class="tl-day d-qa">최종<br>QA</div>
+      <div class="tl-day d-qa">디자<br>인</div>
+      <div class="tl-day d-qa">큐레<br>이션</div>
+      <div class="tl-day d-qa">제출<br>준비</div>
+      <div class="tl-day d-qa">버퍼</div>
+      <div class="tl-day d-qa">버퍼</div>
+      <div class="tl-day d-deadline">⚡<br>마감</div>
+    </div>
+  </div>
+
+  <div class="tl-legend">
+    <div class="tl-leg-item"><div class="tl-leg-dot" style="background:#1e40af"></div>설계/구조</div>
+    <div class="tl-leg-item"><div class="tl-leg-dot" style="background:#065f46"></div>개발</div>
+    <div class="tl-leg-item"><div class="tl-leg-dot" style="background:#7c2d12"></div>QA/수정</div>
+    <div class="tl-leg-item"><div class="tl-leg-dot" style="background:#ef4444"></div>마감</div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>이달트립 - Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-fixed": "#a4eeff",
+                        "surface-container-highest": "#e3e2e0",
+                        "surface": "#faf9f7",
+                        "surface-container-low": "#f4f3f1",
+                        "on-error": "#ffffff",
+                        "primary": "#a63415",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#c84c2b",
+                        "on-secondary-container": "#556679",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#1a1c1b",
+                        "surface-bright": "#faf9f7",
+                        "secondary-container": "#d2e4fb",
+                        "on-secondary-fixed": "#0b1d2d",
+                        "inverse-surface": "#2f3130",
+                        "on-background": "#1a1c1b",
+                        "on-tertiary-fixed-variant": "#004e5a",
+                        "on-tertiary-fixed": "#001f25",
+                        "on-primary-fixed-variant": "#891f01",
+                        "surface-container": "#efeeec",
+                        "secondary": "#4f6073",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#e9e8e6",
+                        "surface-variant": "#e3e2e0",
+                        "surface-dim": "#dadad8",
+                        "on-primary-container": "#fffbff",
+                        "on-primary-fixed": "#3c0800",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#aa3617",
+                        "tertiary": "#006574",
+                        "inverse-primary": "#ffb4a2",
+                        "background": "#faf9f7",
+                        "inverse-on-surface": "#f1f1ef",
+                        "on-surface-variant": "#58413c",
+                        "on-tertiary-container": "#f8fdff",
+                        "error": "#ba1a1a",
+                        "outline": "#8c716a",
+                        "tertiary-container": "#008093",
+                        "primary-fixed": "#ffdbd2",
+                        "outline-variant": "#e0bfb8",
+                        "secondary-fixed": "#d2e4fb",
+                        "tertiary-fixed-dim": "#69d5ec",
+                        "secondary-fixed-dim": "#b7c8de",
+                        "primary-fixed-dim": "#ffb4a2",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#38485a"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    fontFamily: {
+                        "headline": ["Noto Serif KR", "serif"],
+                        "body": ["Pretendard", "sans-serif"],
+                        "label": ["Plus Jakarta Sans", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Pretendard', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .serif-title { font-family: 'Noto Serif KR', serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen max-w-[390px] mx-auto overflow-x-hidden">
+<!-- TopAppBar -->
+<nav class="fixed top-0 w-[390px] z-50 bg-[#faf9f7]/80 dark:bg-[#1a1c1b]/80 backdrop-blur-xl flex justify-between items-center px-6 h-16">
+<div class="font-headline font-black text-[#a63415] dark:text-[#c84c2b] text-xl tracking-tight">이달트립</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#4f6073] hover:opacity-80 transition-opacity">search</span>
+<span class="material-symbols-outlined text-[#4f6073] hover:opacity-80 transition-opacity">menu</span>
+</div>
+</nav>
+<main class="pt-20 pb-12 px-5">
+<!-- Hero Search Card -->
+<section class="mb-12">
+<div class="bg-surface-container-lowest rounded-[32px] p-6 shadow-[0px_12px_32px_rgba(26,28,27,0.06)] border border-outline-variant/10">
+<h1 class="font-headline text-3xl font-bold text-on-surface mb-6 leading-tight tracking-tight">어디로 떠날까요?</h1>
+<!-- Region Chips -->
+<div class="flex gap-2 overflow-x-auto no-scrollbar mb-8 -mx-1 px-1">
+<button class="px-5 py-2.5 rounded-full bg-surface-container-high text-on-surface text-sm font-medium whitespace-nowrap">전체</button>
+<button class="px-5 py-2.5 rounded-full bg-surface-container-high text-on-surface text-sm font-medium whitespace-nowrap">서울/경기</button>
+<button class="px-5 py-2.5 rounded-full bg-primary text-on-primary text-sm font-bold whitespace-nowrap shadow-lg shadow-primary/20">강원</button>
+<button class="px-5 py-2.5 rounded-full bg-surface-container-high text-on-surface text-sm font-medium whitespace-nowrap">충청</button>
+<button class="px-5 py-2.5 rounded-full bg-surface-container-high text-on-surface text-sm font-medium whitespace-nowrap">전라</button>
+<button class="px-5 py-2.5 rounded-full bg-surface-container-high text-on-surface text-sm font-medium whitespace-nowrap">경상</button>
+<button class="px-5 py-2.5 rounded-full bg-surface-container-high text-on-surface text-sm font-medium whitespace-nowrap">제주</button>
+</div>
+<!-- Input Fields -->
+<div class="space-y-4 mb-8">
+<div class="group">
+<label class="text-[10px] font-bold text-secondary tracking-widest uppercase mb-1 block px-1">TRAVEL DATE</label>
+<div class="flex items-center gap-3 bg-surface-container-low p-4 rounded-2xl border border-transparent group-focus-within:border-primary/20 transition-all">
+<span class="material-symbols-outlined text-primary text-xl">event_note</span>
+<span class="text-on-surface font-bold">2025년 5월 10일 (토)</span>
+</div>
+</div>
+<div class="group">
+<label class="text-[10px] font-bold text-secondary tracking-widest uppercase mb-1 block px-1">DEPARTURE</label>
+<div class="flex items-center gap-3 bg-surface-container-low p-4 rounded-2xl border border-transparent group-focus-within:border-primary/20 transition-all">
+<span class="material-symbols-outlined text-secondary text-xl">location_on</span>
+<input class="bg-transparent border-none p-0 focus:ring-0 italic text-on-surface placeholder:text-secondary/50 w-full" placeholder="출발지 입력 (예: 서울역)" type="text"/>
+</div>
+</div>
+</div>
+<!-- CTA -->
+<button class="w-full py-5 bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold rounded-2xl shadow-xl shadow-primary/20 active:scale-95 transition-transform">
+                    강원도 · 5월 10일 여행 찾기
+                </button>
+</div>
+</section>
+<!-- 추천 여행지 Section -->
+<section>
+<div class="flex flex-col mb-6">
+<h2 class="font-headline text-2xl font-bold text-on-surface">이달의 추천 여행지</h2>
+<p class="text-secondary text-sm">클릭하면 자동으로 설정됩니다</p>
+</div>
+<!-- Bento-style Grid -->
+<div class="grid grid-cols-2 gap-4">
+<!-- Large Card -->
+<div class="col-span-2 relative overflow-hidden rounded-[24px] rounded-tr-none aspect-[16/10] group">
+<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="misty mountain range in Gangwon South Korea with lush pine forests and soft morning fog" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9qDYYjAosZn2sgogDzcUIVqbIyB-ZwDOTNsb5Of8UQ6lX0OCINnQO9UgxnU5PR7U2jHUDWBz9WD11FE6bWjWTx7pel9ZPAvMzFHk3f-S7Ai4yM8iEXdJocKqlvELmfQZtC1XGOqQjLbcI3Rxom4C8_h21j_bW2suGZzmXTed4qtAQKgnBc9Qu6lER1SKoiISnh1PWwtNDLiSGSZuJswNgCRuO_4HJFMp8enUCzY_0_I6x90_I4u3LoIDBlo355x0-cFTtWaRMCDA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/80 via-transparent to-transparent"></div>
+<div class="absolute top-4 left-4">
+<span class="px-3 py-1 bg-primary text-on-primary text-[10px] font-bold tracking-widest uppercase rounded-full">지금 축제중</span>
+</div>
+<div class="absolute bottom-5 left-6 right-6">
+<h3 class="font-headline text-2xl text-on-primary font-bold">강릉 봄 여행</h3>
+<p class="text-on-primary/80 text-xs mt-1">경포호수 벚꽃길과 안목해변 커피거리</p>
+</div>
+</div>
+<!-- Small Card 1 -->
+<div class="relative overflow-hidden rounded-[24px] aspect-square group">
+<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="historical korean pavilion in Gyeongju surrounded by blooming pink cherry blossom trees at dusk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbbfKJIBEVE1oGhD6C1XOlDtWbKbmgQvmeZlGl8ZHvewsCNyQezrC44oRhrSFCuwSfbNNn_CvpLLBqUa8aoJHoVCE06Lkm8WqPQrT282Jnd0Cr4LUrn2ji9pTuFrajykZOMkrl-lXVcxMQbICzR-9h3csgyfxL0IA5iTvwMjcEY2M2bU_yz9H1aslSyuWYIP5iT-7E1FNfdjruuXwoYYu7mhQj4hhUSL35x3D4YL8vla-0_vag8bujQp6qW-YgTpfQ2TcahcZqBxA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/60 to-transparent"></div>
+<div class="absolute top-3 left-3">
+<span class="px-2 py-0.5 bg-surface-container-lowest text-primary text-[9px] font-bold tracking-widest uppercase rounded-full">이달 추천</span>
+</div>
+<div class="absolute bottom-4 left-4">
+<h3 class="font-headline text-lg text-on-primary font-bold">경주 벚꽃</h3>
+</div>
+</div>
+<!-- Small Card 2 -->
+<div class="relative overflow-hidden rounded-[24px] aspect-square group">
+<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Yeosu night sea bridge with vibrant colorful city lights reflecting on the dark ocean water" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBz74yZPlLjWawbeqVFrjWQifpQxRrynLLCOQyTWe6UjeqTAYzokSOkAOIjpN1zrNxEK6XZgTVm0h65BaIsTY5Iayp-W_CXaHgEAjvZkfKoOYRhRSKDcFGOIXEFLy0plGBMEnFkP4s_k8-gfuaqcKt98OBxnrQ4WXpchS0_hm-NROQirz5kSMrLnZ9G792cqi5XScyf_pg4PZMLgmTQvbHGZb0BGNSZrYOg87TpHur8oC6eHBCSnRENby9hm_TXhS-ZOe-jZkXqp6E"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/60 to-transparent"></div>
+<div class="absolute bottom-4 left-4">
+<h3 class="font-headline text-lg text-on-primary font-bold">여수 밤바다</h3>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Minimal Footer -->
+<footer class="px-6 py-12 border-t border-outline-variant/10 bg-surface-container-low text-center">
+<div class="font-headline font-black text-outline text-lg tracking-tight mb-4 opacity-40">이달트립</div>
+<div class="flex justify-center gap-6 text-secondary text-[11px] font-medium mb-6">
+<span>개인정보처리방침</span>
+<span>이용약관</span>
+<span>고객센터</span>
+</div>
+<p class="text-secondary/60 text-[10px] leading-relaxed">
+            주식회사 이달트립 | 대표자: 홍길동<br/>
+            사업자등록번호: 000-00-00000<br/>
+            서울시 중구 세종대로 110
+        </p>
+</footer>
+<!-- Empty Spacer for Bottom Balance -->
+<div class="h-8"></div>
+</body></html>

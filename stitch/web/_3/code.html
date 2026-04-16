@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-surface": "#2f3130",
+                    "background": "#faf9f7",
+                    "on-surface": "#1a1c1b",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container": "#efeeec",
+                    "surface-container-high": "#e9e8e6",
+                    "on-primary": "#ffffff",
+                    "on-secondary-fixed-variant": "#38485a",
+                    "tertiary": "#006574",
+                    "surface-container-low": "#f4f3f1",
+                    "on-tertiary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "secondary-container": "#d2e4fb",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed": "#3c0800",
+                    "on-secondary-fixed": "#0b1d2d",
+                    "error": "#ba1a1a",
+                    "surface-bright": "#faf9f7",
+                    "tertiary-fixed": "#a4eeff",
+                    "on-background": "#1a1c1b",
+                    "primary-container": "#c84c2b",
+                    "outline-variant": "#e0bfb8",
+                    "outline": "#8c716a",
+                    "surface-container-highest": "#e3e2e0",
+                    "on-surface-variant": "#58413c",
+                    "secondary": "#4f6073",
+                    "primary": "#a63415",
+                    "on-secondary-container": "#556679",
+                    "on-error": "#ffffff",
+                    "surface-tint": "#aa3617",
+                    "inverse-primary": "#ffb4a2",
+                    "tertiary-fixed-dim": "#69d5ec",
+                    "surface-variant": "#e3e2e0",
+                    "primary-fixed-dim": "#ffb4a2",
+                    "on-tertiary-fixed-variant": "#004e5a",
+                    "on-primary-container": "#fffbff",
+                    "inverse-on-surface": "#f1f1ef",
+                    "surface-dim": "#dadad8",
+                    "surface": "#faf9f7",
+                    "secondary-fixed-dim": "#b7c8de",
+                    "secondary-fixed": "#d2e4fb",
+                    "primary-fixed": "#ffdbd2",
+                    "on-primary-fixed-variant": "#891f01",
+                    "tertiary-container": "#008093",
+                    "on-tertiary-container": "#f8fdff",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed": "#001f25"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Noto Serif KR", "serif"],
+                    "body": ["Plus Jakarta Sans", "sans-serif"],
+                    "label": ["Plus Jakarta Sans", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .editorial-text-shadow {
+            text-shadow: 0 2px 40px rgba(0,0,0,0.3);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-stone-950/80 backdrop-blur-xl">
+<div class="flex justify-between items-center max-w-7xl mx-auto px-12 py-6">
+<div class="text-2xl font-bold font-headline text-stone-900 dark:text-stone-100 italic tracking-tight">IdalTrip</div>
+<div class="hidden md:flex items-center space-x-12">
+<a class="text-orange-800 dark:text-orange-500 border-b-2 border-orange-800 dark:border-orange-500 pb-1 font-label text-sm tracking-wide" href="#">Destinations</a>
+<a class="text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 hover:opacity-80 transition-all duration-300 font-label text-sm tracking-wide" href="#">Journal</a>
+<a class="text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 hover:opacity-80 transition-all duration-300 font-label text-sm tracking-wide" href="#">Curated Stays</a>
+<a class="text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 hover:opacity-80 transition-all duration-300 font-label text-sm tracking-wide" href="#">About</a>
+</div>
+<div class="flex items-center space-x-6">
+<button class="text-stone-600 font-label text-sm tracking-wide hover:opacity-80 transition-all">Sign In</button>
+<button class="bg-primary px-6 py-2.5 rounded-full text-on-primary font-label text-sm font-semibold tracking-wide hover:opacity-90 transition-all shadow-lg shadow-primary/20">Plan Your Trip</button>
+</div>
+</div>
+</nav>
+<main class="relative min-h-screen">
+<!-- Hero Background Section -->
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover brightness-[0.85]" data-alt="Stunning night view of Gyeongju Donggung Palace and Wolji Pond with illuminated traditional architecture reflected in water under blooming cherry blossoms" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9EXU830nkLOOJY92SQNxPdd0N7-AEaO_NAV1G5m2qAvJbA9rlOxDa-7oMz02cv9aD9udUItv8qUZGKyqG44dl6sJtLmvwpwhWXw-L_cL0anGS_iMOUDX9VOgGmYWtvrA-OPXguYLOVxLnfEr-LVJipPDsme1In0_hg9MdupeNpzirj1q7G4GlFJqCLXGbff54ZnLvsWk1OeNqef7Cc7QcoIlMwcWFlo1bLDJQjAgYjAiyD-tY6CmQ6o2y4MXpmHP_E-LtWvXbmq8"/>
+<div class="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-surface"></div>
+</div>
+<div class="relative z-10 max-w-7xl mx-auto px-12 pt-44 pb-32 grid grid-cols-12 gap-8 items-start">
+<!-- Headline Column -->
+<div class="col-span-12 lg:col-span-4 pt-12">
+<h1 class="font-headline text-6xl md:text-7xl lg:text-8xl text-white font-black leading-[1.1] editorial-text-shadow">
+                    여행, <br/>일상이 <br/>되다.
+                </h1>
+<p class="mt-8 text-white/90 text-lg max-w-xs font-light leading-relaxed">
+                    Discover the quiet elegance of Korea's most soulful destinations through our curated editorial lenses.
+                </p>
+<div class="mt-12 flex items-center space-x-4">
+<span class="w-12 h-[1px] bg-white/40"></span>
+<span class="text-white font-label text-xs tracking-[0.2em] uppercase">Autumn Selection 2024</span>
+</div>
+</div>
+<!-- Mobile Mockup Column (Aggressive Asymmetry) -->
+<div class="col-span-12 lg:col-span-4 flex justify-center lg:justify-end lg:pt-32">
+<div class="relative w-[280px] aspect-[9/19.5] rounded-[3rem] p-3 bg-stone-900/40 backdrop-blur-md shadow-2xl border border-white/10 overflow-hidden ring-1 ring-white/20">
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-6 bg-stone-900 rounded-b-2xl z-20"></div>
+<div class="relative w-full h-full rounded-[2.2rem] bg-white overflow-hidden shadow-inner">
+<img class="w-full h-full object-cover" data-alt="High-end mobile interface showing a travel app with a beautiful minimalist photo of Seoul cityscape and clean typography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbakP4IwI53eYxxmeh0u2obDc4jKFUg968Le8-KQtEW5al_j9BieSUsQtN_ROFMwcEuW82EIvZnz2yJsVJNndvl4949kVDXHkfYfOvjZdpRsskMCn8k6NGLZVaJ1YLmQFvc1Lvi5LKnS0zZ_dIbSJPo6To5DoNeUT63kbM5rlk9eqiC8lS32v6kkvTcQE01wPQY1bQcE0xJF8_nIYe5pcQdQBz5CqPhhK2RBXlMsyhCypYX0F021pPqidUWRvS9kvUJMqIK1wJLms"/>
+<div class="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
+<p class="text-white text-[10px] font-label tracking-widest uppercase mb-1">Current Feature</p>
+<h3 class="text-white font-headline text-xl">The Seoul Forest Walk</h3>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Info Cards Column -->
+<div class="col-span-12 lg:col-span-4 lg:pt-24 flex flex-col space-y-8 items-center lg:items-end">
+<!-- Card 1 -->
+<div class="glass-card p-6 rounded-2xl border border-white/10 w-full max-w-sm group hover:bg-white/15 transition-all">
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-white/80" data-icon="auto_awesome">auto_awesome</span>
+<span class="text-white/40 font-label text-[10px] tracking-widest">01 / 04</span>
+</div>
+<h4 class="text-white font-headline text-2xl mb-2">Heritage stays</h4>
+<p class="text-white/70 text-sm leading-relaxed mb-6">Experience the timeless beauty of renovated Hanoks in the heart of Bukchon.</p>
+<a class="text-primary-fixed-dim text-xs font-label font-bold tracking-widest uppercase flex items-center group-hover:gap-2 transition-all" href="#">
+                        Explore Collection <span class="material-symbols-outlined text-sm ml-2" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+<!-- Card 2 -->
+<div class="glass-card p-6 rounded-2xl border border-white/10 w-full max-w-sm group hover:bg-white/15 transition-all">
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-white/80" data-icon="local_library">local_library</span>
+<span class="text-white/40 font-label text-[10px] tracking-widest">02 / 04</span>
+</div>
+<h4 class="text-white font-headline text-2xl mb-2">The Journal</h4>
+<p class="text-white/70 text-sm leading-relaxed mb-6">Curated narratives from local photographers capturing the unseen Korea.</p>
+<a class="text-primary-fixed-dim text-xs font-label font-bold tracking-widest uppercase flex items-center group-hover:gap-2 transition-all" href="#">
+                        Read Stories <span class="material-symbols-outlined text-sm ml-2" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+<!-- Scroll Indicator -->
+<div class="pt-12 flex flex-col items-center lg:items-end space-y-4">
+<div class="w-px h-16 bg-gradient-to-b from-white to-transparent"></div>
+<span class="text-white/40 text-[10px] tracking-[0.3em] uppercase font-label origin-right rotate-0 lg:-rotate-90">Scroll to explore</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Secondary Narrative Section (Aggressive White Space) -->
+<section class="bg-surface py-32 px-12 overflow-hidden">
+<div class="max-w-7xl mx-auto grid grid-cols-12 gap-16 items-center">
+<div class="col-span-12 md:col-span-6 lg:col-span-5 order-2 md:order-1">
+<span class="text-primary font-label text-xs tracking-widest uppercase mb-4 block">Destination Spotlight</span>
+<h2 class="font-headline text-5xl text-on-surface mb-8 leading-tight">Gyeongju: The Museum Without Walls.</h2>
+<p class="text-secondary text-lg leading-relaxed mb-12 font-light">
+                    Walk through the ancient capital where Silla's thousand-year history breathes in every tumulus and temple. Our guide takes you beyond the tourist paths to the quiet morning mists of Bulguksa.
+                </p>
+<button class="flex items-center space-x-4 group">
+<span class="w-12 h-12 rounded-full border border-outline-variant flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all">
+<span class="material-symbols-outlined text-on-surface group-hover:text-on-primary" data-icon="play_arrow">play_arrow</span>
+</span>
+<span class="font-label text-sm font-bold tracking-widest uppercase">Experience the film</span>
+</button>
+</div>
+<div class="col-span-12 md:col-span-6 lg:col-span-7 order-1 md:order-2">
+<div class="relative">
+<img class="w-full aspect-[4/3] object-cover rounded-tr-[120px] rounded-bl-[120px] shadow-2xl" data-alt="Minimalist landscape of Gyeongju tumuli ancient burial mounds at sunrise with a single tree and soft morning mist" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-GgKhG1_PhpoX5LcKxqBwWb4Xv5NoJtK3dQyIoujQ7BxxjZ4q2njUcFLkonBaaVJD7X5EA5fVQ5UffG-DisfuMjG1c0pgcNNnDVkGaW3lQck_Ebt1G5k-7zUVtzES4KaBWW3VixSq8194KMR8PPBoY1mDziKGhUmBvJgVacjOfYjmzefOcFqYC6rPXX_c_202hGLmBLnzjVcSOrcUcv76k7sojdlU2BY_N8GIiuaZPyyEHezlZ7PO9JfjMWf9v5t-917Xluqxpbc"/>
+<div class="absolute -bottom-8 -left-8 bg-surface-container p-8 rounded-xl max-w-xs shadow-xl hidden lg:block">
+<p class="italic font-headline text-on-surface-variant text-xl">"A place where time flows differently, inviting us to linger in the silence."</p>
+<p class="mt-4 text-xs font-label tracking-widest uppercase text-primary">Kim Ji-hun, Photographer</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-stone-100 dark:bg-stone-950 w-full py-12 px-12 border-t border-stone-200/20">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-7xl mx-auto px-12">
+<div class="col-span-2 md:col-span-1">
+<div class="font-noto-serif text-lg font-semibold text-stone-900 dark:text-stone-100 mb-6">IdalTrip</div>
+<p class="text-stone-500 font-pretendard text-sm leading-relaxed max-w-xs">
+                    Curating travel as an art form. Join us in exploring the hidden rhythms of the Korean peninsula.
+                </p>
+</div>
+<div>
+<h5 class="text-orange-800 dark:text-orange-500 font-label text-xs tracking-widest uppercase mb-6">Explore</h5>
+<ul class="space-y-4">
+<li><a class="text-stone-500 hover:text-orange-800 dark:hover:text-orange-400 transition-colors font-pretendard text-sm tracking-wide" href="#">Destinations</a></li>
+<li><a class="text-stone-500 hover:text-orange-800 dark:hover:text-orange-400 transition-colors font-pretendard text-sm tracking-wide" href="#">Journal</a></li>
+<li><a class="text-stone-500 hover:text-orange-800 dark:hover:text-orange-400 transition-colors font-pretendard text-sm tracking-wide" href="#">Curated Stays</a></li>
+</ul>
+</div>
+<div>
+<h5 class="text-orange-800 dark:text-orange-500 font-label text-xs tracking-widest uppercase mb-6">Company</h5>
+<ul class="space-y-4">
+<li><a class="text-stone-500 hover:text-orange-800 dark:hover:text-orange-400 transition-colors font-pretendard text-sm tracking-wide" href="#">Editorial Guidelines</a></li>
+<li><a class="text-stone-500 hover:text-orange-800 dark:hover:text-orange-400 transition-colors font-pretendard text-sm tracking-wide" href="#">Contact</a></li>
+<li><a class="text-stone-500 hover:text-orange-800 dark:hover:text-orange-400 transition-colors font-pretendard text-sm tracking-wide" href="#">Terms of Service</a></li>
+</ul>
+</div>
+<div>
+<h5 class="text-orange-800 dark:text-orange-500 font-label text-xs tracking-widest uppercase mb-6">Legal</h5>
+<ul class="space-y-4">
+<li><a class="text-stone-500 hover:text-orange-800 dark:hover:text-orange-400 transition-colors font-pretendard text-sm tracking-wide" href="#">Privacy Policy</a></li>
+</ul>
+<div class="mt-8 pt-8 border-t border-stone-200/40">
+<p class="text-stone-500 font-pretendard text-xs tracking-widest uppercase">© 2024 IdalTrip. <br/>The Digital Curator.</p>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

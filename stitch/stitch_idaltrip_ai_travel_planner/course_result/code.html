@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link as="style" crossorigin="" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Pretendard', sans-serif; }
+        .font-serif { font-family: 'Noto Serif KR', serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-fixed-variant": "#891f01",
+                      "surface-tint": "#aa3617",
+                      "on-background": "#1a1c1b",
+                      "background": "#faf9f7",
+                      "on-tertiary-fixed-variant": "#004e5a",
+                      "surface-container": "#efeeec",
+                      "on-tertiary-fixed": "#001f25",
+                      "on-primary-container": "#fffbff",
+                      "on-primary": "#ffffff",
+                      "surface-container-low": "#f4f3f1",
+                      "inverse-primary": "#ffb4a2",
+                      "primary-fixed": "#ffdbd2",
+                      "error": "#ba1a1a",
+                      "secondary-fixed": "#d2e4fb",
+                      "tertiary-container": "#008093",
+                      "secondary-fixed-dim": "#b7c8de",
+                      "on-primary-fixed": "#3c0800",
+                      "tertiary": "#006574",
+                      "surface-container-lowest": "#ffffff",
+                      "on-surface": "#1a1c1b",
+                      "on-secondary-fixed-variant": "#38485a",
+                      "surface-container-highest": "#e3e2e0",
+                      "surface-variant": "#e3e2e0",
+                      "tertiary-fixed": "#a4eeff",
+                      "secondary": "#4f6073",
+                      "on-error-container": "#93000a",
+                      "primary": "#a63415",
+                      "primary-fixed-dim": "#ffb4a2",
+                      "outline-variant": "#e0bfb8",
+                      "on-surface-variant": "#58413c",
+                      "tertiary-fixed-dim": "#69d5ec",
+                      "on-tertiary-container": "#f8fdff",
+                      "secondary-container": "#d2e4fb",
+                      "on-secondary": "#ffffff",
+                      "surface-dim": "#dadad8",
+                      "surface": "#faf9f7",
+                      "primary-container": "#c84c2b",
+                      "on-secondary-fixed": "#0b1d2d",
+                      "error-container": "#ffdad6",
+                      "outline": "#8c716a",
+                      "on-secondary-container": "#556679",
+                      "inverse-surface": "#2f3130",
+                      "inverse-on-surface": "#f1f1ef",
+                      "surface-container-high": "#e9e8e6",
+                      "surface-bright": "#faf9f7",
+                      "on-tertiary": "#ffffff",
+                      "on-error": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              }
+            },
+          }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen pb-32">
+<!-- Top Navigation -->
+<header class="fixed top-0 w-full z-50 bg-[#faf9f7]/80 dark:bg-[#1a1c1b]/80 backdrop-blur-xl flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant hover:opacity-70 transition-opacity">arrow_back</span>
+<h1 class="font-serif italic text-lg dark:text-white">AI 코스 결과</h1>
+</div>
+<div class="flex items-center gap-3">
+<button class="hover:opacity-70 transition-opacity">
+<span class="material-symbols-outlined text-on-surface-variant">share</span>
+</button>
+<button class="hover:opacity-70 transition-opacity">
+<span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
+</button>
+</div>
+</header>
+<main class="mt-20 px-6 max-w-[390px] mx-auto">
+<!-- Hero Summary Card -->
+<section class="relative mb-12 overflow-hidden bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(26,28,27,0.06)]">
+<div class="mb-6">
+<h2 class="text-xl font-bold leading-tight mb-2">✨ AI가 최적의 코스를 만들었습니다!</h2>
+<p class="text-secondary text-sm leading-relaxed">운영시간·이동시간·휴무일을 모두 고려했어요</p>
+</div>
+<div class="flex justify-between items-center pt-4 border-t border-outline-variant/20">
+<div class="text-center">
+<p class="text-[10px] uppercase tracking-widest text-secondary mb-1">Duration</p>
+<p class="font-bold text-sm">⏱ 총 6시간 30분</p>
+</div>
+<div class="text-center">
+<p class="text-[10px] uppercase tracking-widest text-secondary mb-1">Budget</p>
+<p class="font-bold text-sm">💰 약 3.5만원</p>
+</div>
+<div class="text-center">
+<p class="text-[10px] uppercase tracking-widest text-secondary mb-1">Stops</p>
+<p class="font-bold text-sm">📍 4곳</p>
+</div>
+</div>
+</section>
+<!-- Itinerary Timeline -->
+<section class="relative">
+<!-- Timeline Path -->
+<div class="absolute left-3 top-4 bottom-4 w-[1px] bg-outline-variant/30"></div>
+<!-- Stop 1 -->
+<div class="relative pl-10 mb-12">
+<div class="absolute left-[9px] top-1.5 w-2.5 h-2.5 rounded-full bg-primary ring-4 ring-background"></div>
+<div class="flex justify-between items-start mb-2">
+<p class="text-xs font-bold text-primary tracking-widest uppercase">10:00 AM</p>
+<span class="bg-primary/10 text-primary text-[10px] px-2 py-0.5 rounded-full font-bold">지금 축제 중!</span>
+</div>
+<h3 class="font-serif text-2xl mb-4 text-on-surface">강릉 커피 축제</h3>
+<div class="rounded-xl overflow-hidden aspect-[16/9] mb-4">
+<img alt="Coffee festival" class="w-full h-full object-cover" data-alt="Close-up of freshly brewed coffee in a ceramic cup at an outdoor festival with soft bokeh lights in background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBI-NNf2-gfoT1wOafGl0mu3U-DvCl3O8s9NBosaDQnTnGphAbQeDLpNA_Ihh7rfubTCctObsIVmp8j0rp8mRxR5jA8B3W2BCIWmXBQWPcfVKLW5pCm8jMEgTXoRZSzDHe3y0vIhd-It_oHfbEtQya2QYMpXiMMLFujKzBKBsmktQtSZM-JEKwTtKx7vpCGZ20UBQ0YVO9sURFFnWJtRbuR-pMtmXKWACcHDg-D1Yr9HlDbcqmtMUxn52gkLhxDK39BncjgnaRXV04"/>
+</div>
+<div class="flex items-center gap-4 mb-4 text-sm text-secondary">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>약 1시간 30분</span>
+</div>
+</div>
+<button class="inline-flex items-center gap-2 bg-surface-container-high px-4 py-2 rounded-full text-xs font-bold hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-[16px]">navigation</span>
+                    카카오내비
+                </button>
+<div class="mt-6 flex items-center gap-2 py-4 border-y border-outline-variant/10">
+<span class="material-symbols-outlined text-secondary text-lg">directions_car</span>
+<p class="text-xs text-secondary font-medium tracking-tight">→ 차 15분 · 8km 이동</p>
+</div>
+</div>
+<!-- Stop 2 -->
+<div class="relative pl-10 mb-12">
+<div class="absolute left-[9px] top-1.5 w-2.5 h-2.5 rounded-full bg-primary ring-4 ring-background"></div>
+<div class="flex justify-between items-start mb-2">
+<p class="text-xs font-bold text-primary tracking-widest uppercase">12:30 PM</p>
+<span class="flex items-center gap-0.5 text-[10px] font-bold text-on-surface-variant">
+<span class="material-symbols-outlined text-[12px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+                        ★ 4.8
+                    </span>
+</div>
+<h3 class="font-serif text-2xl mb-4 text-on-surface">초당 할머니 순두부</h3>
+<div class="rounded-xl overflow-hidden aspect-[16/9] mb-4">
+<img alt="Sundubu restaurant" class="w-full h-full object-cover" data-alt="Traditional Korean soft tofu stew in a rustic black bowl served with side dishes on a wooden table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-Eg2U8--7E8OSMXiTNoIBThqTsXvM2M3YRAo-ZsJRcVIdrxmG7SG-eNchwvyKVq1W7Ld5YKELHZkO-nEfGIIuTXeV-bK5jSiPJe0SAcgmXLrGj0z9TwV0impppJF1AxycAGoy15NS9TtIMvg9MwgFzOyQH3jG0ULXg0zivXg5jkd7daAF8kKcrAH7YQ6G6ODJ2iuPssBie63g1M4Y7NeruRUZy2WuuUbZ8M-zNylCdOIfH5q8Hi7GpmSIoW5WEHxl2ffnFWlRnP4"/>
+</div>
+<button class="inline-flex items-center gap-2 bg-surface-container-high px-4 py-2 rounded-full text-xs font-bold hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-[16px]">navigation</span>
+                    카카오내비
+                </button>
+<div class="mt-6 flex items-center gap-2 py-4 border-y border-outline-variant/10">
+<span class="material-symbols-outlined text-secondary text-lg">directions_car</span>
+<p class="text-xs text-secondary font-medium tracking-tight">→ 차 10분 · 5km 이동</p>
+</div>
+</div>
+<!-- Stop 3 -->
+<div class="relative pl-10 mb-12">
+<div class="absolute left-[9px] top-1.5 w-2.5 h-2.5 rounded-full bg-primary ring-4 ring-background"></div>
+<div class="flex justify-between items-start mb-2">
+<p class="text-xs font-bold text-primary tracking-widest uppercase">02:00 PM</p>
+</div>
+<h3 class="font-serif text-2xl mb-4 text-on-surface">경포대</h3>
+<div class="rounded-xl overflow-hidden aspect-[16/9] mb-4">
+<img alt="Gyeongpodae beach" class="w-full h-full object-cover" data-alt="Cinematic shot of a serene beach at daytime with calm turquoise waves and a clear bright sky" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhtsiGsaidi73Gs9IKi70w-iSgoaasGWA6y3cL6hv3HnP83PM6jjIYkaomRc_r-YINmeNrYqd9rxZC9dG_wCCUuRsoPd7vuAcCAcwuFfDIfWmYO46NQIcSqhNRwfkHZXRXJkCpHC1DoGYQwI5vfTcE6099_4weEjI8WOn83LiNLuJIoPzJqqJ8nfEgWq3DMlGNHV_pc8gSKj4I6dR9I-3Ie5I_kWmJhOApoN0TuKbkuADzonWZnw-Q7uCsks_nVKKjcwU1rn_io1w"/>
+</div>
+<button class="inline-flex items-center gap-2 bg-surface-container-high px-4 py-2 rounded-full text-xs font-bold hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-[16px]">navigation</span>
+                    카카오내비
+                </button>
+<div class="mt-6 flex items-center gap-2 py-4 border-y border-outline-variant/10">
+<span class="material-symbols-outlined text-secondary text-lg">directions_car</span>
+<p class="text-xs text-secondary font-medium tracking-tight">→ 차 8분 · 3km 이동</p>
+</div>
+</div>
+<!-- Stop 4 -->
+<div class="relative pl-10 mb-12">
+<div class="absolute left-[9px] top-1.5 w-2.5 h-2.5 rounded-full bg-primary ring-4 ring-background"></div>
+<div class="flex justify-between items-start mb-2">
+<p class="text-xs font-bold text-primary tracking-widest uppercase">04:00 PM</p>
+<span class="bg-error/10 text-error text-[10px] px-2 py-0.5 rounded-full font-bold">17:00 마감</span>
+</div>
+<h3 class="font-serif text-2xl mb-4 text-on-surface">참소리 축음기 박물관</h3>
+<div class="rounded-xl overflow-hidden aspect-[16/9] mb-4">
+<img alt="Gramophone museum" class="w-full h-full object-cover" data-alt="Collection of antique vintage gramophones and phonographs in a museum with soft warm spotlighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOUVBE0dFpyIkE2De168gTbKjcMjYCbmGYjh_8oy8ZSayDlWQJebqyWafPvPI91G1Kravbh_ZxekcSF9gqnf2qm2_fYYmMVEGAgGFxRPKi9btcUYWatGO5-elROAF7k6RARTdn94qHuxaj53CYY-ZhYvg8h8WJaFJx5Ly84ZyNanT9gHYjSc8tisN31r0ZxFILqc0v1dh3E2p1JMqdxa9wmAniBGV26DOodyq8veFonEzcJz2fNeiI1RDlgXPWZepBWHKJR_c4j7g"/>
+</div>
+<div class="flex items-center gap-4 mb-4 text-sm text-secondary">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">info</span>
+<span>입장 마감까지 30분 남음</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Fixed Bottom Bar -->
+<div class="fixed bottom-0 w-full bg-white/90 backdrop-blur-xl px-6 py-4 pb-8 flex gap-3 z-50">
+<button class="flex-1 py-4 px-2 border border-outline font-bold text-sm rounded-xl text-on-surface hover:bg-surface-container-low transition-colors">
+            다른 코스 추천받기
+        </button>
+<button class="flex-[1.2] py-4 px-2 bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold text-sm rounded-xl flex justify-center items-center gap-2 shadow-lg active:scale-95 duration-200">
+            카카오톡 공유
+            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</body></html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Pretendard', sans-serif; }
+        .font-serif { font-family: 'Noto Serif KR', serif; }
+        .font-sans { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#a4eeff",
+                        "surface-container-highest": "#e3e2e0",
+                        "surface": "#faf9f7",
+                        "surface-container-low": "#f4f3f1",
+                        "on-error": "#ffffff",
+                        "primary": "#a63415",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#c84c2b",
+                        "on-secondary-container": "#556679",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#1a1c1b",
+                        "surface-bright": "#faf9f7",
+                        "secondary-container": "#d2e4fb",
+                        "on-secondary-fixed": "#0b1d2d",
+                        "inverse-surface": "#2f3130",
+                        "on-background": "#1a1c1b",
+                        "on-tertiary-fixed-variant": "#004e5a",
+                        "on-tertiary-fixed": "#001f25",
+                        "on-primary-fixed-variant": "#891f01",
+                        "surface-container": "#efeeec",
+                        "secondary": "#4f6073",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#e9e8e6",
+                        "surface-variant": "#e3e2e0",
+                        "surface-dim": "#dadad8",
+                        "on-primary-container": "#fffbff",
+                        "on-primary-fixed": "#3c0800",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#aa3617",
+                        "tertiary": "#006574",
+                        "inverse-primary": "#ffb4a2",
+                        "background": "#faf9f7",
+                        "inverse-on-surface": "#f1f1ef",
+                        "on-surface-variant": "#58413c",
+                        "on-tertiary-container": "#f8fdff",
+                        "error": "#ba1a1a",
+                        "outline": "#8c716a",
+                        "tertiary-container": "#008093",
+                        "primary-fixed": "#ffdbd2",
+                        "outline-variant": "#e0bfb8",
+                        "secondary-fixed": "#d2e4fb",
+                        "tertiary-fixed-dim": "#69d5ec",
+                        "secondary-fixed-dim": "#b7c8de",
+                        "primary-fixed-dim": "#ffb4a2",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#38485a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Noto Serif KR"],
+                        "body": ["Pretendard"],
+                        "label": ["Plus Jakarta Sans"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-32">
+<!-- Header Navigation (Linear/Transactional Suppressed Shell) -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl flex justify-between items-center px-6 h-16">
+<button class="w-10 h-10 flex items-center justify-start text-on-surface">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-serif font-bold text-lg tracking-tight">AI 코스 결과</h1>
+<button class="w-10 h-10 flex items-center justify-end text-[#FEE500]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">share</span>
+</button>
+</header>
+<main class="pt-20 px-6 max-w-[390px] mx-auto">
+<!-- Hero Summary Card -->
+<section class="mb-10 bg-surface-container-lowest rounded-3xl p-6 shadow-[0px_12px_32px_rgba(26,28,27,0.06)] overflow-hidden relative border border-outline-variant/10">
+<div class="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -mr-8 -mt-8"></div>
+<h2 class="font-serif text-2xl font-bold leading-tight mb-2">✨ AI가 최적의 코스를 만들었습니다!</h2>
+<p class="text-secondary text-sm mb-6 leading-relaxed">운영시간·이동시간·휴무일을 모두 고려했어요</p>
+<div class="flex flex-wrap gap-2">
+<span class="inline-flex items-center px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface text-[11px] font-bold tracking-tight">
+<span class="material-symbols-outlined text-[14px] mr-1">schedule</span> ⏱ 총 6시간 30분
+                </span>
+<span class="inline-flex items-center px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface text-[11px] font-bold tracking-tight">
+<span class="material-symbols-outlined text-[14px] mr-1">payments</span> 💰 약 3.5만원
+                </span>
+<span class="inline-flex items-center px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface text-[11px] font-bold tracking-tight">
+<span class="material-symbols-outlined text-[14px] mr-1">location_on</span> 📍 4곳
+                </span>
+</div>
+</section>
+<!-- Timeline Section -->
+<section class="relative">
+<!-- Timeline Connector Line -->
+<div class="absolute left-[7px] top-6 bottom-0 w-[1px] bg-outline-variant/30"></div>
+<!-- Stop 1 -->
+<div class="relative pl-10 mb-12">
+<div class="absolute left-0 top-1 w-4 h-4 rounded-full bg-primary ring-4 ring-primary/10 z-10"></div>
+<div class="flex items-center gap-2 mb-3">
+<span class="text-primary font-sans font-extrabold text-sm tracking-tighter">10:00 AM</span>
+<span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded uppercase">Festival</span>
+</div>
+<div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm border border-outline-variant/10">
+<img class="w-full h-48 object-cover" data-alt="vibrant outdoor coffee festival with steaming cups, aromatic beans, and people enjoying in a coastal park setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvk21ENHqcCztZOKrKJK4TuN2BHuqjVIqtCvOkJiv8Qa0d8VouPDrYMUILC-EG5RrbNT_uhP8VQqNLfifUawiF-f3zBpsYCk9NNdCGsRkfnirfBztVNL-zhUU_SNy_WdD3WqukQ7dHJ2o11XMoVuC1G_ktCb_U96QKbhPpgeqQ4WGXOsMP9TSTb5XP8z2w5DX7ULkk4v_3jFYg2synRr5DsKt94Yhhol1588AepcZNTSLPW35D9sZz_IKEK3PrlY-QeqooShvz8u0"/>
+<div class="p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-serif text-xl font-bold">강릉 커피 축제</h3>
+<span class="text-xs text-secondary bg-surface-container px-2 py-1 rounded">약 1시간 30분</span>
+</div>
+<p class="text-on-surface-variant text-sm mb-4 leading-relaxed">향긋한 커피 향과 함께 시작하는 강릉 여행의 첫 단추. 다양한 원두 브루잉 체험이 가능합니다.</p>
+<button class="w-full bg-[#FEE500] text-[#1a1c1b] py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">navigation</span>
+                            카카오 내비
+                        </button>
+</div>
+</div>
+<!-- Travel Indicator -->
+<div class="mt-4 flex items-center text-secondary text-[11px] font-medium tracking-wide">
+<span class="material-symbols-outlined text-[14px] mr-1">directions_car</span>
+                    → 차 15분 · 8km
+                </div>
+</div>
+<!-- Stop 2 -->
+<div class="relative pl-10 mb-12">
+<div class="absolute left-0 top-1 w-4 h-4 rounded-full bg-outline-variant z-10"></div>
+<div class="flex items-center gap-2 mb-3">
+<span class="text-secondary font-sans font-bold text-sm tracking-tighter">12:30 PM</span>
+<span class="text-primary text-[11px] font-bold flex items-center">
+<span class="material-symbols-outlined text-[14px] mr-0.5" style="font-variation-settings: 'FILL' 1;">star</span>
+                        4.8
+                    </span>
+</div>
+<div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm border border-outline-variant/10">
+<img class="w-full h-48 object-cover" data-alt="traditional korean soft tofu stew in a rustic earthen pot with side dishes on a wooden table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMJ7R8A_ix-diJJH-7wYAqwKpb-0_9MNtebGkYwX76JOZloKcmcIQ5R4EZfINHjEyr07k5HXdcZaylW81FnapSP3rwC0vk3lEfanp_zh9zrd-GYn4Tv9Dbxir1-tOoD9HHzbdHRqhZXN4m13QjH3fDVHj1m9HwoSf_w_vMWE2kjPsjP_5uY9tUijB2w_CAqGZnqpKrgyPEMfDUupArs83zHxb04HZcg4xXUy9sFxzyE1--4M4oJ1kGjKZbhc1liqBr6FGwnmuh-j4"/>
+<div class="p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-serif text-xl font-bold">초당 할머니 순두부</h3>
+<span class="text-xs text-secondary bg-surface-container px-2 py-1 rounded">약 1시간</span>
+</div>
+<p class="text-on-surface-variant text-sm mb-4 leading-relaxed">3대째 내려오는 전통 방식 그대로 만든 고소하고 담백한 순두부 전골 맛집입니다.</p>
+</div>
+</div>
+<div class="mt-4 flex items-center text-secondary text-[11px] font-medium tracking-wide">
+<span class="material-symbols-outlined text-[14px] mr-1">directions_car</span>
+                    → 차 10분 · 4km
+                </div>
+</div>
+<!-- Stop 3 -->
+<div class="relative pl-10 mb-12">
+<div class="absolute left-0 top-1 w-4 h-4 rounded-full bg-outline-variant z-10"></div>
+<div class="flex items-center gap-2 mb-3">
+<span class="text-secondary font-sans font-bold text-sm tracking-tighter">02:00 PM</span>
+</div>
+<div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm border border-outline-variant/10">
+<img class="w-full h-48 object-cover" data-alt="scenic beach view with clear blue water, white sand, and a traditional korean pavilion in the distance" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFYg5jA0dY__P0QHI3SUxqao3PKTxI7_t7bt7htaXqhI_yCsVscSHUrSTypehacUmz4UOOwGRpnpXfNMipEhmKYI_lt5JFBnNH-xXHG5UNUrS0w2QJL0MPoZCId-P_I1YNQA451rDEEvggHo7baY5gG6NHe60FB6an3qjPPdI9JgNRn8gp4yQWzrtvBSzJXzPT9HugaSpgDaRBGzmjTj1yNg5A2B28ZbNvukGw7WSqrL7XMk5GYtERdcpmUvad2TN7rNTzbluLNUA"/>
+<div class="p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-serif text-xl font-bold">경포대</h3>
+<span class="text-xs text-secondary bg-surface-container px-2 py-1 rounded">약 1시간 30분</span>
+</div>
+<p class="text-on-surface-variant text-sm mb-4 leading-relaxed">동해안 최대의 해변. 시원한 바닷바람을 맞으며 산책하기에 최적의 장소입니다.</p>
+</div>
+</div>
+<div class="mt-4 flex items-center text-secondary text-[11px] font-medium tracking-wide">
+<span class="material-symbols-outlined text-[14px] mr-1">directions_car</span>
+                    → 차 8분 · 3.5km
+                </div>
+</div>
+<!-- Stop 4 -->
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-4 h-4 rounded-full bg-outline-variant z-10"></div>
+<div class="flex items-center gap-2 mb-3">
+<span class="text-secondary font-sans font-bold text-sm tracking-tighter">04:00 PM</span>
+<span class="bg-error/10 text-error text-[10px] font-bold px-2 py-0.5 rounded">17:00 마감</span>
+</div>
+<div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm border border-outline-variant/10">
+<img class="w-full h-48 object-cover" data-alt="vintage gramophones and antique musical instruments displayed in a sophisticated museum gallery with warm ambient lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVPB0dMoSe-8-nJYHJdNYGeuRHBiu_vLBpDUsNOTudoPRgDd-jmZtpLPhBGdwWK9P0uUm1bunGjqi4e0x-CKyEs7z-cr2jzCdzwvKrKfwSmpXM9X2-rNzGJ6Mtz88wl8Ubp-PwqgwoaSvOhIqGStwcftXdnQBh1c0DBdSoH9i41jd0qdPfTTE31_zhYLKwyWsoSfSPFPYAPZdEz3QhRbfDu___8A3b4KE3f4fF3P47BXkcru6vz_5HnZfYgkAzneuNmfmPSEMLkEQ"/>
+<div class="p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-serif text-xl font-bold">참소리 축음기 박물관</h3>
+<span class="text-xs text-secondary bg-surface-container px-2 py-1 rounded">약 1시간</span>
+</div>
+<p class="text-on-surface-variant text-sm mb-4 leading-relaxed">에디슨의 발명품부터 전 세계의 희귀 축음기가 모여있는 독특한 테마 박물관입니다.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Fixed Bottom Bar (Action Focus Shell) -->
+<footer class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[390px] bg-surface/90 backdrop-blur-2xl p-6 pb-8 border-t border-outline-variant/20 z-50">
+<div class="flex gap-3">
+<button class="flex-1 py-4 border-2 border-primary text-primary rounded-2xl font-bold text-sm transition-opacity active:opacity-60">
+                다른 코스 추천받기
+            </button>
+<button class="flex-[1.5] py-4 bg-primary text-on-primary rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition-transform active:scale-95 shadow-lg shadow-primary/20">
+                카카오톡 공유
+                <span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+</div>
+</footer>
+</body></html>

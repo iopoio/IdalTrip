@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데이터 활용 전략</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Apple SD Gothic Neo', sans-serif; background: #0f1117; color: #e2e8f0; padding: 24px 20px; }
+  h2 { font-size: 1.4rem; font-weight: 800; color: #f8fafc; margin-bottom: 4px; }
+  .subtitle { font-size: 0.82rem; color: #94a3b8; margin-bottom: 24px; }
+
+  .flow-diagram {
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+
+  .flow-title { font-size: 0.85rem; font-weight: 700; color: #7dd3fc; margin-bottom: 16px; }
+
+  .flow-step {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.72rem; font-weight: 800;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .s1 { background: #1e3a8a; color: #93c5fd; }
+  .s2 { background: #065f46; color: #6ee7b7; }
+  .s3 { background: #4c1d95; color: #c4b5fd; }
+  .s4 { background: #7c2d12; color: #fdba74; }
+
+  .step-content { flex: 1; }
+  .step-label { font-size: 0.82rem; font-weight: 700; color: #f1f5f9; margin-bottom: 4px; }
+  .step-apis { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 4px; }
+  .api-tag {
+    font-size: 0.68rem; font-weight: 700;
+    padding: 2px 8px; border-radius: 6px;
+  }
+  .tag-tour { background: #1e3a8a33; border: 1px solid #3b82f6; color: #93c5fd; }
+  .tag-kakao { background: #78350f33; border: 1px solid #f59e0b; color: #fcd34d; }
+  .tag-gemini { background: #4c1d9533; border: 1px solid #8b5cf6; color: #c4b5fd; }
+  .tag-new { background: #052e1633; border: 1px solid #34d399; color: #6ee7b7; }
+  .step-note { font-size: 0.72rem; color: #64748b; line-height: 1.4; }
+
+  .arrow-step { text-align: left; padding-left: 36px; color: #374151; font-size: 0.85rem; margin-bottom: 12px; }
+
+  .data-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .data-card {
+    border-radius: 12px;
+    padding: 14px;
+    position: relative;
+  }
+  .dc-used { background: #1e293b; border: 1px solid #334155; }
+  .dc-new { background: #0a1628; border: 1px solid #1e3a8a; }
+  .dc-kakao { background: #1c1200; border: 1px solid #78350f; }
+  .dc-unused { background: #111827; border: 1px dashed #374151; }
+
+  .dc-badge {
+    font-size: 0.62rem; font-weight: 800; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 10px;
+    position: absolute; top: 10px; right: 10px;
+  }
+  .b-used { background: #1e3a8a; color: #93c5fd; }
+  .b-new { background: #052e16; color: #34d399; }
+  .b-kakao { background: #78350f; color: #fcd34d; }
+  .b-drop { background: #374151; color: #9ca3af; }
+
+  .dc-icon { font-size: 1.3rem; margin-bottom: 6px; }
+  .dc-title { font-size: 0.82rem; font-weight: 700; color: #f1f5f9; margin-bottom: 4px; }
+  .dc-code { font-size: 0.68rem; color: #64748b; font-family: monospace; margin-bottom: 6px; }
+  .dc-desc { font-size: 0.72rem; color: #94a3b8; line-height: 1.4; }
+  .dc-use { font-size: 0.72rem; color: #34d399; margin-top: 6px; font-weight: 600; }
+
+  .insight-box {
+    background: #0d2137;
+    border: 1px solid #1e3a5f;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .insight-title { font-size: 0.85rem; font-weight: 700; color: #fbbf24; margin-bottom: 10px; }
+  .insight-row { display: flex; gap: 10px; margin-bottom: 8px; font-size: 0.78rem; line-height: 1.5; color: #94a3b8; }
+  .insight-icon { flex-shrink: 0; }
+  strong { color: #f1f5f9; }
+</style>
+</head>
+<body>
+
+<h2>데이터 활용 전략</h2>
+<p class="subtitle">TourAPI + 카카오 + Gemini 조합으로 공모전 데이터 활용도 극대화</p>
+
+<!-- 플로우 -->
+<div class="flow-diagram">
+  <div class="flow-title">📡 새 플로우 × 데이터 매핑</div>
+
+  <div class="flow-step">
+    <div class="step-num s1">1</div>
+    <div class="step-content">
+      <div class="step-label">홈 — 이달의 추천 여행지</div>
+      <div class="step-apis">
+        <span class="api-tag tag-tour">TourAPI 여행코스(25)</span>
+        <span class="api-tag tag-tour">searchFestival2</span>
+        <span class="api-tag tag-new">큐레이션 하드코딩</span>
+      </div>
+      <div class="step-note">관광공사 검증된 여행코스 데이터 + 이번 달 인기 축제로 추천 카드 구성</div>
+    </div>
+  </div>
+  <div class="arrow-step">↓</div>
+
+  <div class="flow-step">
+    <div class="step-num s2">2</div>
+    <div class="step-content">
+      <div class="step-label">날짜 + 지역 + 출발지 입력</div>
+      <div class="step-apis">
+        <span class="api-tag tag-kakao">카카오 키워드검색 (출발지)</span>
+        <span class="api-tag tag-kakao">카카오 경로API (이동시간)</span>
+      </div>
+      <div class="step-note">출발지 → 목적지 이동시간 계산. 당일치기면 왕복 제외한 실제 관광 가능 시간 산출</div>
+    </div>
+  </div>
+  <div class="arrow-step">↓</div>
+
+  <div class="flow-step">
+    <div class="step-num s3">3</div>
+    <div class="step-content">
+      <div class="step-label">장소 선택 — AI 추천 + 사용자 조정</div>
+      <div class="step-apis">
+        <span class="api-tag tag-tour">searchFestival2 (행사)</span>
+        <span class="api-tag tag-tour">locationBasedList2 (관광지12, 문화시설14, 레포츠28)</span>
+        <span class="api-tag tag-tour">searchStay2 (숙박32, 1박이상)</span>
+        <span class="api-tag tag-kakao">카카오 맛집검색 (보완)</span>
+        <span class="api-tag tag-gemini">Gemini 추천 선택</span>
+      </div>
+      <div class="step-note">TourAPI 음식점(39)은 데이터 부실 → 카카오 키워드로 맛집 보완. Gemini가 실제 관광 가능 시간 기준으로 장소 수 자동 결정</div>
+    </div>
+  </div>
+  <div class="arrow-step">↓</div>
+
+  <div class="flow-step">
+    <div class="step-num s4">4</div>
+    <div class="step-content">
+      <div class="step-label">코스 결과</div>
+      <div class="step-apis">
+        <span class="api-tag tag-tour">detailIntro2 (영업시간, 요금)</span>
+        <span class="api-tag tag-tour">detailImage2 (이미지)</span>
+        <span class="api-tag tag-kakao">카카오맵 내비</span>
+        <span class="api-tag tag-kakao">카카오톡 공유</span>
+      </div>
+      <div class="step-note">각 장소 영업시간 실제 반영. 이미지 풍부하게. 장소별 카카오 내비 + 전체 공유</div>
+    </div>
+  </div>
+</div>
+
+<!-- 데이터 카드 -->
+<div class="data-grid">
+
+  <div class="data-card dc-used">
+    <span class="dc-badge b-used">현재 사용중</span>
+    <div class="dc-icon">🎪</div>
+    <div class="dc-title">행사/축제</div>
+    <div class="dc-code">searchFestival2 (type:15)</div>
+    <div class="dc-desc">날짜 기반 축제 검색. 지역코드 조합 가능</div>
+    <div class="dc-use">→ 핵심 유지</div>
+  </div>
+
+  <div class="data-card dc-used">
+    <span class="dc-badge b-used">현재 사용중</span>
+    <div class="dc-icon">🏔️</div>
+    <div class="dc-title">관광지</div>
+    <div class="dc-code">locationBasedList2 (type:12)</div>
+    <div class="dc-desc">위치 반경 기반 관광지 목록. 최대 20km</div>
+    <div class="dc-use">→ 핵심 유지</div>
+  </div>
+
+  <div class="data-card dc-new">
+    <span class="dc-badge b-new">신규 추가</span>
+    <div class="dc-icon">🗺️</div>
+    <div class="dc-title">공사 검증 여행코스</div>
+    <div class="dc-code">areaBasedList2 (type:25)</div>
+    <div class="dc-desc">관광공사가 큐레이션한 지역별 여행코스. 이달의 추천에 활용</div>
+    <div class="dc-use">→ 홈 큐레이션 베이스</div>
+  </div>
+
+  <div class="data-card dc-new">
+    <span class="dc-badge b-new">신규 추가</span>
+    <div class="dc-icon">🏛️</div>
+    <div class="dc-title">문화시설</div>
+    <div class="dc-code">locationBasedList2 (type:14)</div>
+    <div class="dc-desc">박물관, 미술관, 전시관. 지금 코스에서 빠져있음</div>
+    <div class="dc-use">→ 장소 선택에 추가</div>
+  </div>
+
+  <div class="data-card dc-new">
+    <span class="dc-badge b-new">신규 추가</span>
+    <div class="dc-icon">🏄</div>
+    <div class="dc-title">레포츠</div>
+    <div class="dc-code">locationBasedList2 (type:28)</div>
+    <div class="dc-desc">액티비티, 스포츠 시설. 체험형 여행에 필수</div>
+    <div class="dc-use">→ 액티비티 옵션</div>
+  </div>
+
+  <div class="data-card dc-new">
+    <span class="dc-badge b-new">신규 추가</span>
+    <div class="dc-icon">🏨</div>
+    <div class="dc-title">숙박</div>
+    <div class="dc-code">searchStay2 (type:32)</div>
+    <div class="dc-desc">1박 이상 선택 시 숙소 위치 기반 동선 최적화</div>
+    <div class="dc-use">→ 1박2일 이상에서 활용</div>
+  </div>
+
+  <div class="data-card dc-new">
+    <span class="dc-badge b-new">신규 추가</span>
+    <div class="dc-icon">⏰</div>
+    <div class="dc-title">영업시간/요금</div>
+    <div class="dc-code">detailIntro2</div>
+    <div class="dc-desc">실제 운영 시간 기반 코스 배치. "문 닫은 곳" 포함 방지</div>
+    <div class="dc-use">→ 코스 정확도 향상</div>
+  </div>
+
+  <div class="data-card dc-kakao">
+    <span class="dc-badge b-kakao">카카오 보완</span>
+    <div class="dc-icon">🍽️</div>
+    <div class="dc-title">맛집 (카카오)</div>
+    <div class="dc-code">카카오 키워드 검색 API</div>
+    <div class="dc-desc">TourAPI 음식점(39) 데이터 부실 → 카카오 맛집 검색으로 보완. 리뷰 수 기반</div>
+    <div class="dc-use">→ 음식점 대체/보완</div>
+  </div>
+
+</div>
+
+<!-- 인사이트 -->
+<div class="insight-box">
+  <div class="insight-title">💡 공모전 심사 포인트</div>
+  <div class="insight-row"><span class="insight-icon">📊</span><div>TourAPI <strong>5개 이상 데이터 타입</strong> 활용 → 데이터 활용도 점수 높음 (현재는 2개)</div></div>
+  <div class="insight-row"><span class="insight-icon">🗺️</span><div>카카오 API는 <strong>경로 탐색 + 내비 + 공유</strong> 3가지 모두 활용 → 카카오 연동 완성도</div></div>
+  <div class="insight-row"><span class="insight-icon">🤖</span><div>Gemini가 <strong>이동시간 기반 코스 최적화</strong> → 단순 추천이 아닌 실용적 AI 활용 어필 가능</div></div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이달트립 새 구조</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Apple SD Gothic Neo', sans-serif; background: #0f1117; color: #e2e8f0; padding: 28px 20px; min-height: 100vh; }
+  h2 { font-size: 1.4rem; font-weight: 800; color: #f8fafc; margin-bottom: 4px; }
+  .subtitle { font-size: 0.82rem; color: #94a3b8; margin-bottom: 28px; }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+  .col-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 14px; text-align: center; padding: 5px 12px; border-radius: 20px; display: inline-block; }
+  .col-title-old { background: #450a0a; color: #fca5a5; }
+  .col-title-new { background: #052e16; color: #6ee7b7; }
+
+  .col-header { text-align: center; margin-bottom: 16px; }
+
+  .flow { display: flex; flex-direction: column; align-items: center; gap: 0; }
+
+  .page-node {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.4;
+    position: relative;
+  }
+
+  /* OLD */
+  .old-home { background: #1e3a8a22; border: 1.5px solid #3b82f6; color: #93c5fd; }
+  .old-explore { background: #5b21b622; border: 1.5px solid #8b5cf6; color: #c4b5fd; }
+  .old-detail { background: #06522222; border: 1.5px solid #10b981; color: #6ee7b7; }
+  .old-result { background: #7c2d1222; border: 1.5px solid #f97316; color: #fdba74; }
+  .old-dead { background: #1f293722; border: 1.5px dashed #4b5563; color: #6b7280; font-style: italic; }
+
+  /* NEW */
+  .new-home { background: #1e3a8a44; border: 2px solid #60a5fa; color: #bfdbfe; }
+  .new-search { background: #065f4644; border: 2px solid #34d399; color: #a7f3d0; }
+  .new-spots { background: #4c1d9544; border: 2px solid #a78bfa; color: #ddd6fe; }
+  .new-result { background: #7c2d1244; border: 2px solid #fb923c; color: #fed7aa; }
+
+  .arrow { text-align: center; font-size: 0.85rem; color: #475569; padding: 4px 0; }
+  .arrow-label { font-size: 0.65rem; color: #64748b; display: block; }
+
+  .badge { display: inline-block; font-size: 0.65rem; padding: 2px 7px; border-radius: 10px; font-weight: 700; margin-top: 4px; }
+  .badge-warn { background: #422006; color: #fbbf24; }
+  .badge-good { background: #052e16; color: #34d399; }
+  .badge-new { background: #1e1b4b; color: #a5b4fc; }
+
+  .sub-detail { font-size: 0.68rem; font-weight: 400; color: #94a3b8; margin-top: 3px; display: block; }
+
+  .summary-box { margin-top: 28px; background: #0d2137; border: 1px solid #1e3a5f; border-radius: 12px; padding: 18px 20px; }
+  .summary-title { font-size: 0.85rem; font-weight: 700; color: #7dd3fc; margin-bottom: 12px; }
+  .change-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; font-size: 0.78rem; line-height: 1.5; }
+  .change-icon { flex-shrink: 0; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-size: 0.75rem; }
+  .icon-drop { background: #450a0a; }
+  .icon-keep { background: #052e16; }
+  .icon-add { background: #1e1b4b; }
+  .change-text strong { color: #f1f5f9; }
+  .change-text { color: #94a3b8; }
+
+  .page-count { display: flex; gap: 20px; justify-content: center; margin-top: 24px; }
+  .count-box { text-align: center; }
+  .count-num { font-size: 2rem; font-weight: 800; }
+  .count-old { color: #f87171; }
+  .count-new { color: #34d399; }
+  .count-label { font-size: 0.72rem; color: #64748b; margin-top: 2px; }
+  .count-arrow { font-size: 1.5rem; color: #475569; align-self: center; }
+</style>
+</head>
+<body>
+
+<h2>이달트립 — 전/후 플로우 비교</h2>
+<p class="subtitle">같은 아이디어, 다른 구조</p>
+
+<div class="split">
+
+  <!-- 현재 -->
+  <div>
+    <div class="col-header">
+      <span class="col-title col-title-old">현재 구조</span>
+    </div>
+    <div class="flow">
+      <div class="page-node old-home">
+        🏠 홈
+        <span class="sub-detail">히어로 + 지역/날짜탐색 + 축제그리드</span>
+        <span class="badge badge-warn">진입점 2개 혼재</span>
+      </div>
+      <div class="arrow">↓ <span class="arrow-label">경로 A: 탐색 버튼</span></div>
+      <div class="page-node old-explore">
+        🗺️ 탐색결과
+        <span class="sub-detail">ExploreResultPage</span>
+        <span class="badge badge-warn">코스 연결 불명확</span>
+      </div>
+      <div class="arrow">↓ <span class="arrow-label">경로 B: 축제 카드</span></div>
+      <div class="page-node old-detail">
+        🎪 축제 상세
+        <span class="sub-detail">설명 + AI스팟 + 옵션설정 + 생성버튼</span>
+        <span class="badge badge-warn">역할 과부하</span>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="page-node old-result">
+        📋 코스 결과
+        <span class="sub-detail">CourseResultPage</span>
+      </div>
+      <div class="arrow">·</div>
+      <div class="page-node old-dead">
+        👤 마이페이지
+        <span class="sub-detail">준비중</span>
+      </div>
+      <div class="page-node old-dead" style="margin-top:6px;">
+        ✨ AI 추천
+        <span class="sub-detail">준비중</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 새 구조 -->
+  <div>
+    <div class="col-header">
+      <span class="col-title col-title-new">새 구조</span>
+    </div>
+    <div class="flow">
+      <div class="page-node new-home">
+        🏠 홈
+        <span class="sub-detail">검색창 + 이달의 추천 여행지</span>
+        <span class="badge badge-good">진입점 1개</span>
+      </div>
+      <div class="arrow">↓ <span class="arrow-label">날짜 + 지역 + 출발지 선택</span></div>
+      <div class="page-node new-spots">
+        ✨ 장소 선택
+        <span class="sub-detail">AI 추천 미리 체크 + 사용자 조정</span>
+        <span class="badge badge-new">축제 있으면 포함 / 없어도 OK</span>
+      </div>
+      <div class="arrow">↓ <span class="arrow-label">출발지 기준 이동시간 계산</span></div>
+      <div class="page-node new-result">
+        📋 코스 결과
+        <span class="sub-detail">시간표 + 카카오 내비 + 공유</span>
+        <span class="badge badge-good">카카오 연동 완성</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 페이지 수 비교 -->
+<div class="page-count">
+  <div class="count-box">
+    <div class="count-num count-old">8</div>
+    <div class="count-label">현재 페이지 수<br>(준비중 포함)</div>
+  </div>
+  <div class="count-arrow">→</div>
+  <div class="count-box">
+    <div class="count-num count-new">3</div>
+    <div class="count-label">새 페이지 수<br>(홈/장소선택/코스결과)</div>
+  </div>
+</div>
+
+<!-- 무엇을 버리고 살릴지 -->
+<div class="summary-box">
+  <div class="summary-title">✂️ 버리기 / 살리기 / 추가하기</div>
+
+  <div class="change-row">
+    <div class="change-icon icon-drop">🗑</div>
+    <div class="change-text"><strong>버리기</strong> — FestivalsPage (전체축제 목록), RecentCoursePage, ExploreResultPage, 준비중 탭 2개, BottomNav (불필요)</div>
+  </div>
+  <div class="change-row">
+    <div class="change-icon icon-keep">✅</div>
+    <div class="change-text"><strong>살리기</strong> — TourAPI 연동 로직, Gemini 코스 생성 로직, 카카오맵 서비스, 디자인 시스템 (오렌지/에디토리얼)</div>
+  </div>
+  <div class="change-row">
+    <div class="change-icon icon-add">✨</div>
+    <div class="change-text"><strong>추가하기</strong> — 이달의 추천 여행지 큐레이션, 축제 없을 때 관광지만으로 코스 생성, 출발지→목적지 이동시간 기반 코스 계산</div>
+  </div>
+</div>
+
+</body>
+</html>

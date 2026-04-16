@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link as="style" crossorigin="" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Pretendard', sans-serif; background-color: #faf9f7; color: #1a1c1b; -webkit-font-smoothing: antialiased; }
+        .serif { font-family: 'Noto Serif KR', serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+        .active-pill { background: #a63415; color: #ffffff; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                "surface": "#faf9f7",
+                "surface-container-low": "#f4f3f1",
+                "tertiary-fixed": "#a4eeff",
+                "surface-container-highest": "#e3e2e0",
+                "on-secondary": "#ffffff",
+                "primary-container": "#c84c2b",
+                "primary": "#a63415",
+                "on-error": "#ffffff",
+                "on-surface": "#1a1c1b",
+                "on-secondary-container": "#556679",
+                "on-error-container": "#93000a",
+                "inverse-surface": "#2f3130",
+                "surface-bright": "#faf9f7",
+                "secondary-container": "#d2e4fb",
+                "on-secondary-fixed": "#0b1d2d",
+                "on-background": "#1a1c1b",
+                "on-tertiary-fixed": "#001f25",
+                "on-primary-fixed-variant": "#891f01",
+                "on-tertiary-fixed-variant": "#004e5a",
+                "secondary": "#4f6073",
+                "surface-container": "#efeeec",
+                "surface-container-high": "#e9e8e6",
+                "surface-variant": "#e3e2e0",
+                "on-tertiary": "#ffffff",
+                "on-primary-fixed": "#3c0800",
+                "on-primary-container": "#fffbff",
+                "surface-dim": "#dadad8",
+                "tertiary": "#006574",
+                "surface-tint": "#aa3617",
+                "on-primary": "#ffffff",
+                "inverse-primary": "#ffb4a2",
+                "background": "#faf9f7",
+                "inverse-on-surface": "#f1f1ef",
+                "primary-fixed": "#ffdbd2",
+                "on-tertiary-container": "#f8fdff",
+                "on-surface-variant": "#58413c",
+                "error": "#ba1a1a",
+                "tertiary-container": "#008093",
+                "outline": "#8c716a",
+                "tertiary-fixed-dim": "#69d5ec",
+                "secondary-fixed": "#d2e4fb",
+                "secondary-fixed-dim": "#b7c8de",
+                "outline-variant": "#e0bfb8",
+                "error-container": "#ffdad6",
+                "surface-container-lowest": "#ffffff",
+                "on-secondary-fixed-variant": "#38485a",
+                "primary-fixed-dim": "#ffb4a2"
+              },
+              "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+              },
+              "fontFamily": {
+                "headline": ["Noto Serif KR"],
+                "body": ["Pretendard"],
+                "label": ["Plus Jakarta Sans"]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#faf9f7]/80 backdrop-blur-xl flex items-center justify-between px-6 h-16">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#a63415] hover:opacity-70 transition-opacity cursor-pointer active:scale-95 active:duration-150">arrow_back</span>
+<h1 class="font-['Noto_Serif_KR'] text-lg font-bold tracking-tight text-[#1a1c1b]">강원도 · 5월 10일</h1>
+</div>
+<div class="flex items-center">
+<span class="material-symbols-outlined text-[#4f6073] hover:opacity-70 transition-opacity cursor-pointer active:scale-95 active:duration-150">share</span>
+</div>
+</header>
+<main class="pt-20 pb-32 px-6">
+<!-- Trip Options Summary Bar -->
+<section class="flex flex-col gap-4 mb-6">
+<div class="flex items-center justify-between gap-2 overflow-x-auto no-scrollbar pb-2">
+<!-- 출발지 -->
+<button class="flex-shrink-0 flex items-center gap-2 bg-surface-container-low px-4 py-2.5 rounded-full hover:bg-surface-container-high transition-colors">
+<span class="text-[10px] font-bold text-secondary tracking-widest uppercase font-label">FROM</span>
+<span class="text-sm font-semibold">서울역</span>
+<span class="material-symbols-outlined text-xs">keyboard_arrow_down</span>
+</button>
+<!-- 이동수단 Toggle -->
+<div class="flex-shrink-0 flex bg-surface-container-low p-1 rounded-full border border-outline-variant/10">
+<button class="px-4 py-1.5 rounded-full text-sm font-bold bg-primary text-white shadow-sm">자차</button>
+<button class="px-4 py-1.5 rounded-full text-sm font-medium text-secondary">대중교통</button>
+</div>
+<!-- 일정 Pill Selector -->
+<div class="flex-shrink-0 flex gap-2">
+<button class="px-4 py-2 rounded-full text-sm font-bold bg-surface-container-highest border border-primary/20 text-primary">당일</button>
+<button class="px-4 py-2 rounded-full text-sm font-medium bg-surface-container-low text-secondary">1박 2일</button>
+</div>
+</div>
+<!-- AI Insight Banner -->
+<div class="bg-surface-container-low/50 rounded-2xl p-4 flex items-center gap-3 border border-outline-variant/5">
+<div class="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-primary text-lg" data-weight="fill">auto_awesome</span>
+</div>
+<p class="text-[13px] font-medium text-on-surface leading-tight">
+                    서울역 기준 실제 관광 가능 시간 <span class="text-primary font-bold">약 5시간 30분</span>
+</p>
+</div>
+</section>
+<!-- AI 추천 장소 Section -->
+<section>
+<div class="flex items-baseline justify-between mb-6">
+<h2 class="serif text-2xl font-black tracking-tight text-on-surface italic">AI 추천 장소</h2>
+<button class="text-xs font-bold text-primary border-b border-primary/30 pb-0.5">전체 선택</button>
+</div>
+<div class="grid grid-cols-1 gap-8">
+<!-- Card 1 -->
+<div class="relative group">
+<div class="aspect-[16/10] overflow-hidden rounded-xl bg-surface-container-high relative">
+<img alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Steaming cup of coffee on a wooden table overlooking a vibrant outdoor festival market with warm morning sunlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuChG8Mq48tvWX6VObwSGlWjg20-4nyKOCMC76fBQ4a0dgu2gFCvg0R_4Y1C9QJMsqzVSpXgrFmopZ1mcifTSF1dLRW4vKQAbqe-FaOD0CPjQxQAVtLBZkm_uzHz7vs7OCjAIpIY7fpCrG_lrJbpeUI7WIY4YBRuN9fKEx-gTQBg-A8E749vQSoVTa6zxUz0zssUjrGSeE37Pjdg9BQHMRSsjSDr1qatoO2J08gIXXr_GdLwtY7j5MCALMWgDReQr6xIdEXMYFdhtX4"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="px-3 py-1 bg-white/90 backdrop-blur-md rounded-full text-[10px] font-bold tracking-widest uppercase">축제</span>
+</div>
+<div class="absolute top-4 right-4">
+<div class="w-6 h-6 rounded-lg bg-primary flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+</div>
+<div class="mt-3">
+<h3 class="serif text-xl font-bold leading-tight">강릉 커피 축제</h3>
+<p class="text-sm text-secondary mt-1">강원도 강릉시 난설헌로 131</p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="relative group">
+<div class="aspect-[16/10] overflow-hidden rounded-xl bg-surface-container-high relative">
+<img alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Wide panoramic view of Gyeongpodae Beach in South Korea with blue sea and pine trees under a clear sky" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNLNz_sbmGyOLzb2L3fh-YPIZ_-E6kCxUMgsovYwvCw90rAWdqTPAEIZP5B6WK5NJ72WbTDXMRilq76S2gqwM6FTf0OqnQABRk2NCX-_xr_-aoqax2dsXUcG_Q7R-x6T2eM_fV4iZSFpiAOlD9AUo1jbxJkYIKAP_5DFPCInxGwyibQEOzy9kuwNt9FHEIkurE0SYGW2JHdPUbAqB1N1rEojE9J31Qbkh7HbE8EN_PRMDwDV_WN4vGrlQZkcGN0B6Vnsy8DWOc9aw"/>
+<div class="absolute top-4 left-4">
+<span class="px-3 py-1 bg-white/90 backdrop-blur-md rounded-full text-[10px] font-bold tracking-widest uppercase">관광지</span>
+</div>
+<div class="absolute top-4 right-4">
+<div class="w-6 h-6 rounded-lg bg-primary flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+</div>
+<div class="mt-3">
+<h3 class="serif text-xl font-bold leading-tight">경포대</h3>
+<p class="text-sm text-secondary mt-1">강원도 강릉시 경포로 365</p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="relative group">
+<div class="aspect-[16/10] overflow-hidden rounded-xl bg-surface-container-high relative">
+<img alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Traditional Korean soft tofu stew in a ceramic bowl with side dishes on a wooden table, warm steam rising" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIgfRqy4ga6n56MCMkxB0V-aSMrZFm4u-UL3WASRZyZifG1SjFXKbS7ougyCgks1LU4iIuib3qO_vCKx4cwSPZ6e2HuWOS9HBxIyJ4xmKFLgkJWplsjw3klAas5xElKrf6IoFbnRpjzDl3db3kdRGgnME8L58zHt4nThF9tJ2toUZXmsGW8PHPdAJYt8XB46WfoihuLnfqQpHxPcMXWsMIl57IZnhQFf1P7O-dFiF86zLPM-e7Ucv9lFp4FiKKqmJSdCrEyDS97v8"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="px-3 py-1 bg-white/90 backdrop-blur-md rounded-full text-[10px] font-bold tracking-widest uppercase">맛집</span>
+<span class="px-3 py-1 bg-on-surface text-white rounded-full text-[10px] font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[10px]" style="font-variation-settings: 'FILL' 1;">star</span> 4.8
+                            </span>
+</div>
+<div class="absolute top-4 right-4">
+<div class="w-6 h-6 rounded-lg bg-primary flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+</div>
+<div class="mt-3">
+<h3 class="serif text-xl font-bold leading-tight">초당 할머니 순두부</h3>
+<p class="text-sm text-secondary mt-1">강원도 강릉시 초당순두부길 77</p>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="relative group">
+<div class="aspect-[16/10] overflow-hidden rounded-xl bg-surface-container-high relative">
+<img alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Vintage gramophones displayed in a museum gallery with elegant wooden floors and atmospheric lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkd9el0Nl6PAFGREal18WEHH_C2vgv2yZS9SA3ziFl2H4J70UbAY8q-OnZGpxIdVWVod2Y2FjS5QqR7r7ZtD5y1FWhVuP9KMEONqPTOyEw49fjVMGIQUbpO6kkSKPb8kvKs_3OPmt8G-QpTvEUsxp5CfK92wwCo1oNszYgZczieJuXLNhPiBluu6DeLFpGfqzoKyCg1gPUYPhU9AGz4J-QzesXfP09wnXDH0Wzv_iXmU9Wshi0MUs-A83WQ2hKSU3GRTjUtcDwgwc"/>
+<div class="absolute top-4 left-4">
+<span class="px-3 py-1 bg-white/90 backdrop-blur-md rounded-full text-[10px] font-bold tracking-widest uppercase">문화시설</span>
+</div>
+<div class="absolute top-4 right-4">
+<div class="w-6 h-6 rounded-lg bg-primary flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+</div>
+<div class="mt-3">
+<h3 class="serif text-xl font-bold leading-tight">참소리 축음기 박물관</h3>
+<p class="text-sm text-secondary mt-1">강원도 강릉시 경포로 393</p>
+</div>
+</div>
+<!-- Card 5 (Unchecked) -->
+<div class="relative group opacity-80 grayscale-[0.2]">
+<div class="aspect-[16/10] overflow-hidden rounded-xl bg-surface-container-high relative">
+<img alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Modern seaside cafe interior with large glass windows looking out to the beach and ocean at sunset" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwPdQS2d8MF3Mm56CmSsoHY6x0rwGBYPXVzGERpG4lY-87OJk_QQ7jL23Kty4Bqnlj3p1hAYZaMil-xmYrhrX6cd7foX8tsL4orJr74PXhSfiew_Ok_Pt8WXb7Ny4jNKv4Mbro0MdzNO8Rk_ZOEXCtMOKBOpoT-2Z4jaZe7f4b3C7kgIe9N6Oc0hRQRKXLDjCDE0Ysa3nVRi0Ginomc_69mXn729LSzsOKfDvKlUGLEI5DilXAQ4uKhdZsWMkdx9ZOpPmD9Z4zfmQ"/>
+<div class="absolute top-4 left-4">
+<span class="px-3 py-1 bg-white/90 backdrop-blur-md rounded-full text-[10px] font-bold tracking-widest uppercase">관광지</span>
+</div>
+<div class="absolute top-4 right-4">
+<div class="w-6 h-6 rounded-lg bg-white/50 backdrop-blur-sm flex items-center justify-center border border-white/20">
+<span class="material-symbols-outlined text-transparent text-sm">check</span>
+</div>
+</div>
+</div>
+<div class="mt-3">
+<h3 class="serif text-xl font-bold leading-tight">안목 해변 카페거리</h3>
+<p class="text-sm text-secondary mt-1">강원도 강릉시 창해로14번길</p>
+</div>
+</div>
+<!-- Card 6 (Unchecked) -->
+<div class="relative group opacity-80 grayscale-[0.2]">
+<div class="aspect-[16/10] overflow-hidden rounded-xl bg-surface-container-high relative">
+<img alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Spacious industrial-style coffee roastery with sacks of coffee beans and professional roasting equipment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIzyimZbbArr38jXJQvXrfq5Ui8v3YzdB339Q4a6ms7WFv2AxmWL84j9VUpQCwkMpOjvCB2n4lcWzbIBLeroy9_963S3evIbkBumy4oDOvP6bqMneOJ7wQgoaqhSLre3yA4N4CPcVHhZBWk-1KFvJ2CNDOjGiHdl0Fi0GP59sMresV4dc-ay7krh14e50gXLGipeTQJNS6LO6m8DHuuMFym1f9FW0cS20pyCqbG63k-19y-08vUPzPykhJ-f3QL9He40ieN4TNIVI"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="px-3 py-1 bg-white/90 backdrop-blur-md rounded-full text-[10px] font-bold tracking-widest uppercase">맛집</span>
+<span class="px-3 py-1 bg-on-surface text-white rounded-full text-[10px] font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[10px]" style="font-variation-settings: 'FILL' 1;">star</span> 4.6
+                            </span>
+</div>
+<div class="absolute top-4 right-4">
+<div class="w-6 h-6 rounded-lg bg-white/50 backdrop-blur-sm flex items-center justify-center border border-white/20">
+<span class="material-symbols-outlined text-transparent text-sm">check</span>
+</div>
+</div>
+</div>
+<div class="mt-3">
+<h3 class="serif text-xl font-bold leading-tight">테라로사 커피공장</h3>
+<p class="text-sm text-secondary mt-1">강원도 강릉시 구정면 현남길 25</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Fixed Bottom Bar -->
+<div class="fixed bottom-0 left-0 w-full z-50 bg-[#faf9f7] dark:bg-[#1a1c1b] flex items-center justify-between px-6 pb-8 h-24 shadow-[0px_-12px_32px_rgba(26,28,27,0.06)] rounded-t-3xl border-t border-[#e0bfb8]/20">
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-secondary tracking-widest uppercase font-label">SELECTION</span>
+<span class="serif text-lg font-bold text-primary">4곳 선택됨</span>
+</div>
+<button class="flex items-center justify-center bg-gradient-to-r from-primary to-primary-container text-white rounded-xl px-6 py-3.5 transition-transform duration-200 ease-out active:scale-95 shadow-lg shadow-primary/20">
+<span class="text-sm font-bold tracking-tight">AI 코스 생성하기</span>
+<span class="material-symbols-outlined ml-2 text-sm">arrow_forward</span>
+</button>
+</div>
+</body></html>

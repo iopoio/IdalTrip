@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IdalTrip - AI Managed Travel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-surface": "#2f3130",
+                    "background": "#faf9f7",
+                    "on-surface": "#1a1c1b",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container": "#efeeec",
+                    "surface-container-high": "#e9e8e6",
+                    "on-primary": "#ffffff",
+                    "on-secondary-fixed-variant": "#38485a",
+                    "tertiary": "#006574",
+                    "surface-container-low": "#f4f3f1",
+                    "on-tertiary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "secondary-container": "#d2e4fb",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed": "#3c0800",
+                    "on-secondary-fixed": "#0b1d2d",
+                    "error": "#ba1a1a",
+                    "surface-bright": "#faf9f7",
+                    "tertiary-fixed": "#a4eeff",
+                    "on-background": "#1a1c1b",
+                    "primary-container": "#c84c2b",
+                    "outline-variant": "#e0bfb8",
+                    "outline": "#8c716a",
+                    "surface-container-highest": "#e3e2e0",
+                    "on-surface-variant": "#58413c",
+                    "secondary": "#4f6073",
+                    "primary": "#a63415",
+                    "on-secondary-container": "#556679",
+                    "on-error": "#ffffff",
+                    "surface-tint": "#aa3617",
+                    "inverse-primary": "#ffb4a2",
+                    "tertiary-fixed-dim": "#69d5ec",
+                    "surface-variant": "#e3e2e0",
+                    "primary-fixed-dim": "#ffb4a2",
+                    "on-tertiary-fixed-variant": "#004e5a",
+                    "on-primary-container": "#fffbff",
+                    "inverse-on-surface": "#f1f1ef",
+                    "surface-dim": "#dadad8",
+                    "surface": "#faf9f7",
+                    "secondary-fixed-dim": "#b7c8de",
+                    "secondary-fixed": "#d2e4fb",
+                    "primary-fixed": "#ffdbd2",
+                    "on-primary-fixed-variant": "#891f01",
+                    "tertiary-container": "#008093",
+                    "on-tertiary-container": "#f8fdff",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed": "#001f25"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Noto Serif KR", "serif"],
+                    "body": ["Plus Jakarta Sans", "sans-serif"],
+                    "label": ["Plus Jakarta Sans", "sans-serif"]
+            }
+          },
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .editorial-shadow {
+            box-shadow: 0px 12px 32px rgba(26, 28, 27, 0.06);
+        }
+        .glass-panel {
+            background: rgba(250, 249, 247, 0.75);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-fixed selection:text-primary">
+<!-- Top Navigation -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-stone-950/80 backdrop-blur-xl">
+<nav class="flex justify-between items-center max-w-7xl mx-auto px-12 py-6">
+<div class="text-2xl font-bold font-headline italic tracking-tight text-stone-900 dark:text-stone-100">IdalTrip</div>
+<div class="hidden md:flex items-center gap-10">
+<a class="text-orange-800 dark:text-orange-500 border-b-2 border-orange-800 dark:border-orange-500 pb-1 font-label text-sm uppercase tracking-widest" href="#">Destinations</a>
+<a class="text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 font-label text-sm uppercase tracking-widest transition-all duration-300" href="#">Journal</a>
+<a class="text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 font-label text-sm uppercase tracking-widest transition-all duration-300" href="#">Curated Stays</a>
+<a class="text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 font-label text-sm uppercase tracking-widest transition-all duration-300" href="#">About</a>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-stone-600 font-label text-sm hover:opacity-80 transition-all">Sign In</button>
+<button class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-6 py-2.5 rounded-full font-label text-sm font-semibold hover:opacity-90 transition-all shadow-lg shadow-primary/20">
+                    Plan Your Trip
+                </button>
+</div>
+</nav>
+</header>
+<main class="relative pt-24 min-h-screen overflow-hidden">
+<!-- Hero Background -->
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover opacity-90" data-alt="Vibrant traditional Korean festival with colorful silk lanterns and dancers under a twilight sky in a historic palace courtyard" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGRnlNSVw7fjQalen1kd4-Y1nI7IB7NcWRFs4dAnoWuMrJtjSQx_5jeKMwCc_eMgY77IEiV-bZyRA_AAR6AissJ5vZOD9o6QKh9bal0Dgtjq45b7aNaDf1MLxiRR0d5s1_Kbh0zLCSaW-EGMGE4OevtKDHhdslz4rQjLTh590Y4_tR3fhCJkabH6hxOm0IHgkOtFKyUP7Yle0yUfwpZQ9NwtOPjR2BPTmmT9EB2sHe4-ACwRkbOJDxVLk9RtfWfk9OmY4FhVtRDpE"/>
+<div class="absolute inset-0 bg-gradient-to-b from-surface/20 via-transparent to-surface"></div>
+</div>
+<section class="relative z-10 max-w-7xl mx-auto px-12 py-20 grid grid-cols-12 gap-8 items-center min-h-[870px]">
+<!-- Left: Headline & AI Focus -->
+<div class="col-span-12 lg:col-span-4">
+<div class="inline-flex items-center gap-2 bg-surface-container-lowest/80 backdrop-blur px-3 py-1 rounded-full mb-6 editorial-shadow">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="text-[10px] font-bold tracking-[0.2em] text-on-surface-variant uppercase">AI Concierge Engine</span>
+</div>
+<h1 class="text-6xl md:text-7xl font-headline font-black text-on-surface leading-[1.1] mb-8 tracking-tighter">
+                    단 10초 만에<br/>끝나는<br/><span class="text-primary italic">여행 계획.</span>
+</h1>
+<p class="text-lg text-on-surface-variant leading-relaxed mb-10 max-w-sm">
+                    당신의 취향, 예산, 동선을 분석하여 세상에 단 하나뿐인 프리미엄 루트를 설계합니다. 검색은 AI에게 맡기고 당신은 설렘에만 집중하세요.
+                </p>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-4 group cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary transition-transform group-hover:scale-110">
+<span class="material-symbols-outlined">bolt</span>
+</div>
+<div>
+<div class="font-bold text-sm">초고속 최적화</div>
+<div class="text-xs text-on-surface-variant">평균 10.2초 이내 경로 생성</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Middle: Mobile Mockup Centerpiece -->
+<div class="col-span-12 lg:col-span-4 flex justify-center items-center">
+<div class="relative w-[320px] h-[640px] bg-stone-900 rounded-[3rem] p-3 shadow-2xl border-[8px] border-stone-800">
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-stone-800 rounded-b-2xl z-20"></div>
+<div class="w-full h-full bg-surface rounded-[2.2rem] overflow-hidden relative flex flex-col">
+<div class="p-6 pt-10">
+<h3 class="font-headline text-2xl font-bold mb-1">어디로 떠날까요?</h3>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest mb-6">Discovery Search</p>
+<div class="space-y-3">
+<div class="bg-surface-container-low p-4 rounded-xl flex items-center gap-3">
+<span class="material-symbols-outlined text-outline text-lg">location_on</span>
+<span class="text-sm font-medium">제주도 서귀포시</span>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl flex items-center gap-3">
+<span class="material-symbols-outlined text-outline text-lg">calendar_today</span>
+<span class="text-sm font-medium">10월 24일 - 10월 27일</span>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl flex items-center gap-3">
+<span class="material-symbols-outlined text-outline text-lg">group</span>
+<span class="text-sm font-medium">성인 2명, 아이 1명</span>
+</div>
+<div class="bg-primary text-on-primary p-4 rounded-xl flex items-center justify-center gap-2 font-bold shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-sm">magic_button</span>
+                                    AI 계획 생성하기
+                                </div>
+</div>
+</div>
+<div class="mt-auto p-4 bg-surface-container-high/50 backdrop-blur-sm">
+<div class="flex justify-between items-center mb-4">
+<span class="text-[10px] font-bold uppercase tracking-tighter">Popular Themes</span>
+<span class="text-[10px] text-primary">View all</span>
+</div>
+<div class="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+<div class="min-w-[100px] h-24 rounded-lg overflow-hidden relative flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Traditional Korean hanok architecture in autumn" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMOtG2cThkoLD9SB_PEGNTvVY34_zgWD6KX23hEbXsWjC9yTps5F-Rz823gt5BssiNouFF2cXYV2us9mpQmGVr4DLPL3kEzJ2NZ4R_Xf66nMrC3Lwm7gaGN0iGp2_0EnfTCRDz5ryha1XZOVoxySYA38xo52BlVzX-otm2OIby_RBReGOQc6WfjYpGtBeSm7Kf5lXThBta2LAqI-lvRBn-hiayrWitew8-yNk2koIW2o1aqWhr5CM8vG8IlCqte22hoxF0yy2AYiM"/>
+<div class="absolute inset-0 bg-black/20 flex items-end p-2">
+<span class="text-white text-[10px] font-bold">전통 가옥</span>
+</div>
+</div>
+<div class="min-w-[100px] h-24 rounded-lg overflow-hidden relative flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Crystal clear ocean water in Jeju Island" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSxiN8fwlxL-WMlXnRR2BCtsReoVvS6rJQanfw_Q9ZGjanjpQpWuRFqJF8Vqw8NSRqZAmuXbxQ6cugxhWMu8ml261i9-lGWUCCnr7FQISRK6gU7TlRQPp429LpAAgr3SAyhRJt0eYh3YmmafL7pNgIN27K_3pTYySpr0mVtAsEhErS7MnHFxq3SVBhO3Jip3DVrJ5WFIZGjwbsFs9tShOEsUG_OUzFfLWhJddqxUPUUJIohByf7WUj0A2ho-E3xGaR0TldDR2sI4w"/>
+<div class="absolute inset-0 bg-black/20 flex items-end p-2">
+<span class="text-white text-[10px] font-bold">제주 바다</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Sample Course Cards -->
+<div class="col-span-12 lg:col-span-4 space-y-6">
+<!-- Course Detail Card 1 -->
+<div class="glass-panel p-6 rounded-2xl editorial-shadow translate-x-8">
+<div class="flex justify-between items-start mb-4">
+<div>
+<div class="text-[10px] font-bold text-primary tracking-widest uppercase mb-1">Recommended Course</div>
+<h4 class="font-headline text-xl font-bold">경주 고택 감성 투어</h4>
+</div>
+<div class="bg-surface-container-highest p-2 rounded-lg">
+<span class="material-symbols-outlined text-secondary">share</span>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="bg-white/60 px-3 py-1 rounded-full text-[11px] font-semibold flex items-center gap-1 border border-outline-variant/20">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 2박 3일
+                        </span>
+<span class="bg-white/60 px-3 py-1 rounded-full text-[11px] font-semibold flex items-center gap-1 border border-outline-variant/20">
+<span class="material-symbols-outlined text-[14px]">payments</span> 850,000원~
+                        </span>
+<span class="bg-white/60 px-3 py-1 rounded-full text-[11px] font-semibold flex items-center gap-1 border border-outline-variant/20">
+<span class="material-symbols-outlined text-[14px]">distance</span> 42km 이동
+                        </span>
+</div>
+<div class="space-y-4">
+<div class="flex items-start gap-4">
+<div class="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0"></div>
+<div>
+<div class="text-sm font-bold">불국사 새벽 산책</div>
+<div class="text-xs text-on-surface-variant">조용한 경내에서 즐기는 명상의 시간</div>
+</div>
+</div>
+<div class="flex items-start gap-4 opacity-60">
+<div class="w-1.5 h-1.5 rounded-full bg-secondary mt-2 flex-shrink-0"></div>
+<div>
+<div class="text-sm font-bold">황리단길 티 하우스</div>
+<div class="text-xs text-on-surface-variant">전통차와 현대적 디저트의 만남</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Stats/AI Insight Card -->
+<div class="bg-primary/95 backdrop-blur-md p-6 rounded-2xl editorial-shadow -translate-x-4">
+<div class="flex items-center gap-3 mb-4">
+<div class="bg-on-primary/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-on-primary">analytics</span>
+</div>
+<span class="text-on-primary font-bold text-sm">Travel AI Insight</span>
+</div>
+<p class="text-on-primary/80 text-sm leading-relaxed mb-4">
+                        "해당 코스는 작년 동기 대비 <span class="text-white font-bold">34% 더 쾌적한</span> 동선으로 설계되었습니다. 대기 시간이 짧은 카페 위주로 구성했습니다."
+                    </p>
+<div class="h-1.5 w-full bg-on-primary/10 rounded-full overflow-hidden">
+<div class="h-full bg-on-primary w-[88%] rounded-full"></div>
+</div>
+<div class="mt-2 text-right text-[10px] text-on-primary/60 font-bold tracking-widest uppercase">Matching Rate 88%</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Section -->
+<footer class="bg-stone-100 dark:bg-stone-950 w-full py-12 px-12 border-t border-stone-200/20">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-7xl mx-auto px-12">
+<div class="col-span-2 md:col-span-1">
+<div class="font-headline text-lg font-semibold text-stone-900 dark:text-stone-100 mb-4">IdalTrip</div>
+<p class="text-stone-500 text-sm leading-relaxed max-w-[200px]">The Digital Curator for sophisticated travelers seeking authentic Korean experiences.</p>
+</div>
+<div>
+<h5 class="text-orange-800 dark:text-orange-500 font-bold text-xs tracking-widest uppercase mb-4">Company</h5>
+<div class="flex flex-col gap-2">
+<a class="text-stone-500 hover:text-orange-800 transition-colors text-sm" href="#">Editorial Guidelines</a>
+<a class="text-stone-500 hover:text-orange-800 transition-colors text-sm" href="#">Contact</a>
+</div>
+</div>
+<div>
+<h5 class="text-orange-800 dark:text-orange-500 font-bold text-xs tracking-widest uppercase mb-4">Support</h5>
+<div class="flex flex-col gap-2">
+<a class="text-stone-500 hover:text-orange-800 transition-colors text-sm" href="#">Privacy Policy</a>
+<a class="text-stone-500 hover:text-orange-800 transition-colors text-sm" href="#">Terms of Service</a>
+</div>
+</div>
+<div class="col-span-2 md:col-span-1">
+<div class="text-stone-500 text-sm">© 2024 IdalTrip. The Digital Curator.</div>
+</div>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이달트립 현재 구조</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; background: #0f1117; color: #e2e8f0; padding: 32px 24px; min-height: 100vh; }
+  h2 { font-size: 1.5rem; font-weight: 800; color: #f8fafc; margin-bottom: 6px; }
+  .subtitle { font-size: 0.85rem; color: #94a3b8; margin-bottom: 32px; }
+
+  .diagram { display: flex; flex-direction: column; gap: 0; }
+
+  .row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 0; }
+  .arrow-row { display: flex; align-items: center; justify-content: center; gap: 8px; height: 28px; }
+
+  .node {
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-align: center;
+    min-width: 100px;
+    line-height: 1.3;
+  }
+  .node-home { background: #1e40af; border: 2px solid #3b82f6; color: #bfdbfe; }
+  .node-explore { background: #5b21b6; border: 2px solid #8b5cf6; color: #ddd6fe; }
+  .node-festivals { background: #5b21b6; border: 2px solid #8b5cf6; color: #ddd6fe; }
+  .node-detail { background: #065f46; border: 2px solid #10b981; color: #a7f3d0; }
+  .node-result { background: #7c2d12; border: 2px solid #f97316; color: #fed7aa; }
+  .node-recent { background: #374151; border: 2px solid #6b7280; color: #d1d5db; }
+  .node-wip { background: #1f2937; border: 2px dashed #4b5563; color: #6b7280; }
+  .node-ai { background: #4c1d95; border: 2px solid #a855f7; color: #e9d5ff; }
+
+  .arrow { color: #475569; font-size: 1.1rem; }
+  .arrow-label { font-size: 0.68rem; color: #64748b; white-space: nowrap; }
+
+  .problem-section { margin-top: 36px; }
+  .problem-title { font-size: 1rem; font-weight: 700; color: #fbbf24; margin-bottom: 12px; }
+  .problem-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .problem-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+  .p-red { background: #450a0a; border-left: 3px solid #ef4444; }
+  .p-yellow { background: #422006; border-left: 3px solid #f59e0b; }
+  .icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+
+  .split-entry { display: flex; gap: 8px; align-items: center; justify-content: center; }
+  .vs { font-size: 0.7rem; color: #64748b; font-weight: 700; background: #1f2937; padding: 3px 8px; border-radius: 20px; }
+
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; font-size: 0.75rem; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+
+  .branch-container { display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .branch-row { display: flex; gap: 40px; justify-content: center; align-items: flex-start; margin: 4px 0; }
+  .branch-col { display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .branch-line { width: 1px; height: 20px; background: #334155; }
+  .branch-hline { display: flex; align-items: center; justify-content: center; }
+
+  .connector { display: flex; align-items: center; justify-content: center; flex-direction: column; }
+  .conn-v { width: 1px; height: 16px; background: #334155; }
+  .conn-down { color: #475569; font-size: 0.9rem; }
+</style>
+</head>
+<body>
+
+<h2>이달트립 현재 구조</h2>
+<p class="subtitle">코드 기반으로 실제 연결 상태를 그린 것 — 덕지덕지한 느낌의 원인</p>
+
+<div class="diagram">
+
+  <!-- HOME -->
+  <div class="row">
+    <div class="node node-home">🏠 홈<br><span style="font-weight:400;font-size:0.72rem">HomePage</span></div>
+  </div>
+
+  <!-- 두 개의 진입점 -->
+  <div class="connector"><div class="conn-v"></div><div class="conn-down">↓</div><div class="conn-v"></div></div>
+  <div class="row">
+    <div style="font-size:0.72rem;color:#f59e0b;font-weight:700;background:#422006;padding:4px 12px;border-radius:20px;">⚠️ 진입점이 2개 공존</div>
+  </div>
+  <div class="connector"><div class="conn-v"></div><div class="conn-down">↓</div><div class="conn-v"></div></div>
+
+  <!-- 두 경로 분기 -->
+  <div class="branch-row">
+    <!-- 왼쪽: 축제 탭 -->
+    <div class="branch-col">
+      <div style="font-size:0.68rem;color:#94a3b8;margin-bottom:6px;text-align:center">경로 A<br>축제 카드 클릭</div>
+      <div class="node node-festivals">📅 축제 목록<br><span style="font-weight:400;font-size:0.72rem">월별 그리드</span></div>
+      <div class="connector"><div class="conn-v"></div><div class="conn-down">↓</div></div>
+      <div class="node node-detail">🎪 축제 상세<br><span style="font-weight:400;font-size:0.72rem">FestivalDetailPage</span></div>
+      <div style="margin-top:4px;font-size:0.68rem;color:#f87171;text-align:center">⚠️ 너무 많은 역할</div>
+    </div>
+
+    <!-- 오른쪽: 지역+날짜 탐색 -->
+    <div class="branch-col">
+      <div style="font-size:0.68rem;color:#94a3b8;margin-bottom:6px;text-align:center">경로 B<br>지역+날짜 탐색</div>
+      <div class="node node-explore">🗺️ 탐색 결과<br><span style="font-weight:400;font-size:0.72rem">ExploreResultPage</span></div>
+      <div class="connector"><div class="conn-v"></div><div class="conn-down">↓</div></div>
+      <div class="node node-detail" style="opacity:0.5">🎪 축제 상세<br><span style="font-weight:400;font-size:0.72rem">같은 페이지?</span></div>
+      <div style="margin-top:4px;font-size:0.68rem;color:#f59e0b;text-align:center">❓ 연결 불명확</div>
+    </div>
+  </div>
+
+  <!-- AI 코스 생성 -->
+  <div class="connector" style="margin-top:12px"><div class="conn-v"></div><div class="conn-down">↓</div><div class="conn-v"></div></div>
+  <div class="row">
+    <div class="node node-ai">✨ AI 코스 생성<br><span style="font-weight:400;font-size:0.72rem">Gemini Flash</span></div>
+  </div>
+  <div class="connector"><div class="conn-v"></div><div class="conn-down">↓</div><div class="conn-v"></div></div>
+  <div class="row">
+    <div class="node node-result">📋 코스 결과<br><span style="font-weight:400;font-size:0.72rem">CourseResultPage</span></div>
+  </div>
+
+  <!-- 바텀 네비 -->
+  <div class="connector" style="margin-top:16px"><div class="conn-v" style="height:8px"></div></div>
+  <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:8px;">
+    <div style="font-size:0.7rem;color:#94a3b8;margin-right:4px;line-height:2">BottomNav:</div>
+    <div class="node node-home" style="min-width:60px;padding:6px 10px;font-size:0.72rem">🏠 홈</div>
+    <div class="node node-explore" style="min-width:60px;padding:6px 10px;font-size:0.72rem">🔍 탐색</div>
+    <div class="node node-recent" style="min-width:60px;padding:6px 10px;font-size:0.72rem">📁 최근</div>
+    <div class="node node-wip" style="min-width:60px;padding:6px 10px;font-size:0.72rem">👤 준비중</div>
+  </div>
+
+</div>
+
+<!-- 문제점 -->
+<div class="problem-section">
+  <div class="problem-title">🔍 코드에서 발견된 문제들</div>
+  <ul class="problem-list">
+    <li class="problem-item p-red">
+      <span class="icon">🔴</span>
+      <div><strong>홈에 진입점 2개 공존</strong> — 월별 축제 카드 + 지역/날짜 탐색 버튼이 같은 화면에서 경쟁. 사용자가 뭘 먼저 해야 하는지 모름</div>
+    </li>
+    <li class="problem-item p-red">
+      <span class="icon">🔴</span>
+      <div><strong>FestivalDetailPage 과부하</strong> — 축제 설명 + AI 스팟 그리드 + 출발지 입력 + 교통수단 선택 + 일정 선택 + 코스 생성 버튼을 한 페이지가 담당</div>
+    </li>
+    <li class="problem-item p-yellow">
+      <span class="icon">🟡</span>
+      <div><strong>ExploreResultPage 연결 불명확</strong> — 지역+날짜로 탐색하면 뭘 보여주는지, 코스 생성까지 어떻게 이어지는지 흐름이 끊김</div>
+    </li>
+    <li class="problem-item p-yellow">
+      <span class="icon">🟡</span>
+      <div><strong>Gemini API 키 클라이언트 노출</strong> — VITE_GEMINI_API_KEY가 브라우저에서 직접 호출됨. 공모전용이라 당장 치명적이진 않지만 구조적 문제</div>
+    </li>
+    <li class="problem-item p-yellow">
+      <span class="icon">🟡</span>
+      <div><strong>제대리 지시서 12개</strong> — 방향이 여러 번 바뀐 흔적. 기능이 누적되면서 원래 컨셉이 흐려짐</div>
+    </li>
+  </ul>
+</div>
+
+</body>
+</html>

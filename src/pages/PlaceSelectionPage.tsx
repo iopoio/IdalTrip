@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Share2, Sparkles, Check } from 'lucide-react';
 import { tourApi } from '../services/tourApi';
+import { kakaoMapService } from '../services/kakaoMap';
 import { geminiService } from '../services/gemini';
 import type { Place, PlaceWithDetail, CourseResponse } from '../types';
 
@@ -41,6 +42,17 @@ function getAvailableTime(departure: string, region: string): string {
   if (departure.includes('서울')) return '약 6시간 (예상)';
   return '약 6시간 (예상)';
 }
+
+// 지역별 중심 좌표 (카카오 맛집 검색용)
+const REGION_CENTER: Record<string, { lat: number; lng: number }> = {
+  '서울/경기': { lat: 37.5665, lng: 126.9780 },
+  '강원': { lat: 37.8228, lng: 128.1555 },
+  '충청': { lat: 36.6358, lng: 127.4913 },
+  '전라': { lat: 35.8160, lng: 127.1089 },
+  '경상': { lat: 35.8714, lng: 128.6014 },
+  '제주': { lat: 33.4996, lng: 126.5312 },
+  '전체': { lat: 36.5, lng: 127.5 },
+};
 
 function festivalToPlace(f: Festival): Place {
   return {
@@ -168,12 +180,15 @@ export default function PlaceSelectionPage() {
     setError(null);
 
     try {
+      const center = REGION_CENTER[region] ?? REGION_CENTER['전체'];
+
       const results = await Promise.allSettled([
         tourApi.fetchFestivalsByRegionAndDate(region, date),
         tourApi.fetchPlacesByRegion(region, '12'),
         tourApi.fetchPlacesByRegion(region, '14'),
         tourApi.fetchPlacesByRegion(region, '28'),
-        tourApi.fetchPlacesByRegion(region, '39'),
+        kakaoMapService.searchRestaurants(`${region} 맛집`, center.lat, center.lng, 30000),
+        tourApi.fetchPlacesByRegion(region, '39'), // TourAPI 음식점 fallback
       ]);
 
       const fetchedFestivals: Festival[] =
@@ -184,10 +199,21 @@ export default function PlaceSelectionPage() {
         results[2].status === 'fulfilled' ? results[2].value : [];
       const leisure: Place[] =
         results[3].status === 'fulfilled' ? results[3].value : [];
-      const food: Place[] =
-        results[4].status === 'fulfilled' && results[4].value.length > 0
-          ? results[4].value
-          : [];
+      // 카카오 맛집 우선, 없으면 TourAPI 39 fallback
+      const kakaoResult = results[4].status === 'fulfilled' ? results[4].value : [];
+      const tourFood: Place[] = results[5].status === 'fulfilled' ? results[5].value : [];
+      const kakaoFood: Place[] =
+        kakaoResult.length > 0
+          ? kakaoResult.map((k) => ({
+              contentid: `kakao_${k.id}`,
+              title: k.place_name,
+              addr1: k.road_address_name || k.address_name,
+              firstimage: '',
+              mapx: k.x,
+              mapy: k.y,
+              contenttypeid: '39',
+            }))
+          : tourFood.slice(0, 3);
 
       setFestivals(fetchedFestivals);
 
@@ -198,7 +224,7 @@ export default function PlaceSelectionPage() {
         ...attractions.slice(0, 5),
         ...culture.slice(0, 3),
         ...leisure.slice(0, 3),
-        ...food.slice(0, 2),
+        ...kakaoFood.slice(0, 3),
       ];
 
       // Deduplicate by contentid
