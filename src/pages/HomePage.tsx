@@ -106,7 +106,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-surface text-on-surface font-body">
       {/* Fixed Header */}
-      <nav className="fixed top-0 w-full max-w-[430px] left-1/2 -translate-x-1/2 z-50 flex justify-between items-center px-6 h-16 z-50">
+      <nav className="fixed top-0 w-full max-w-[430px] left-1/2 -translate-x-1/2 z-50 flex justify-between items-center px-6 h-16 bg-white/15 backdrop-blur-md border-b border-white/10">
         <img src={LogoLight} className="h-7 w-auto" alt="이달여행" />
         <div className="flex items-center gap-4">
           <button
@@ -137,7 +137,7 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-br from-[#1a0e06] via-[#a63415] to-[#FF6B35]" />
         )}
         {/* 그라데이션 오버레이 */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-surface" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black/60" />
         {/* 상단 헤더 영역 반투명 처리 */}
         <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-black/50 to-transparent" />
 
@@ -243,7 +243,7 @@ export default function HomePage() {
               <div className="rounded-[24px] bg-surface-container-high aspect-[3/4] animate-pulse" />
             </div>
           ) : destinations.length === 0 ? (
-            <div className="text-center py-10 text-secondary text-sm">이달의 축제 정보를 불러오는 중...</div>
+            <div className="text-center py-10 text-secondary text-sm">이달의 추천 여행지 정보가 없습니다.</div>
           ) : (
             /* Bento Grid */
             <div className="grid grid-cols-2 gap-4">

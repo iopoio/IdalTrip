@@ -81,7 +81,7 @@ const CourseResultPage = () => {
   };
 
   const handleRetry = () => {
-    navigate(-2);
+    navigate('/');
   };
 
   if (!course) {
@@ -295,7 +295,7 @@ const CourseResultPage = () => {
             className="flex-1 py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-[16px] font-bold flex items-center justify-center gap-2 shadow-lg font-body"
           >
             <Share2 className="w-4 h-4" />
-            카카오톡 공유
+            공유하기
           </button>
         </div>
       </div>

@@ -245,7 +245,7 @@ export default function PlaceSelectionPage() {
       const selectable: SelectablePlace[] = unique.map((p, idx) => ({
         ...p,
         placeType: p.contenttypeid,
-        selected: idx < 8, // first 8 pre-selected
+        selected: idx < 3, // first 3 pre-selected
       }));
 
       setPlaces(selectable);
