@@ -1,9 +1,8 @@
 import axios from 'axios';
 import type { Place, PlaceDetail, CourseResponse, PlaceType } from '../types';
 
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-const MODEL = 'gemini-2.5-flash';
-const BASE_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${API_KEY}`;
+// Gemini 호출은 서버사이드 Edge Function을 통해 처리 (API 키 클라이언트 노출 방지)
+const BASE_URL = '/api/generate-course';
 
 interface CourseRequest {
   festivalTitle: string;
@@ -107,7 +106,7 @@ export const geminiService = {
         generationConfig: {
           temperature: 0.7,
           responseMimeType: 'application/json',
-        }
+        },
       });
 
       const text = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;

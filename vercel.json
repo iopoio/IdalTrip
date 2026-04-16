@@ -13,7 +13,7 @@
       "destination": "https://dapi.kakao.com/:path*"
     },
     {
-      "source": "/(.*)",
+      "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
   ]
