@@ -1,7 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-// 2026-04 기준: gemini-2.5-flash 무료 한도 소진 → gemini-3 preview 사용 (2026-04-17 실호출 검증)
-const MODEL = 'gemini-3-flash-preview';
+// 2026-04 기준: gemini-2.5-flash 무료 한도 소진 → gemini-3 preview 사용
+// preview 모델은 capacity 부족 시 429 발생 → 폴백 리스트로 순차 시도
+const MODELS = ['gemini-3-flash-preview', 'gemini-3.1-flash-lite-preview'];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
@@ -13,24 +14,36 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(500).json({ error: 'GEMINI_API_KEY not configured on server' });
   }
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`;
+  let lastErrorStatus = 500;
+  let lastErrorBody = 'Failed to proxy Gemini request';
 
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(req.body),
-    });
+  for (const model of MODELS) {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
-    if (!response.ok) {
-      const err = await response.text();
-      return res.status(response.status).json({ error: err });
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(req.body),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return res.status(200).json(data);
+      }
+
+      lastErrorStatus = response.status;
+      lastErrorBody = await response.text();
+      // 429/503 같은 capacity 오류는 다음 모델로 폴백
+      if (response.status !== 429 && response.status !== 503) {
+        return res.status(response.status).json({ error: lastErrorBody });
+      }
+      console.warn(`Gemini ${model} returned ${response.status}, trying next fallback`);
+    } catch (error) {
+      console.error(`Gemini proxy error (${model}):`, error);
+      lastErrorBody = String(error);
     }
-
-    const data = await response.json();
-    return res.status(200).json(data);
-  } catch (error) {
-    console.error('Gemini proxy error:', error);
-    return res.status(500).json({ error: 'Failed to proxy Gemini request' });
   }
+
+  return res.status(lastErrorStatus).json({ error: lastErrorBody });
 }
