@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Share2, Sparkles, Check } from 'lucide-react';
 import { tourApi } from '../services/tourApi';
+import type { CourseSubItem } from '../services/tourApi';
 import { kakaoMapService } from '../services/kakaoMap';
 import { geminiService } from '../services/gemini';
 import type { Place, PlaceWithDetail, CourseResponse } from '../types';
@@ -20,6 +21,8 @@ interface Festival {
 interface SelectablePlace extends PlaceWithDetail {
   placeType: string;
   selected: boolean;
+  isRecommended?: boolean;
+  recommendOrder?: number;
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -143,6 +146,73 @@ function PlaceCard({ place, onToggle }: PlaceCardProps) {
   );
 }
 
+// ─── Recommended Section ─────────────────────────────────────────────────────
+
+interface RecommendedSectionProps {
+  places: SelectablePlace[];
+  onToggle: (id: string) => void;
+}
+
+function RecommendedSection({ places, onToggle }: RecommendedSectionProps) {
+  if (places.length === 0) return null;
+
+  const sorted = [...places].sort(
+    (a, b) => (a.recommendOrder ?? 99) - (b.recommendOrder ?? 99)
+  );
+
+  return (
+    <section className="mb-6">
+      <div className="flex items-center gap-2 mb-3">
+        <span className="bg-primary text-on-primary text-[10px] font-bold px-2.5 py-1 rounded-full">
+          한국관광공사 추천
+        </span>
+        <span className="text-sm font-semibold text-on-surface">이 지역 추천 코스</span>
+      </div>
+      <div className="space-y-3">
+        {sorted.map((place, idx) => (
+          <div
+            key={place.contentid}
+            className="flex gap-4 p-3 bg-primary/5 rounded-[20px] border border-primary/20"
+          >
+            {place.firstimage ? (
+              <img
+                src={place.firstimage}
+                alt={place.title}
+                className="w-20 h-20 rounded-[12px] object-cover shrink-0"
+                loading="lazy"
+              />
+            ) : (
+              <div className="w-20 h-20 rounded-[12px] bg-primary/10 shrink-0 flex items-center justify-center">
+                <span className="text-xl">🏛️</span>
+              </div>
+            )}
+            <div className="flex-1 flex flex-col justify-between py-1 min-w-0">
+              <div>
+                <span className="text-[10px] font-bold text-primary">{idx + 1}순위</span>
+                <h3 className="font-bold text-base mt-0.5 leading-snug truncate">{place.title}</h3>
+                <p className="text-xs text-secondary mt-0.5 truncate">{place.addr1}</p>
+              </div>
+            </div>
+            <div className="flex items-center pr-2 shrink-0">
+              <button
+                onClick={() => onToggle(place.contentid)}
+                className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors ${
+                  place.selected
+                    ? 'bg-primary'
+                    : 'border-2 border-outline-variant bg-transparent'
+                }`}
+                aria-label={place.selected ? '선택 해제' : '선택'}
+              >
+                {place.selected && <Check className="text-white w-4 h-4" strokeWidth={3} />}
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export default function PlaceSelectionPage() {
@@ -164,6 +234,7 @@ export default function PlaceSelectionPage() {
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [visibleCount, setVisibleCount] = useState(10);
 
   const dateDisplay = date
     ? new Date(date).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' })
@@ -188,6 +259,10 @@ export default function PlaceSelectionPage() {
 
     try {
       const center = REGION_CENTER[region] ?? REGION_CENTER['전체'];
+      const REGION_AREA_CODE: Record<string, number> = {
+        '서울/경기': 1, '강원': 32, '충청': 3, '전라': 5, '경상': 4, '제주': 39,
+      };
+      const areaCode = REGION_AREA_CODE[region];
 
       const results = await Promise.allSettled([
         tourApi.fetchFestivalsByRegionAndDate(region, date),
@@ -195,20 +270,19 @@ export default function PlaceSelectionPage() {
         tourApi.fetchPlacesByRegion(region, '14'),
         tourApi.fetchPlacesByRegion(region, '28'),
         kakaoMapService.searchRestaurants(`${region} 맛집`, center.lat, center.lng, 30000),
-        tourApi.fetchPlacesByRegion(region, '39'), // TourAPI 음식점 fallback
+        tourApi.fetchPlacesByRegion(region, '39'),
+        areaCode ? tourApi.fetchRecommendedCourses(areaCode) : Promise.resolve([]),
       ]);
 
       const fetchedFestivals: Festival[] =
         results[0].status === 'fulfilled' ? (results[0].value as unknown as Festival[]) : [];
-      const attractions: Place[] =
-        results[1].status === 'fulfilled' ? results[1].value : [];
-      const culture: Place[] =
-        results[2].status === 'fulfilled' ? results[2].value : [];
-      const leisure: Place[] =
-        results[3].status === 'fulfilled' ? results[3].value : [];
-      // 카카오 맛집 우선, 없으면 TourAPI 39 fallback
+      const attractions: Place[] = results[1].status === 'fulfilled' ? results[1].value : [];
+      const culture: Place[] = results[2].status === 'fulfilled' ? results[2].value : [];
+      const leisure: Place[] = results[3].status === 'fulfilled' ? results[3].value : [];
       const kakaoResult = results[4].status === 'fulfilled' ? results[4].value : [];
       const tourFood: Place[] = results[5].status === 'fulfilled' ? results[5].value : [];
+      const courses: Place[] = results[6].status === 'fulfilled' ? results[6].value : [];
+
       const kakaoFood: Place[] =
         kakaoResult.length > 0
           ? kakaoResult.map((k) => ({
@@ -222,19 +296,28 @@ export default function PlaceSelectionPage() {
             }))
           : tourFood.slice(0, 3);
 
+      // 관광공사 코스 서브아이템 fetch
+      let subItems: CourseSubItem[] = [];
+      if (courses.length > 0) {
+        subItems = await tourApi.fetchCourseDetail(courses[0].contentid);
+      }
+
       setFestivals(fetchedFestivals);
 
       const festivalPlaces: Place[] = fetchedFestivals.map(festivalToPlace);
 
-      const all: Place[] = [
-        ...festivalPlaces,
-        ...attractions.slice(0, 10),
-        ...culture.slice(0, 5),
-        ...leisure.slice(0, 5),
-        ...kakaoFood.slice(0, 5),
-      ];
+      // 카테고리별 2개씩, 부족하면 관광지로 보충
+      const pick = (arr: Place[], n: number): Place[] => arr.slice(0, n);
+      const cat12 = pick(attractions, 2);
+      const cat14 = pick(culture, 2);
+      const cat28 = pick(leisure, 2);
+      const cat39 = pick(kakaoFood, 2);
+      const shortfall = (2 - cat12.length) + (2 - cat14.length) + (2 - cat28.length) + (2 - cat39.length);
+      const extra12 = pick(attractions.slice(2), shortfall);
+      const additionalPlaces: Place[] = [...cat12, ...cat14, ...cat28, ...cat39, ...extra12];
 
-      // Deduplicate by contentid
+      const all: Place[] = [...festivalPlaces, ...additionalPlaces];
+
       const seen = new Set<string>();
       const unique = all.filter((p) => {
         if (seen.has(p.contentid)) return false;
@@ -242,13 +325,20 @@ export default function PlaceSelectionPage() {
         return true;
       });
 
-      const selectable: SelectablePlace[] = unique.map((p, idx) => ({
-        ...p,
-        placeType: p.contenttypeid,
-        selected: idx < 3, // first 3 pre-selected
-      }));
+      const selectable: SelectablePlace[] = unique.map((p) => {
+        const subItem = subItems.find((s) => s.subcontentid === p.contentid);
+        const isRecommended = !!subItem;
+        return {
+          ...p,
+          placeType: p.contenttypeid,
+          selected: isRecommended,
+          isRecommended,
+          recommendOrder: subItem ? parseInt(subItem.subnum) : undefined,
+        };
+      });
 
       setPlaces(selectable);
+      setVisibleCount(10);
     } catch (err) {
       console.error('장소 로딩 실패:', err);
       setError('장소를 불러오는 중 오류가 발생했습니다.');
@@ -291,16 +381,24 @@ export default function PlaceSelectionPage() {
       const firstFestival = festivals[0];
       const firstPlace = selectedPlaces[0];
 
+      // 관광공사 추천 순서 우선 정렬
+      const sortedSelected = [...selectedPlaces].sort((a, b) => {
+        const aOrder = a.recommendOrder ?? 9999;
+        const bOrder = b.recommendOrder ?? 9999;
+        return aOrder - bOrder;
+      });
+
       const courseRequest = {
         festivalTitle: firstFestival?.title || firstPlace?.title || `${region} 여행`,
         festivalAddr: firstFestival?.addr1 || '',
         festivalLat: parseFloat(firstFestival?.mapy || '0'),
         festivalLng: parseFloat(firstFestival?.mapx || '0'),
-        places: selectedPlaces,
+        places: sortedSelected,
         transportation: transport,
         duration: duration,
         origin: departure || undefined,
         travelDate: date,
+        hasRecommendedCourse: sortedSelected.some((p) => p.isRecommended),
       };
 
       const course: CourseResponse | null = await geminiService.generateCourse(courseRequest);
@@ -427,10 +525,18 @@ export default function PlaceSelectionPage() {
           </div>
         )}
 
-        {/* Places Section */}
+        {/* 관광공사 추천 섹션 */}
+        {!loading && (
+          <RecommendedSection
+            places={places.filter((p) => p.isRecommended)}
+            onToggle={togglePlace}
+          />
+        )}
+
+        {/* 추가 장소 목록 */}
         <section>
           <div className="flex justify-between items-end mb-4">
-            <h2 className="font-headline text-xl font-black text-on-surface">AI 추천 장소</h2>
+            <h2 className="font-headline text-xl font-black text-on-surface">추가 장소 선택</h2>
             {!loading && places.length > 0 && (
               <button
                 onClick={toggleAll}
@@ -455,9 +561,34 @@ export default function PlaceSelectionPage() {
               </p>
             </div>
           ) : (
-            places.map((place) => (
-              <PlaceCard key={place.contentid} place={place} onToggle={togglePlace} />
-            ))
+            <>
+              {places
+                .filter((p) => !p.isRecommended)
+                .slice(0, visibleCount)
+                .map((place) => (
+                  <div
+                    key={place.contentid}
+                    className={place.contenttypeid === '15' ? 'border border-primary rounded-[22px] mb-3' : ''}
+                  >
+                    {place.contenttypeid === '15' && (
+                      <div className="px-3 pt-2 pb-0">
+                        <span className="text-[10px] font-bold text-primary">🎪 이달 진행중 축제</span>
+                      </div>
+                    )}
+                    <PlaceCard place={place} onToggle={togglePlace} />
+                  </div>
+                ))}
+
+              {/* 더 보기 */}
+              {places.filter((p) => !p.isRecommended).length > visibleCount && (
+                <button
+                  onClick={() => setVisibleCount((v) => v + 10)}
+                  className="w-full py-3 text-sm font-bold text-primary border border-primary/30 rounded-[16px] hover:bg-primary/5 transition-colors"
+                >
+                  + 더 보기 ({places.filter((p) => !p.isRecommended).length - visibleCount}개 남음)
+                </button>
+              )}
+            </>
           )}
         </section>
       </main>
@@ -495,12 +626,17 @@ export default function PlaceSelectionPage() {
               </>
             ) : (
               <>
-                AI 코스 생성하기
+                ✈️ AI 추천 코스로 여행하기
                 <span className="text-on-primary/80">→</span>
               </>
             )}
           </button>
         </div>
+        {places.filter((p) => p.isRecommended && p.selected).length > 0 && (
+          <p className="text-[10px] text-secondary text-center mt-2">
+            관광공사 추천 {places.filter((p) => p.isRecommended && p.selected).length}개 포함
+          </p>
+        )}
       </div>
     </div>
   );

@@ -16,6 +16,7 @@ interface CourseRequest {
   travelDate?: string;          // YYYY-MM-DD
   availableMinutes?: number;    // 출발지→목적지 이동 후 실제 관광 가능 분
   placeDetails?: Record<string, PlaceDetail>; // contentid → detail
+  hasRecommendedCourse?: boolean; // 관광공사 추천 코스 포함 여부
 }
 
 const DAY_OF_WEEK: Record<number, string> = {
@@ -78,6 +79,7 @@ export const geminiService = {
 10. lat, lng는 후보 장소에서 가져오고 없으면 0
 11. 일정(${dayCount}일)에 맞게 각 장소에 "day" 값을 1부터 부여하여 골고루 분배하세요. day 값은 반드시 숫자(1, 2, 3)로만 작성하고, ${dayCount}일이면 day:1과 day:${dayCount} 항목이 반드시 하나 이상 포함되어야 합니다.
 12. title은 "${dayCount === 1 ? '당일' : dayCount + '일'}" 키워드를 반드시 포함하세요.
+${req.hasRecommendedCourse ? '13. 앞에 나열된 장소 중 한국관광공사 추천 장소들은 이미 최적 순서로 정렬되어 있습니다. 이 순서를 최대한 유지하고, 이동 효율이 크게 나빠지는 경우에만 재배치하세요.' : ''}
 
 ## JSON 형식 (JSON만 출력)
 {
