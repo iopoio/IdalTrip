@@ -381,7 +381,14 @@ export default function HomePage() {
           <p>시즌드 · 대표 채영화</p>
           <p>사업자등록번호 890-19-01928</p>
           <p>서울특별시 관악구 남부순환로244가길 12</p>
-          <p>문의 chaejenn@gmail.com</p>
+          <p>
+            <a
+              href="mailto:chaejenn@gmail.com"
+              className="hover:text-on-surface underline underline-offset-2 transition-colors"
+            >
+              문의하기
+            </a>
+          </p>
         </div>
 
         <p className="text-secondary/60 text-[10px] leading-relaxed">
