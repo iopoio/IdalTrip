@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Share2, Sparkles, Check } from 'lucide-react';
-import { tourApi } from '../services/tourApi';
+import { tourApi, REGION_AREA_CODES } from '../services/tourApi';
 import type { CourseSubItem } from '../services/tourApi';
 import { kakaoMapService } from '../services/kakaoMap';
 import { geminiService } from '../services/gemini';
@@ -259,10 +259,7 @@ export default function PlaceSelectionPage() {
 
     try {
       const center = REGION_CENTER[region] ?? REGION_CENTER['전체'];
-      const REGION_AREA_CODE: Record<string, number> = {
-        '서울/경기': 1, '강원': 32, '충청': 3, '전라': 5, '경상': 4, '제주': 39,
-      };
-      const areaCode = REGION_AREA_CODE[region];
+      const areaCode = REGION_AREA_CODES[region]?.[0];
 
       const results = await Promise.allSettled([
         tourApi.fetchFestivalsByRegionAndDate(region, date),
@@ -333,7 +330,7 @@ export default function PlaceSelectionPage() {
           placeType: p.contenttypeid,
           selected: isRecommended,
           isRecommended,
-          recommendOrder: subItem ? parseInt(subItem.subnum) : undefined,
+          recommendOrder: subItem ? (Number(subItem.subnum) || 0) : undefined,
         };
       });
 
