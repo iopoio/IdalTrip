@@ -18,21 +18,24 @@ interface Destination {
 
 const REGIONS = ['전체', '서울/경기', '강원', '충청', '전라', '경상', '제주'];
 
-const AREA_CODE_TO_REGION: Record<string, string> = {
-  '1': '서울/경기', '2': '서울/경기', '31': '서울/경기',
-  '32': '강원',
-  '3': '충청', '8': '충청', '33': '충청', '34': '충청',
-  '5': '전라', '37': '전라', '38': '전라',
-  '4': '경상', '6': '경상', '7': '경상', '35': '경상', '36': '경상',
-  '39': '제주',
-};
 
 function toHttps(url: string): string {
   return url ? url.replace(/^http:\/\//, 'https://') : '';
 }
 
+function regionFromAddr(addr: string): string {
+  if (!addr) return '전국';
+  if (addr.includes('서울') || addr.includes('경기') || addr.includes('인천')) return '서울/경기';
+  if (addr.includes('강원')) return '강원';
+  if (addr.includes('충청') || addr.includes('대전') || addr.includes('세종') || addr.includes('충북') || addr.includes('충남')) return '충청';
+  if (addr.includes('전라') || addr.includes('광주') || addr.includes('전북') || addr.includes('전남')) return '전라';
+  if (addr.includes('경상') || addr.includes('부산') || addr.includes('대구') || addr.includes('울산') || addr.includes('경북') || addr.includes('경남')) return '경상';
+  if (addr.includes('제주')) return '제주';
+  return '전체';
+}
+
 function festivalToDestination(f: Festival, idx: number): Destination {
-  const region = AREA_CODE_TO_REGION[f.areacode ?? ''] ?? '전국';
+  const region = regionFromAddr(f.addr1 || '');
   return {
     id: f.contentid,
     title: f.title,

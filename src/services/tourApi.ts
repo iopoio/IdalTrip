@@ -330,11 +330,6 @@ export const tourApi = {
           MobileOS: 'ETC',
           MobileApp: '이달여행',
           contentId,
-          defaultYN: 'Y',
-          firstImageYN: 'Y',
-          addrinfoYN: 'Y',
-          mapinfoYN: 'Y',
-          overviewYN: 'N',
         },
       });
       const item = response.data?.response?.body?.items?.item;

@@ -135,8 +135,7 @@ function App() {
               </p>
               <button
                 onClick={() => setShowComingSoon(false)}
-                className="w-full py-3 rounded-full font-bold text-sm text-white"
-                style={{ background: '#FF6B35' }}
+                className="w-full py-3 rounded-full font-bold text-sm text-on-primary bg-primary active:opacity-80 transition-opacity"
               >
                 확인
               </button>
