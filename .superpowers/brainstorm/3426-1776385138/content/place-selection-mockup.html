@@ -1,0 +1,91 @@
+<h2>장소 선택 페이지 — 새 레이아웃 목업</h2>
+<p class="subtitle">상단 코스 섹션 위치 검토용. 클릭해서 선택해줘.</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>축제 정보 → 코스 선택 → 장소 목록</h3>
+      <div style="margin-top:10px;border:1px solid #ddd;border-radius:8px;overflow:hidden;font-size:12px">
+        <div style="background:#FF6B35;color:white;padding:8px 12px;font-weight:600">🎪 속초 벚꽃축제 · 4.19~4.21 · 강원</div>
+        <div style="background:#fff8f0;padding:8px 12px;border-bottom:1px solid #eee;font-size:11px;color:#666">📍 강원도 속초시 중앙광장</div>
+        <div style="background:#f8f9fa;padding:8px 12px;border-bottom:1px solid #eee">
+          <div style="font-size:11px;color:#888;margin-bottom:6px;font-weight:600">🏛 한국관광공사 추천 코스</div>
+          <div style="display:flex;gap:6px;overflow-x:auto">
+            <div style="flex-shrink:0;background:white;border:2px solid #FF6B35;border-radius:8px;padding:6px 10px;font-size:11px;text-align:center">
+              <div style="font-weight:700">힐링코스</div>
+              <div style="color:#666;font-size:10px">가슴 탁 트이는<br>속초여행</div>
+            </div>
+            <div style="flex-shrink:0;background:white;border:1px solid #ddd;border-radius:8px;padding:6px 10px;font-size:11px;text-align:center">
+              <div style="font-weight:700">가족코스</div>
+              <div style="color:#666;font-size:10px">스테디셀러<br>여행지</div>
+            </div>
+            <div style="flex-shrink:0;background:white;border:1px solid #ddd;border-radius:8px;padding:6px 10px;font-size:11px;text-align:center">
+              <div style="font-weight:700">맛코스</div>
+              <div style="color:#666;font-size:10px">속초 로컬<br>맛기행</div>
+            </div>
+          </div>
+        </div>
+        <div style="padding:8px 12px">
+          <div style="font-size:11px;color:#888;margin-bottom:6px;font-weight:600">추가 장소 선택</div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;align-items:center;gap:8px;padding:4px;background:#fff3e0;border-radius:6px">
+              <span style="font-size:14px">✅</span>
+              <span style="font-size:11px">속초 등대전망대</span>
+              <span style="margin-left:auto;font-size:9px;background:#FF6B35;color:white;padding:1px 4px;border-radius:3px">관광공사</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:4px;background:#fff3e0;border-radius:6px">
+              <span style="font-size:14px">✅</span>
+              <span style="font-size:11px">석봉도자기미술관</span>
+              <span style="margin-left:auto;font-size:9px;background:#FF6B35;color:white;padding:1px 4px;border-radius:3px">관광공사</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:4px">
+              <span style="font-size:14px">☐</span>
+              <span style="font-size:11px">속초 중앙시장</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:4px">
+              <span style="font-size:14px">☐</span>
+              <span style="font-size:11px">청초호 카페거리</span>
+            </div>
+          </div>
+        </div>
+        <div style="background:#FF6B35;color:white;padding:10px 12px;text-align:center;font-size:12px;font-weight:700">AI 추천 코스로 여행하기 ✈️</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>축제 정보 → 장소 목록 → 코스 선택 (하단)</h3>
+      <div style="margin-top:10px;border:1px solid #ddd;border-radius:8px;overflow:hidden;font-size:12px">
+        <div style="background:#FF6B35;color:white;padding:8px 12px;font-weight:600">🎪 속초 벚꽃축제 · 4.19~4.21 · 강원</div>
+        <div style="background:#f8f9fa;padding:8px 12px;border-bottom:1px solid #eee;font-size:11px;color:#666">📍 강원도 속초시 중앙광장</div>
+        <div style="padding:8px 12px">
+          <div style="font-size:11px;color:#888;margin-bottom:6px;font-weight:600">장소 선택</div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;align-items:center;gap:8px;padding:4px;background:#fff3e0;border-radius:6px">
+              <span style="font-size:14px">✅</span><span style="font-size:11px">속초 등대전망대</span>
+              <span style="margin-left:auto;font-size:9px;background:#FF6B35;color:white;padding:1px 4px;border-radius:3px">관광공사</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:4px">
+              <span style="font-size:14px">☐</span><span style="font-size:11px">속초 중앙시장</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:4px">
+              <span style="font-size:14px">☐</span><span style="font-size:11px">청초호 카페거리</span>
+            </div>
+          </div>
+        </div>
+        <div style="background:#f8f9fa;padding:8px 12px;border-top:1px solid #eee">
+          <div style="font-size:11px;color:#888;margin-bottom:6px;font-weight:600">🏛 코스 테마 선택 (선택사항)</div>
+          <div style="display:flex;gap:6px">
+            <div style="background:white;border:2px solid #FF6B35;border-radius:6px;padding:4px 8px;font-size:10px;font-weight:700">힐링코스</div>
+            <div style="background:white;border:1px solid #ddd;border-radius:6px;padding:4px 8px;font-size:10px">가족코스</div>
+            <div style="background:white;border:1px solid #ddd;border-radius:6px;padding:4px 8px;font-size:10px">맛코스</div>
+          </div>
+        </div>
+        <div style="background:#FF6B35;color:white;padding:10px 12px;text-align:center;font-size:12px;font-weight:700">AI 추천 코스로 여행하기 ✈️</div>
+      </div>
+    </div>
+  </div>
+</div>

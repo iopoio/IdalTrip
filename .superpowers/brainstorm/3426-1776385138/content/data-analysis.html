@@ -1,0 +1,61 @@
+<h2>contentTypeId=25 데이터 활용 분석</h2>
+<p class="subtitle">지금 가진 데이터로 뭘 할 수 있는지</p>
+
+<div class="section">
+  <p class="label">① 코스 목록 (areaBasedList2)</p>
+  <div style="background:#f8f9fa;border-radius:8px;padding:12px;font-size:13px;margin-top:8px">
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px">
+      <span style="color:#888">title</span><span>"가슴 탁 트이는 속초여행"</span>
+      <span style="color:#888">cat2</span><span>C0114 → <strong>힐링코스</strong> / C0112 → 가족코스 등</span>
+      <span style="color:#888">mapx/mapy</span><span>✅ 코스 중심 좌표 있음 (128.59 / 38.20)</span>
+      <span style="color:#888">firstimage</span><span>✅ 썸네일 이미지 있음</span>
+      <span style="color:#888">addr1</span><span>⚠️ 일부만 있음 (빈 값도 있음)</span>
+      <span style="color:#888">modifiedtime</span><span>20230809 — 2023년 업데이트, 어느 정도 신뢰</span>
+    </div>
+  </div>
+  <div style="margin-top:8px;padding:10px;background:#d4edda;border-radius:6px;font-size:13px">
+    ✅ 활용: 코스 타입(힐링/가족/맛) + 제목 + 이미지로 <strong>코스 선택 카드</strong> 만들 수 있음
+  </div>
+</div>
+
+<div class="section">
+  <p class="label">② 코스 내 장소 (detailInfo2)</p>
+  <div style="background:#f8f9fa;border-radius:8px;padding:12px;font-size:13px;margin-top:8px">
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px">
+      <span style="color:#888">subcontentid</span><span>✅ 개별 장소 ID (128803, 130466...)</span>
+      <span style="color:#888">subname</span><span>✅ 장소명 ("속초 등대전망대")</span>
+      <span style="color:#888">subdetailoverview</span><span>✅ 긴 설명 (Gemini 컨텍스트로 활용 가능)</span>
+      <span style="color:#888">subdetailimg</span><span>⚠️ 일부 빈값</span>
+      <span style="color:#888">mapx/mapy</span><span>❌ 없음 — 추가 호출 필요</span>
+    </div>
+  </div>
+  <div style="margin-top:8px;padding:10px;background:#fff3cd;border-radius:6px;font-size:13px">
+    ⚠️ 좌표 없음. 단, <strong>subcontentid ↔ 근처 장소 contentid 매칭</strong>으로 좌표 획득 가능
+  </div>
+</div>
+
+<div class="section">
+  <p class="label">③ 실용적 데이터 흐름</p>
+  <div style="background:#e8f4f8;border-radius:8px;padding:14px;font-size:13px;margin-top:8px">
+    <div style="margin-bottom:8px">1. 지역 선택 → areaBasedList2(25) → 코스 3~5개 목록</div>
+    <div style="margin-bottom:8px">2. 코스 선택 → detailInfo2 → 서브장소 subcontentid 목록</div>
+    <div style="margin-bottom:8px">3. 근처 장소 fetch 결과에서 contentid 교차 매칭</div>
+    <div style="margin-bottom:8px">4. 매칭된 장소 → <span style="background:#FF6B35;color:white;padding:2px 6px;border-radius:4px;font-size:11px">한국관광공사 추천</span> 뱃지 + 상단 체크</div>
+    <div>5. 미매칭 장소 → 하단 추가 선택 리스트</div>
+  </div>
+</div>
+
+<div class="section">
+  <p class="label">④ 매칭 성공률 예측</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+    <div style="background:#d4edda;border-radius:8px;padding:10px;font-size:13px">
+      <strong>높을 때</strong><br>속초처럼 관광지 밀집 지역<br>반경 10km 내 장소 많음
+    </div>
+    <div style="background:#f8d7da;border-radius:8px;padding:10px;font-size:13px">
+      <strong>낮을 때</strong><br>농촌/소도시 지역<br>코스 장소와 근처 장소 겹침 적음
+    </div>
+  </div>
+  <div style="margin-top:8px;padding:10px;background:#f8f9fa;border-radius:6px;font-size:13px">
+    미매칭 시 폴백: subname으로 Gemini에 장소명만 전달 (좌표 0) → Gemini가 설명만으로 순서 결정
+  </div>
+</div>

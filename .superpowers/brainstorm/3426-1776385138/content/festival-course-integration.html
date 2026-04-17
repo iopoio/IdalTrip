@@ -1,0 +1,61 @@
+<h2>축제 + 관광공사 코스 통합 방법</h2>
+<p class="subtitle">이달여행 정체성 유지하면서 코스 데이터 활용하기</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>축제 고정 + 코스는 "주변 장소 추천" 역할</h3>
+      <p>축제는 항상 상단 체크 고정 (필수). 코스 서브장소는 "이 축제 근처 관광공사 추천 장소"로 표현. 역할 분리가 명확함.</p>
+      <div style="margin-top:8px;background:#f8f9fa;border-radius:6px;padding:10px;font-size:12px">
+        <div style="background:#FF6B35;color:white;padding:6px 10px;border-radius:6px;margin-bottom:6px;font-weight:600">🎪 속초 벚꽃축제 — 필수 포함</div>
+        <div style="color:#888;font-size:11px;margin-bottom:4px">이 축제 근처 관광공사 추천 장소</div>
+        <div style="background:#fff3e0;border-left:3px solid #FF6B35;padding:4px 8px;font-size:11px;margin-bottom:3px">✅ 속초 등대전망대</div>
+        <div style="background:#fff3e0;border-left:3px solid #FF6B35;padding:4px 8px;font-size:11px">✅ 엑스포타워</div>
+      </div>
+      <div class="pros-cons" style="margin-top:8px">
+        <div class="pros"><h4>장점</h4><ul><li>이달여행 정체성 유지</li><li>구현 단순</li><li>사용자 혼란 없음</li></ul></div>
+        <div class="cons"><h4>단점</h4><ul><li>코스 "테마" 느낌 약함</li><li>코스 선택지가 의미 작음</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>축제를 코스에 끼워넣기 (지리적 필터)</h3>
+      <p>축제 좌표 반경 20km 내 코스 장소만 표시. 코스 서브장소 + 축제를 묶어서 "이 지역 힐링코스 + 이달 축제" 조합으로 표현.</p>
+      <div style="margin-top:8px;background:#f8f9fa;border-radius:6px;padding:10px;font-size:12px">
+        <div style="color:#888;font-size:11px;margin-bottom:4px">힐링코스 · 이달 축제 포함</div>
+        <div style="background:#FF6B35;color:white;padding:4px 8px;border-radius:4px;font-size:11px;margin-bottom:3px">🎪 속초 벚꽃축제 (이달 한정)</div>
+        <div style="background:#fff3e0;border-left:3px solid #FF6B35;padding:4px 8px;font-size:11px;margin-bottom:3px">✅ 속초 등대전망대</div>
+        <div style="background:#fff3e0;border-left:3px solid #FF6B35;padding:4px 8px;font-size:11px">✅ 엑스포타워</div>
+      </div>
+      <div class="pros-cons" style="margin-top:8px">
+        <div class="pros"><h4>장점</h4><ul><li>코스 완성도 높음</li><li>"이달의" 특별함 표현</li><li>동선 자연스러움</li></ul></div>
+        <div class="cons"><h4>단점</h4><ul><li>반경 내 코스 없으면 빈 화면</li><li>구현 복잡도 높음</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>코스 선택 없앰 — Gemini가 전부 통합</h3>
+      <p>코스 서브장소 이름을 Gemini 프롬프트 힌트로만 전달. 사용자에게는 코스 선택 단계 없음. Gemini가 축제 + 힌트 장소 + 근처 장소를 통합해서 최적 코스 생성.</p>
+      <div style="margin-top:8px;background:#f8f9fa;border-radius:6px;padding:10px;font-size:12px;color:#555">
+        사용자가 보는 것: 축제 선택 → 장소 목록 → 생성<br>
+        백그라운드: 코스 힌트가 Gemini 프롬프트에 포함됨<br>
+        <span style="color:#FF6B35">→ 사용자 경험 단순화</span>
+      </div>
+      <div class="pros-cons" style="margin-top:8px">
+        <div class="pros"><h4>장점</h4><ul><li>UX 가장 단순</li><li>축제 강조 자연스러움</li><li>코스 충돌 문제 없음</li></ul></div>
+        <div class="cons"><h4>단점</h4><ul><li>Gemini 신뢰도 의존</li><li>관광공사 코스 활용 안 보임</li><li>공모전 어필 약함</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:16px;padding:12px;background:#e8f4f8;border-radius:8px;font-size:13px">
+  💡 내 추천: <strong>A + B 하이브리드</strong> — 축제는 항상 고정(A), 코스 장소는 지리적 근접성 필터로 자동 선택(B). 코스 선택 UI는 없애고 백그라운드에서 자동 처리. 사용자는 단순하게, 데이터는 풍부하게.
+</div>
