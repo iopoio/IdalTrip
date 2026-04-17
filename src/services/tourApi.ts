@@ -320,6 +320,41 @@ export const tourApi = {
     }
   },
 
+  // 장소 공통정보 조회 — 관광공사 추천 코스 subItem의 상세 정보 fetch용
+  fetchPlaceCommonInfo: async (contentId: string): Promise<Place | null> => {
+    try {
+      const response = await axios.get(`${BASE_URL}/detailCommon2`, {
+        params: {
+          serviceKey: API_KEY,
+          _type: 'json',
+          MobileOS: 'ETC',
+          MobileApp: '이달여행',
+          contentId,
+          defaultYN: 'Y',
+          firstImageYN: 'Y',
+          addrinfoYN: 'Y',
+          mapinfoYN: 'Y',
+          overviewYN: 'N',
+        },
+      });
+      const item = response.data?.response?.body?.items?.item;
+      if (!item) return null;
+      const data = Array.isArray(item) ? item[0] : item;
+      return {
+        contentid: data.contentid,
+        title: data.title,
+        addr1: data.addr1 || '',
+        firstimage: data.firstimage || data.firstimage2 || '',
+        mapx: data.mapx,
+        mapy: data.mapy,
+        contenttypeid: data.contenttypeid || '12',
+      };
+    } catch (error) {
+      console.error('Failed to fetch place common info:', contentId, error);
+      return null;
+    }
+  },
+
   // 이달의 추천 여행지 — areaBasedList2 contentTypeId=25 (여행코스)
   fetchRecommendedCourses: async (areaCode?: number): Promise<Place[]> => {
     try {

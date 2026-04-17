@@ -312,10 +312,17 @@ export default function PlaceSelectionPage() {
             }))
           : tourFood.slice(0, 3);
 
-      // 관광공사 코스 서브아이템 fetch
+      // 관광공사 코스 서브아이템 + 장소 상세정보 fetch
       let subItems: CourseSubItem[] = [];
+      let recommendedPlaces: Place[] = [];
       if (courses.length > 0) {
         subItems = await tourApi.fetchCourseDetail(courses[0].contentid);
+        if (subItems.length > 0) {
+          const placeInfos = await Promise.all(
+            subItems.map((s) => tourApi.fetchPlaceCommonInfo(s.subcontentid))
+          );
+          recommendedPlaces = placeInfos.filter((p): p is Place => p !== null);
+        }
       }
 
       setFestivals(fetchedFestivals);
@@ -332,7 +339,7 @@ export default function PlaceSelectionPage() {
       const extra12 = pick(attractions.slice(2), shortfall);
       const additionalPlaces: Place[] = [...cat12, ...cat14, ...cat28, ...cat39, ...extra12];
 
-      const all: Place[] = [...festivalPlaces, ...additionalPlaces];
+      const all: Place[] = [...festivalPlaces, ...recommendedPlaces, ...additionalPlaces];
 
       const seen = new Set<string>();
       const unique = all.filter((p) => {
