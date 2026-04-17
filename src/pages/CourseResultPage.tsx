@@ -76,7 +76,7 @@ const CourseResultPage = () => {
   // 일자 전환 시 active 리셋 + 카드 스크롤도 맨 앞으로
   useEffect(() => {
     setActiveIndex(0);
-    scrollerRef.current?.scrollTo({ left: 0, behavior: 'smooth' });
+    scrollerRef.current?.scrollTo({ left: 0, behavior: 'auto' });
   }, [activeDay]);
 
   // IntersectionObserver로 현재 가시 카드 감지
