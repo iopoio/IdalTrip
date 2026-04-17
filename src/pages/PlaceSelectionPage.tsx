@@ -341,12 +341,17 @@ export default function PlaceSelectionPage() {
         return true;
       });
 
-      const hasRecommendedCourse = subItems.length > 0;
+      // 실제로 unique 장소와 매칭되는 추천 항목이 있는지 확인
+      const matchedRecommendCount = subItems.filter(
+        (s) => unique.some((p) => p.contentid === s.subcontentid)
+      ).length;
+      const hasMatchingRecommended = matchedRecommendCount > 0;
+
       const selectable: SelectablePlace[] = unique.map((p, idx) => {
         const subItem = subItems.find((s) => s.subcontentid === p.contentid);
         const isRecommended = !!subItem;
-        // 관광공사 추천 코스 없으면 앞 5개 기본 선택
-        const selected = hasRecommendedCourse ? isRecommended : idx < 5;
+        // 매칭되는 추천 장소 없으면 앞 5개 기본 선택
+        const selected = hasMatchingRecommended ? isRecommended : idx < 5;
         return {
           ...p,
           placeType: p.contenttypeid,
@@ -511,7 +516,7 @@ export default function PlaceSelectionPage() {
                 <button
                   key={d}
                   onClick={() => setDuration(d)}
-                  className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-bold transition-colors whitespace-nowrap ${
                     duration === d
                       ? 'bg-primary text-on-primary'
                       : 'text-secondary hover:text-on-surface'

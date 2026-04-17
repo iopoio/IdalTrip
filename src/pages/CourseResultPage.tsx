@@ -278,7 +278,7 @@ const CourseResultPage = () => {
       </main>
 
       {/* 고정 하단 바 */}
-      <div className="fixed bottom-0 left-0 right-0 max-w-[430px] mx-auto z-50 p-5 bg-gradient-to-t from-surface via-surface to-transparent">
+      <div className="fixed bottom-0 left-0 right-0 max-w-[430px] mx-auto z-50 px-5 pb-8 pt-4 bg-surface border-t border-outline-variant/10">
         <div className="flex gap-3">
           <button
             onClick={handleRetry}
