@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-const MODEL = 'gemini-2.5-flash';
+// 2026-04 기준: gemini-2.5-flash 무료 한도 소진 → gemini-3 preview 사용 (2026-04-17 실호출 검증)
+const MODEL = 'gemini-3-flash-preview';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {

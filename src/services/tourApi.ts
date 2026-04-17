@@ -4,6 +4,25 @@ import type { Festival, Place, PlaceDetail } from '../types';
 const BASE_URL = '/B551011/KorService2';
 const API_KEY = import.meta.env.VITE_TOUR_API_KEY;
 
+// TourAPI는 서비스 키 오류/쿼터 초과 시 200 OK + 에러 body 반환하므로 resultCode 체크 필수
+const extractItems = <T = any>(responseData: any, context: string): T[] | null => {
+  const resultCode = responseData?.response?.header?.resultCode;
+  if (resultCode && resultCode !== '0000') {
+    const resultMsg = responseData?.response?.header?.resultMsg || 'unknown';
+    console.error(`TourAPI ${context} error: ${resultCode} ${resultMsg}`);
+    return null;
+  }
+  const raw = responseData?.response?.body?.items?.item;
+  if (!raw) return [];
+  return Array.isArray(raw) ? raw : [raw];
+};
+
+const extractSingleItem = <T = any>(responseData: any, context: string): T | null => {
+  const items = extractItems<T>(responseData, context);
+  if (!items) return null;
+  return items[0] || null;
+};
+
 export interface CourseSubItem {
   subnum: string;
   subcontentid: string;
@@ -43,10 +62,7 @@ export const tourApi = {
         }
       });
 
-      const items = response.data?.response?.body?.items?.item;
-      if (!items) return [];
-      
-      return Array.isArray(items) ? items : [items];
+      return extractItems<Festival>(response.data, 'fetchFestivals') ?? [];
     } catch (error) {
       console.error('Failed to fetch festivals:', error);
       return [];
@@ -65,8 +81,7 @@ export const tourApi = {
         }
       });
 
-      const item = response.data?.response?.body?.items?.item?.[0] || response.data?.response?.body?.items?.item;
-      return item || null;
+      return extractSingleItem<Festival>(response.data, 'fetchFestivalDetail');
     } catch (error) {
       console.error('Failed to fetch festival detail:', error);
       return null;
@@ -90,10 +105,7 @@ export const tourApi = {
         }
       });
 
-      const items = response.data?.response?.body?.items?.item;
-      if (!items) return [];
-      
-      return Array.isArray(items) ? items : [items];
+      return extractItems<Place>(response.data, 'fetchNearbyPlaces') ?? [];
     } catch (error) {
       console.error('Failed to fetch nearby places:', error);
       return [];
@@ -125,12 +137,8 @@ export const tourApi = {
         )
       );
   
-      const items = results.flatMap(r => {
-        const raw = r.data?.response?.body?.items?.item;
-        if (!raw) return [];
-        return Array.isArray(raw) ? raw : [raw];
-      });
-  
+      const items = results.flatMap(r => extractItems<Festival>(r.data, 'fetchFestivalsByRegionAndDate') ?? []);
+
       return items;
     } catch (error) {
       console.error('Failed to fetch festivals by region and date:', error);
@@ -140,7 +148,7 @@ export const tourApi = {
 
   fetchPlacesByRegion: async (region: string, contentTypeId: string): Promise<Place[]> => {
     const areaCodes = REGION_AREA_CODES[region] || [];
-  
+
     try {
       const results = await Promise.all(
         areaCodes.map(areaCode =>
@@ -160,11 +168,7 @@ export const tourApi = {
         )
       );
 
-      const items = results.flatMap(r => {
-        const raw = r.data?.response?.body?.items?.item;
-        if (!raw) return [];
-        return Array.isArray(raw) ? raw : [raw];
-      });
+      const items = results.flatMap(r => extractItems<Place>(r.data, 'fetchPlacesByRegion') ?? []);
 
       return items.slice(0, 40);
     } catch (error) {
@@ -185,8 +189,7 @@ export const tourApi = {
           contentTypeId,
         }
       });
-      const item = response.data?.response?.body?.items?.item;
-      return Array.isArray(item) ? item[0] : item || null;
+      return extractSingleItem(response.data, 'fetchDetailIntro');
     } catch (error) {
       console.error('Failed to fetch detail intro:', error);
       return null;
@@ -206,8 +209,7 @@ export const tourApi = {
           contentTypeId,
         }
       });
-      const item = response.data?.response?.body?.items?.item;
-      return (Array.isArray(item) ? item[0] : item) || null;
+      return extractSingleItem<PlaceDetail>(response.data, 'fetchPlaceDetail');
     } catch (error) {
       console.error('Failed to fetch place detail:', error);
       return null;
@@ -231,9 +233,7 @@ export const tourApi = {
           numOfRows: 20,
         }
       });
-      const items = response.data?.response?.body?.items?.item;
-      if (!items) return [];
-      return Array.isArray(items) ? items : [items];
+      return extractItems<Place>(response.data, 'fetchNearbyCulture') ?? [];
     } catch (error) {
       console.error('Failed to fetch nearby culture:', error);
       return [];
@@ -257,9 +257,7 @@ export const tourApi = {
           numOfRows: 20,
         }
       });
-      const items = response.data?.response?.body?.items?.item;
-      if (!items) return [];
-      return Array.isArray(items) ? items : [items];
+      return extractItems<Place>(response.data, 'fetchNearbyLeisure') ?? [];
     } catch (error) {
       console.error('Failed to fetch nearby leisure:', error);
       return [];
@@ -286,11 +284,7 @@ export const tourApi = {
           })
         )
       );
-      const items = results.flatMap(r => {
-        const raw = r.data?.response?.body?.items?.item;
-        if (!raw) return [];
-        return Array.isArray(raw) ? raw : [raw];
-      });
+      const items = results.flatMap(r => extractItems<Place>(r.data, 'fetchStayByRegion') ?? []);
       return items.slice(0, 20);
     } catch (error) {
       console.error('Failed to fetch stay by region:', error);
@@ -310,9 +304,7 @@ export const tourApi = {
           contentTypeId: '25',
         }
       });
-      const items = response.data?.response?.body?.items?.item;
-      if (!items) return [];
-      const arr: CourseSubItem[] = Array.isArray(items) ? items : [items];
+      const arr = extractItems<CourseSubItem>(response.data, 'fetchCourseDetail') ?? [];
       return arr.sort((a, b) => parseInt(a.subnum) - parseInt(b.subnum));
     } catch (error) {
       console.error('Failed to fetch course detail:', error);
@@ -332,9 +324,8 @@ export const tourApi = {
           contentId,
         },
       });
-      const item = response.data?.response?.body?.items?.item;
-      if (!item) return null;
-      const data = Array.isArray(item) ? item[0] : item;
+      const data = extractSingleItem<any>(response.data, 'fetchPlaceCommonInfo');
+      if (!data) return null;
       return {
         contentid: data.contentid,
         title: data.title,
@@ -366,9 +357,7 @@ export const tourApi = {
           ...(areaCode ? { areaCode } : {}),
         }
       });
-      const items = response.data?.response?.body?.items?.item;
-      if (!items) return [];
-      return Array.isArray(items) ? items : [items];
+      return extractItems<Place>(response.data, 'fetchRecommendedCourses') ?? [];
     } catch (error) {
       console.error('Failed to fetch recommended courses:', error);
       return [];
