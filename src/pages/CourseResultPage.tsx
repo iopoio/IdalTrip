@@ -1,15 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
-  Sparkles,
-  Car,
   Clock,
-  DollarSign,
   MapPin,
   Navigation,
-  Share2,
   RefreshCw,
+  Share2,
+  Sparkles,
   UtensilsCrossed,
   Ticket,
   Building2,
@@ -18,30 +16,24 @@ import {
 } from 'lucide-react';
 import type { CourseResponse, CourseItem, PlaceType } from '../types';
 import LogoLight from '../assets/logo/이달여행.svg';
+import CourseMap from '../components/CourseMap';
 
-declare global {
-  interface Window {
-    kakao: unknown;
-    Kakao: unknown;
-  }
-}
-
-const TYPE_ICONS: Record<PlaceType, React.ReactNode> = {
-  festival: <Ticket className="w-5 h-5 text-primary" />,
-  attraction: <MapPin className="w-5 h-5 text-secondary" />,
-  food: <UtensilsCrossed className="w-5 h-5 text-primary-container" />,
-  culture: <Building2 className="w-5 h-5 text-tertiary" />,
-  leisure: <Activity className="w-5 h-5 text-tertiary" />,
-  stay: <Hotel className="w-5 h-5 text-secondary" />,
+const TYPE_ICON: Record<PlaceType, React.ReactNode> = {
+  festival: <Ticket className="w-4 h-4" />,
+  attraction: <MapPin className="w-4 h-4" />,
+  food: <UtensilsCrossed className="w-4 h-4" />,
+  culture: <Building2 className="w-4 h-4" />,
+  leisure: <Activity className="w-4 h-4" />,
+  stay: <Hotel className="w-4 h-4" />,
 };
 
-const TYPE_ICONS_LARGE: Record<PlaceType, React.ReactNode> = {
-  festival: <Ticket className="w-10 h-10 text-primary opacity-30" />,
-  attraction: <MapPin className="w-10 h-10 text-secondary opacity-30" />,
-  food: <UtensilsCrossed className="w-10 h-10 text-primary-container opacity-30" />,
-  culture: <Building2 className="w-10 h-10 text-tertiary opacity-30" />,
-  leisure: <Activity className="w-10 h-10 text-tertiary opacity-30" />,
-  stay: <Hotel className="w-10 h-10 text-secondary opacity-30" />,
+const TYPE_LABEL: Record<PlaceType, string> = {
+  festival: '축제',
+  attraction: '관광지',
+  food: '맛집',
+  culture: '문화',
+  leisure: '레포츠',
+  stay: '숙박',
 };
 
 const openKakaoNavi = (item: CourseItem) => {
@@ -55,8 +47,18 @@ const CourseResultPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [activeDay, setActiveDay] = useState(1);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  type CourseState = { course?: CourseResponse; region?: string; date?: string; departure?: string; transport?: 'car' | 'public'; duration?: 'day' | '1night' | '2night' };
+  type CourseState = {
+    course?: CourseResponse;
+    region?: string;
+    date?: string;
+    departure?: string;
+    transport?: 'car' | 'public';
+    duration?: 'day' | '1night' | '2night';
+  };
   const state = (location.state || (() => {
     try { return JSON.parse(sessionStorage.getItem('lastCourse') || '{}'); }
     catch { return {}; }
@@ -64,22 +66,56 @@ const CourseResultPage = () => {
 
   const { course, region, date } = state;
 
+  const schedule = course?.schedule ?? [];
+  const maxDay = schedule.length ? Math.max(...schedule.map((i) => i.day)) : 1;
+  const filteredSchedule = useMemo(
+    () => schedule.filter((i) => maxDay === 1 || i.day === activeDay),
+    [schedule, maxDay, activeDay]
+  );
+
+  // 일자 전환 시 active 리셋 + 카드 스크롤도 맨 앞으로
+  useEffect(() => {
+    setActiveIndex(0);
+    scrollerRef.current?.scrollTo({ left: 0, behavior: 'smooth' });
+  }, [activeDay]);
+
+  // IntersectionObserver로 현재 가시 카드 감지
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
+            const idx = Number((entry.target as HTMLElement).dataset.idx);
+            if (!Number.isNaN(idx)) setActiveIndex(idx);
+          }
+        });
+      },
+      { root: scroller, threshold: [0.6] }
+    );
+
+    cardRefs.current.forEach((el) => el && observer.observe(el));
+    return () => observer.disconnect();
+  }, [filteredSchedule]);
+
+  // 마커 클릭 시 해당 카드로 스크롤
+  const handleMarkerClick = (idx: number) => {
+    const card = cardRefs.current[idx];
+    if (card) card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  };
+
   const handleShare = () => {
     if (!course) return;
     if (navigator.share) {
-      navigator.share({
-        title: course.title,
-        text: course.summary,
-        url: window.location.href,
-      });
+      navigator.share({ title: course.title, text: course.summary, url: window.location.href });
     } else {
       alert('공유 기능은 모바일에서 사용 가능합니다.');
     }
   };
 
-  const handleRetry = () => {
-    navigate('/');
-  };
+  const handleRetry = () => navigate('/');
 
   if (!course) {
     return (
@@ -99,90 +135,57 @@ const CourseResultPage = () => {
     );
   }
 
-  const schedule = course.schedule;
-  const maxDay = Math.max(...schedule.map((i) => i.day));
-  const filteredSchedule = schedule.filter(
-    (i) => maxDay === 1 || i.day === activeDay
-  );
-
   return (
-    <div className="bg-surface min-h-screen">
-      {/* 고정 헤더 */}
-      <header className="fixed top-0 w-full max-w-[430px] left-0 right-0 mx-auto z-50 bg-surface/90 backdrop-blur-md flex items-center justify-between px-6 h-16">
+    <div className="h-screen h-[100svh] flex flex-col bg-surface overflow-hidden">
+      {/* 상단 헤더 */}
+      <header className="flex-none h-14 flex items-center justify-between px-4 bg-surface/95 backdrop-blur-md z-30">
         <button
           onClick={() => navigate(-1)}
-          className="text-on-surface p-1"
+          className="p-2 -ml-2 text-on-surface"
           aria-label="뒤로가기"
         >
-          <ArrowLeft className="w-6 h-6" />
+          <ArrowLeft className="w-5 h-5" />
         </button>
-        <img src={LogoLight} className="h-6 w-auto" alt="이달여행" />
+        <img src={LogoLight} className="h-5 w-auto" alt="이달여행" />
         <button
           onClick={handleShare}
-          className="text-on-surface p-1"
+          className="p-2 -mr-2 text-on-surface"
           aria-label="공유"
         >
-          <Share2 className="w-6 h-6" />
+          <Share2 className="w-5 h-5" />
         </button>
       </header>
 
-      <main className="pt-20 px-5 pb-40">
-        {/* AI 인사 섹션 */}
-        <section className="mb-8">
-          {/* 지역/날짜 부제목 */}
-          {(region || date) && (
-            <p className="text-xs text-on-surface-variant font-label mb-3">
-              {[region, date].filter(Boolean).join(' · ')}
+      {/* 메타 정보 + 일자 탭 */}
+      <div className="flex-none px-5 py-3 border-b border-outline-variant/10">
+        <div className="flex items-center justify-between">
+          <div className="min-w-0">
+            <p className="text-xs text-on-surface-variant font-label truncate">
+              {[region, date].filter(Boolean).join(' · ') || '코스'}
             </p>
-          )}
-
-          <div className="flex items-start gap-4 mb-6">
-            <div className="w-12 h-12 rounded-[14px] bg-gradient-to-br from-primary to-primary-container flex items-center justify-center shadow-lg shadow-primary/20 flex-shrink-0">
-              <Sparkles className="text-white w-6 h-6" />
-            </div>
-            <div className="flex-1">
-              <h2 className="text-2xl font-bold font-headline text-on-surface mb-2 leading-tight">
-                AI가 최적의 코스를 만들었습니다!
-              </h2>
-              <div className="bg-surface-container-lowest p-4 rounded-[16px] rounded-tl-none border border-outline-variant/20 shadow-sm">
-                <p className="text-on-surface-variant text-sm leading-relaxed font-body">
-                  {course.summary}
-                </p>
-              </div>
-            </div>
+            <h1 className="text-sm font-bold text-on-surface truncate font-headline mt-0.5">
+              <Sparkles className="inline w-3.5 h-3.5 text-primary mr-1" />
+              {course.title || 'AI 추천 코스'}
+            </h1>
           </div>
-
-          {/* 통계 그리드 */}
-          <div className="grid grid-cols-3 gap-3">
-            <div className="bg-surface-container-lowest p-4 rounded-[16px] flex flex-col items-center text-center">
-              <Clock className="text-secondary w-4 h-4 mb-1" />
-              <span className="text-[10px] text-secondary mb-1 font-label">총 소요</span>
-              <span className="font-bold text-primary text-sm font-body">{course.total_duration}</span>
-            </div>
-            <div className="bg-surface-container-lowest p-4 rounded-[16px] flex flex-col items-center text-center">
-              <DollarSign className="text-secondary w-4 h-4 mb-1" />
-              <span className="text-[10px] text-secondary mb-1 font-label">예상 비용</span>
-              <span className="font-bold text-secondary text-sm font-body">{course.estimated_cost}</span>
-            </div>
-            <div className="bg-surface-container-lowest p-4 rounded-[16px] flex flex-col items-center text-center">
-              <MapPin className="text-secondary w-4 h-4 mb-1" />
-              <span className="text-[10px] text-secondary mb-1 font-label">방문 장소</span>
-              <span className="font-bold text-on-surface text-sm font-body">{schedule.length}곳</span>
-            </div>
+          <div className="flex items-center gap-2 text-[11px] text-on-surface-variant font-label flex-shrink-0 ml-3">
+            <Clock className="w-3 h-3" />
+            <span>{course.total_duration}</span>
+            <span className="opacity-40">·</span>
+            <span>{schedule.length}곳</span>
           </div>
-        </section>
+        </div>
 
-        {/* 일자 탭 (다일정인 경우) */}
         {maxDay > 1 && (
-          <div className="flex gap-4 border-b border-surface-container mb-6">
+          <div className="flex gap-2 mt-2">
             {Array.from({ length: maxDay }, (_, i) => i + 1).map((d) => (
               <button
                 key={d}
                 onClick={() => setActiveDay(d)}
                 className={
                   activeDay === d
-                    ? 'pb-3 px-2 text-lg font-bold font-headline text-primary border-b-2 border-primary'
-                    : 'pb-3 px-2 text-lg font-medium font-headline text-secondary'
+                    ? 'px-3 py-1 rounded-full text-xs font-bold bg-primary text-on-primary'
+                    : 'px-3 py-1 rounded-full text-xs font-medium bg-surface-container text-on-surface-variant'
                 }
               >
                 Day {d}
@@ -190,111 +193,113 @@ const CourseResultPage = () => {
             ))}
           </div>
         )}
+      </div>
 
-        {/* 타임라인 */}
-        <section className="relative">
-          <div className="absolute left-5 top-4 bottom-0 w-0.5 bg-gradient-to-b from-primary-container via-surface-container-high to-transparent" />
-          <div className="flex flex-col gap-8">
-            {filteredSchedule.map((item, i) => (
-              <div key={`${item.day}-${i}`}>
-                {/* 타임라인 아이템 */}
-                <div className="relative flex gap-5 group">
-                  {/* 원형 아이콘 */}
-                  <div className="z-10 w-10 h-10 rounded-full bg-surface-container-lowest border-2 border-primary-container flex items-center justify-center shadow-sm flex-shrink-0">
-                    {TYPE_ICONS[item.type] ?? <MapPin className="w-5 h-5 text-secondary" />}
-                  </div>
+      {/* 지도 */}
+      <div className="flex-none h-[55vh]">
+        <CourseMap
+          items={filteredSchedule}
+          activeIndex={activeIndex}
+          onMarkerClick={handleMarkerClick}
+        />
+      </div>
 
-                  {/* 카드 내용 */}
-                  <div className="flex-1 pb-2">
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <span className="text-xs font-medium text-primary mb-1 block font-label">
-                          {item.time}
-                        </span>
-                        <h3 className="text-xl font-bold text-on-surface font-headline">
-                          {item.place_name}
-                        </h3>
-                      </div>
-                      {/* 카카오내비 버튼 */}
-                      <button
-                        onClick={() => openKakaoNavi(item)}
-                        className="flex items-center gap-1 px-3 py-1.5 rounded-[8px] bg-[#FEE500] text-[#1A1A1A] text-xs font-bold hover:opacity-90 transition-opacity flex-shrink-0 ml-2"
-                      >
-                        <Navigation className="w-3 h-3" />
-                        카카오내비
-                      </button>
-                    </div>
-
-                    {/* 사진 */}
-                    {item.image_url ? (
-                      <div className="rounded-[16px] overflow-hidden mb-3 aspect-video">
-                        <img
-                          src={item.image_url}
-                          alt={item.place_name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                      </div>
-                    ) : (
-                      <div className="rounded-[16px] bg-surface-container-high mb-3 aspect-video flex items-center justify-center">
-                        {TYPE_ICONS_LARGE[item.type] ?? <MapPin className="w-10 h-10 text-secondary opacity-30" />}
-                      </div>
-                    )}
-
-                    <p className="text-sm text-on-surface-variant leading-relaxed font-body">
-                      {item.description}
-                    </p>
-                  </div>
+      {/* 카드 가로 스와이프 */}
+      <div
+        ref={scrollerRef}
+        className="flex-1 overflow-x-auto overflow-y-hidden snap-x snap-mandatory flex gap-3 px-5 pt-3 pb-2 scrollbar-hide"
+        style={{ scrollPaddingLeft: '20px', scrollPaddingRight: '20px' }}
+      >
+        {filteredSchedule.map((item, idx) => (
+          <div
+            key={`${item.day}-${idx}`}
+            ref={(el) => { cardRefs.current[idx] = el; }}
+            data-idx={idx}
+            className={`snap-center flex-none w-[82vw] max-w-[360px] flex flex-col rounded-[20px] overflow-hidden bg-surface-container-lowest shadow-md transition-shadow ${
+              idx === activeIndex ? 'shadow-lg ring-1 ring-primary/20' : ''
+            }`}
+          >
+            {/* 이미지 */}
+            <div className="relative h-32 flex-none bg-surface-container-high overflow-hidden">
+              {item.image_url ? (
+                <img
+                  src={item.image_url}
+                  alt={item.place_name}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-secondary/10">
+                  <MapPin className="w-8 h-8 text-outline-variant" />
                 </div>
+              )}
+              {/* 순서 뱃지 */}
+              <div className="absolute top-2 left-2 bg-primary text-on-primary text-xs font-bold px-2 py-1 rounded-full shadow">
+                {String(idx + 1).padStart(2, '0')}
+              </div>
+              {/* 시간 뱃지 */}
+              <div className="absolute top-2 right-2 bg-black/60 text-white text-[11px] font-medium px-2 py-1 rounded-full backdrop-blur-sm">
+                {item.time}
+              </div>
+            </div>
 
-                {/* 이동 시간 + 다음 장소 소요 시간 */}
-                {item.move_time && i < filteredSchedule.length - 1 && (
-                  <div className="relative flex gap-5 items-center mt-2">
-                    <div className="w-10 flex justify-center z-10">
-                      <div className="w-2 h-2 rounded-full bg-surface-container-high" />
-                    </div>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <div className="bg-surface-container-low px-4 py-2 rounded-full flex items-center gap-2">
-                        <Car className="w-3 h-3 text-secondary" />
-                        <span className="text-xs text-secondary font-medium font-label">
-                          이동 {item.move_time}
-                          {item.distance ? ` (${item.distance})` : ''}
-                        </span>
-                      </div>
-                      {filteredSchedule[i + 1]?.stay_duration && (
-                        <div className="bg-primary/8 px-4 py-2 rounded-full flex items-center gap-2">
-                          <Clock className="w-3 h-3 text-primary" />
-                          <span className="text-xs text-primary font-medium font-label">
-                            체류 {filteredSchedule[i + 1].stay_duration}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+            {/* 본문 */}
+            <div className="flex-1 flex flex-col p-4 min-h-0">
+              <div className="flex items-center gap-1.5 text-[11px] text-primary font-label mb-1">
+                {TYPE_ICON[item.type] ?? <MapPin className="w-4 h-4" />}
+                <span>{TYPE_LABEL[item.type] ?? '장소'}</span>
+                {item.stay_duration && (
+                  <>
+                    <span className="opacity-40">·</span>
+                    <span className="text-on-surface-variant">체류 {item.stay_duration}</span>
+                  </>
                 )}
               </div>
-            ))}
-          </div>
-        </section>
-      </main>
+              <h3 className="text-base font-bold text-on-surface font-headline leading-tight mb-1.5 line-clamp-2">
+                {item.place_name}
+              </h3>
+              <p className="flex-1 text-xs text-on-surface-variant leading-relaxed line-clamp-3 font-body">
+                {item.description}
+              </p>
 
-      {/* 고정 하단 바 */}
-      <div className="fixed bottom-0 left-0 right-0 max-w-[430px] mx-auto z-50 px-5 pb-8 pt-4 bg-surface border-t border-outline-variant/10">
-        <div className="flex gap-3">
-          <button
-            onClick={handleRetry}
-            className="flex-1 py-4 border-2 border-outline-variant rounded-[16px] font-bold text-on-surface flex items-center justify-center gap-2 font-body"
-          >
-            <RefreshCw className="w-4 h-4" />
-            다른 코스 추천받기
-          </button>
-          <button
-            onClick={handleShare}
-            className="flex-1 py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-[16px] font-bold flex items-center justify-center gap-2 shadow-lg font-body"
-          >
-            <Share2 className="w-4 h-4" />
-            공유하기
-          </button>
-        </div>
+              {/* 이동 시간 (다음 장소) */}
+              {item.move_time && idx < filteredSchedule.length - 1 && (
+                <p className="text-[11px] text-on-surface-variant font-label mt-2 flex items-center gap-1.5">
+                  <Navigation className="w-3 h-3" />
+                  다음 장소까지 {item.move_time}
+                  {item.distance ? ` · ${item.distance}` : ''}
+                </p>
+              )}
+
+              {/* 카카오 네비 버튼 */}
+              <button
+                onClick={() => openKakaoNavi(item)}
+                className="mt-3 flex items-center justify-center gap-2 h-11 rounded-[12px] bg-[#FEE500] text-[#1A1A1A] font-bold text-sm active:scale-[0.98] transition-transform"
+              >
+                <Navigation className="w-4 h-4" />
+                카카오내비 길찾기
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* 하단 바 */}
+      <div className="flex-none px-5 py-3 pb-[calc(env(safe-area-inset-bottom)+12px)] bg-surface border-t border-outline-variant/10 flex gap-3">
+        <button
+          onClick={handleRetry}
+          className="flex-1 h-11 border-2 border-outline-variant rounded-[12px] font-bold text-sm text-on-surface flex items-center justify-center gap-2 font-body"
+        >
+          <RefreshCw className="w-4 h-4" />
+          다른 코스
+        </button>
+        <button
+          onClick={handleShare}
+          className="flex-1 h-11 bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-[12px] font-bold text-sm flex items-center justify-center gap-2 shadow-md font-body"
+        >
+          <Share2 className="w-4 h-4" />
+          공유하기
+        </button>
       </div>
     </div>
   );
