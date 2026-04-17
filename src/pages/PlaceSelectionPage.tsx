@@ -41,9 +41,28 @@ function getTypeConfig(contenttypeid: string) {
 }
 
 function getAvailableTime(departure: string, region: string): string {
-  if (departure.includes('서울') && region.includes('강원')) return '약 5시간 30분';
-  if (departure.includes('서울')) return '약 6시간 (예상)';
-  return '약 6시간 (예상)';
+  const isDepartureSeoul = departure.includes('서울') || departure.includes('경기') || departure.includes('인천');
+
+  if (region.includes('서울') || region.includes('경기')) {
+    // 서울/경기에서 서울/경기 → 이동 거의 없음
+    return isDepartureSeoul ? '약 10시간 (예상)' : '약 8시간 (예상)';
+  }
+  if (region.includes('강원')) {
+    return isDepartureSeoul ? '약 7시간 (예상)' : '약 6시간 (예상)';
+  }
+  if (region.includes('충청')) {
+    return isDepartureSeoul ? '약 8시간 (예상)' : '약 7시간 (예상)';
+  }
+  if (region.includes('전라')) {
+    return isDepartureSeoul ? '약 6시간 30분 (예상)' : '약 6시간 (예상)';
+  }
+  if (region.includes('경상')) {
+    return isDepartureSeoul ? '약 6시간 30분 (예상)' : '약 7시간 (예상)';
+  }
+  if (region.includes('제주')) {
+    return '약 8시간 (예상)';
+  }
+  return '약 8시간 (예상)';
 }
 
 // 지역별 중심 좌표 (카카오 맛집 검색용)
@@ -322,13 +341,16 @@ export default function PlaceSelectionPage() {
         return true;
       });
 
-      const selectable: SelectablePlace[] = unique.map((p) => {
+      const hasRecommendedCourse = subItems.length > 0;
+      const selectable: SelectablePlace[] = unique.map((p, idx) => {
         const subItem = subItems.find((s) => s.subcontentid === p.contentid);
         const isRecommended = !!subItem;
+        // 관광공사 추천 코스 없으면 앞 5개 기본 선택
+        const selected = hasRecommendedCourse ? isRecommended : idx < 5;
         return {
           ...p,
           placeType: p.contenttypeid,
-          selected: isRecommended,
+          selected,
           isRecommended,
           recommendOrder: subItem ? (Number(subItem.subnum) || 0) : undefined,
         };
