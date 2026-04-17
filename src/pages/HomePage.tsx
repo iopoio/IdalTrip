@@ -66,7 +66,7 @@ function formatDateKorean(dateStr: string): string {
 export default function HomePage() {
   const navigate = useNavigate();
   const dateInputRef = useRef<HTMLInputElement>(null);
-  const [selectedRegion, setSelectedRegion] = useState('강원');
+  const [selectedRegion, setSelectedRegion] = useState('전체');
   const [travelDate, setTravelDate] = useState<string>(getNextSaturday());
   const [departure, setDeparture] = useState('');
   const [destinations, setDestinations] = useState<Destination[]>([]);
@@ -142,21 +142,23 @@ export default function HomePage() {
         {/* 상단 헤더 영역 반투명 처리 */}
         <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-black/50 to-transparent" />
         {/* 히어로 텍스트 */}
-        <div className="relative px-6 pt-24 pb-4">
+        <div className="relative px-6 pt-24 pb-8">
+          {/* 텍스트 가독성용 로컬 그라데이션 */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/20 to-transparent pointer-events-none" />
           {(() => {
             const month = new Date().getMonth() + 1;
             const copy = (seasonCopy as Record<number, { title: string; subtitle: string }>)[month];
             return (
-              <>
+              <div className="relative">
                 <p className="text-white/60 text-xs font-label uppercase tracking-widest mb-1">
                   {copy.subtitle}
                 </p>
-                <h1 className="font-headline text-4xl font-black text-white leading-tight">
+                <h1 className="font-headline text-4xl font-black text-white leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
                   {copy.title.split('\n').map((line, i) => (
                     <span key={i}>{line}{i < copy.title.split('\n').length - 1 && <br />}</span>
                   ))}
                 </h1>
-              </>
+              </div>
             );
           })()}
         </div>
