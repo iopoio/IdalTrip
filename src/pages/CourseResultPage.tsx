@@ -117,12 +117,12 @@ const CourseResultPage = () => {
 
   const handleRetry = () => navigate('/');
 
-  if (!course) {
+  if (!course || schedule.length === 0) {
     return (
       <div className="min-h-screen bg-surface flex flex-col items-center justify-center gap-6 px-6">
         <MapPin className="w-16 h-16 text-outline-variant" />
         <p className="text-on-surface-variant text-center font-body">
-          코스 정보를 불러올 수 없습니다.
+          {!course ? '코스 정보를 불러올 수 없습니다.' : '생성된 일정이 없습니다.'}
         </p>
         <button
           onClick={() => navigate(-1)}
