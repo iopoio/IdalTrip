@@ -17,6 +17,7 @@ import {
 import type { CourseResponse, CourseItem, PlaceType } from '../types';
 import LogoLight from '../assets/logo/이달여행.svg';
 import CourseMap from '../components/CourseMap';
+import { toHttps } from '../utils/imageUrl';
 
 const TYPE_ICON: Record<PlaceType, React.ReactNode> = {
   festival: <Ticket className="w-4 h-4" />,
@@ -223,7 +224,7 @@ const CourseResultPage = () => {
             <div className="relative h-32 flex-none bg-surface-container-high overflow-hidden">
               {item.image_url ? (
                 <img
-                  src={item.image_url}
+                  src={toHttps(item.image_url)}
                   alt={item.place_name}
                   className="w-full h-full object-cover"
                   loading="lazy"

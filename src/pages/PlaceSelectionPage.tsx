@@ -6,6 +6,7 @@ import type { CourseSubItem } from '../services/tourApi';
 import { kakaoMapService } from '../services/kakaoMap';
 import { geminiService } from '../services/gemini';
 import type { Place, PlaceWithDetail, CourseResponse } from '../types';
+import { toHttps } from '../utils/imageUrl';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -120,7 +121,7 @@ function PlaceCard({ place, onToggle }: PlaceCardProps) {
     <div className="flex gap-4 p-3 bg-surface-container-lowest rounded-[20px] shadow-sm border border-outline-variant/10 mb-3">
       {place.firstimage ? (
         <img
-          src={place.firstimage}
+          src={toHttps(place.firstimage)}
           alt={place.title}
           className="w-24 h-24 rounded-[12px] object-cover shrink-0"
           loading="lazy"
@@ -195,7 +196,7 @@ function RecommendedSection({ places, onToggle }: RecommendedSectionProps) {
           >
             {place.firstimage ? (
               <img
-                src={place.firstimage}
+                src={toHttps(place.firstimage)}
                 alt={place.title}
                 className="w-20 h-20 rounded-[12px] object-cover shrink-0"
                 loading="lazy"

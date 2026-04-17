@@ -1,5 +1,6 @@
 import React from 'react';
 import { Map, Clock, Navigation } from 'lucide-react';
+import { toHttps } from '../utils/imageUrl';
 
 interface TimelineItemProps {
   index: number;
@@ -64,7 +65,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
             {/* Optional Thumbnail */}
             {image && (
               <div className="w-full md:w-64 h-40 rounded-xl overflow-hidden shadow-sm flex-shrink-0">
-                <img src={image} alt={name} className="w-full h-full object-cover transition-transform group-hover:scale-110 duration-700" />
+                <img src={toHttps(image)} alt={name} className="w-full h-full object-cover transition-transform group-hover:scale-110 duration-700" />
               </div>
             )}
           </div>

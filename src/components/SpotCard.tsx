@@ -1,5 +1,6 @@
 import React from 'react';
 import { CheckCircle2, Circle, MapPin, Star } from 'lucide-react';
+import { toHttps } from '../utils/imageUrl';
 
 interface SpotCardProps {
   id: string;
@@ -32,7 +33,7 @@ const SpotCard: React.FC<SpotCardProps> = ({
       {/* Thumbnail */}
       <div className="relative w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
         {image && !image.includes('unsplash.com') ? (
-          <img src={image} alt={name} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
+          <img src={toHttps(image)} alt={name} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
         ) : (
           <div className="text-primary opacity-30">
             <MapPin size={32} strokeWidth={1.5} />

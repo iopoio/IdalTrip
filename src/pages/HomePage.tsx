@@ -270,7 +270,7 @@ export default function HomePage() {
               >
                 {destinations[0].imageUrl ? (
                   <img
-                    src={destinations[0].imageUrl}
+                    src={toHttps(destinations[0].imageUrl)}
                     alt={destinations[0].title}
                     loading="lazy"
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -310,7 +310,7 @@ export default function HomePage() {
                 >
                   {dest.imageUrl ? (
                     <img
-                      src={dest.imageUrl}
+                      src={toHttps(dest.imageUrl)}
                       alt={dest.title}
                       loading="lazy"
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -377,6 +377,13 @@ export default function HomePage() {
           <span className="cursor-pointer hover:text-on-surface transition-colors">이용약관</span>
           <span className="cursor-pointer hover:text-on-surface transition-colors">고객센터</span>
         </div>
+        <div className="text-secondary/50 text-[10px] leading-relaxed space-y-0.5 mb-4">
+          <p>시즌드 · 대표 채영화</p>
+          <p>사업자등록번호 890-19-01928</p>
+          <p>서울특별시 관악구 남부순환로244가길 12</p>
+          <p>문의 chaejenn@gmail.com</p>
+        </div>
+
         <p className="text-secondary/60 text-[10px] leading-relaxed">
           ⓒ 2025 이달여행. 여행을 더 쉽게.
         </p>

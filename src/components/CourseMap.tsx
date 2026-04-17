@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { MapPin } from 'lucide-react';
 import { loadKakaoMaps } from '../utils/kakaoLoader';
 import type { CourseItem } from '../types';
 
@@ -69,6 +70,7 @@ export default function CourseMap({ items, activeIndex, onMarkerClick }: CourseM
   const polylineRef = useRef<PolylineInstance | null>(null);
   const kakaoRef = useRef<AnyKakao['kakao'] | null>(null);
   const onMarkerClickRef = useRef(onMarkerClick);
+  const [loadError, setLoadError] = useState(false);
 
   // 콜백 변경에 따른 재등록 회피용 ref
   useEffect(() => {
@@ -96,6 +98,7 @@ export default function CourseMap({ items, activeIndex, onMarkerClick }: CourseM
       })
       .catch((err) => {
         console.error('[CourseMap] 지도 로드 실패:', err);
+        if (!cancelled) setLoadError(true);
       });
 
     return () => {
@@ -198,6 +201,39 @@ export default function CourseMap({ items, activeIndex, onMarkerClick }: CourseM
       marker.setImage(createNumberedMarkerImage(kakao, idx + 1, idx === activeIndex));
     });
   }, [activeIndex, items]);
+
+  if (loadError) {
+    return (
+      <div className="w-full h-full bg-surface-container flex flex-col items-center justify-center gap-3 px-6 text-center">
+        <MapPin className="w-10 h-10 text-outline-variant" />
+        <p className="text-sm font-bold text-on-surface font-headline">지도를 불러올 수 없어요</p>
+        <p className="text-xs text-on-surface-variant leading-relaxed font-body">
+          잠시 후 다시 시도해 주세요.<br />아래 카드로 코스 순서를 확인할 수 있어요.
+        </p>
+        {items.length > 0 && (
+          <div className="flex flex-wrap justify-center gap-1.5 mt-1 max-w-full">
+            {items.slice(0, 8).map((item, idx) => (
+              <span
+                key={`${item.day}-${idx}`}
+                className={`text-[10px] px-2 py-1 rounded-full font-bold ${
+                  idx === activeIndex
+                    ? 'bg-primary text-on-primary'
+                    : 'bg-surface-container-high text-on-surface-variant'
+                }`}
+              >
+                {idx + 1}. {item.place_name.slice(0, 10)}
+              </span>
+            ))}
+            {items.length > 8 && (
+              <span className="text-[10px] text-on-surface-variant self-center">
+                외 {items.length - 8}곳
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return <div ref={containerRef} className="w-full h-full bg-surface-container" />;
 }
