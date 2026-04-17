@@ -319,7 +319,7 @@ export default function PlaceSelectionPage() {
         subItems = await tourApi.fetchCourseDetail(courses[0].contentid);
         if (subItems.length > 0) {
           const placeInfos = await Promise.all(
-            subItems.map((s) => tourApi.fetchPlaceCommonInfo(s.subcontentid))
+            subItems.slice(0, 5).map((s) => tourApi.fetchPlaceCommonInfo(s.subcontentid))
           );
           recommendedPlaces = placeInfos.filter((p): p is Place => p !== null);
         }
