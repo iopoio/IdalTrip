@@ -34,6 +34,7 @@ const MONTHS = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','
 
 function App() {
   const [bgUrl, setBgUrl] = useState('');
+  const [showComingSoon, setShowComingSoon] = useState(false);
 
   useEffect(() => {
     const month = String(new Date().getMonth() + 1);
@@ -95,9 +96,10 @@ function App() {
           {/* 우측 — 에디토리얼 카드 */}
           <div className="flex-1 flex flex-col justify-center gap-4 pl-8 pr-16 pointer-events-auto">
             {FEATURES.map((f) => (
-              <div
+              <button
                 key={f.num}
-                className="rounded-2xl p-5 border border-white/10 backdrop-blur-xl"
+                onClick={() => setShowComingSoon(true)}
+                className="rounded-2xl p-5 border border-white/10 backdrop-blur-xl text-left hover:border-white/25 transition-colors"
                 style={{ background: 'rgba(15,10,5,0.45)' }}
               >
                 <div className="flex items-center justify-between mb-3">
@@ -111,10 +113,36 @@ function App() {
                 <span className="text-[11px] font-bold tracking-wide uppercase" style={{ color: '#FF6B35' }}>
                   {f.cta} →
                 </span>
-              </div>
+              </button>
             ))}
           </div>
         </div>
+
+        {/* 준비중 팝업 */}
+        {showComingSoon && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
+            onClick={() => setShowComingSoon(false)}
+          >
+            <div
+              className="bg-white rounded-[28px] px-8 py-8 mx-6 text-center shadow-2xl max-w-xs w-full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="text-4xl mb-4">🚧</div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">준비 중입니다</h3>
+              <p className="text-sm text-gray-500 leading-relaxed mb-6">
+                더 많은 기능을 준비하고 있어요.<br />조금만 기다려 주세요!
+              </p>
+              <button
+                onClick={() => setShowComingSoon(false)}
+                className="w-full py-3 rounded-full font-bold text-sm text-white"
+                style={{ background: '#FF6B35' }}
+              >
+                확인
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* 앱 컨테이너 */}
         <div className="relative z-20 mx-auto w-full max-w-[430px] min-h-screen bg-surface shadow-2xl text-on-surface font-body overflow-x-hidden">
