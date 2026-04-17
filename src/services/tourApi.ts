@@ -4,6 +4,13 @@ import type { Festival, Place, PlaceDetail } from '../types';
 const BASE_URL = '/B551011/KorService2';
 const API_KEY = import.meta.env.VITE_TOUR_API_KEY;
 
+export interface CourseSubItem {
+  subnum: string;
+  subcontentid: string;
+  subname: string;
+  subdetailoverview: string;
+}
+
 export const REGION_AREA_CODES: Record<string, number[]> = {
   '서울/경기': [1, 2, 31],
   '강원': [32],
@@ -287,6 +294,28 @@ export const tourApi = {
       return items.slice(0, 20);
     } catch (error) {
       console.error('Failed to fetch stay by region:', error);
+      return [];
+    }
+  },
+
+  fetchCourseDetail: async (contentId: string): Promise<CourseSubItem[]> => {
+    try {
+      const response = await axios.get(`${BASE_URL}/detailInfo2`, {
+        params: {
+          serviceKey: API_KEY,
+          _type: 'json',
+          MobileOS: 'ETC',
+          MobileApp: '이달여행',
+          contentId,
+          contentTypeId: '25',
+        }
+      });
+      const items = response.data?.response?.body?.items?.item;
+      if (!items) return [];
+      const arr: CourseSubItem[] = Array.isArray(items) ? items : [items];
+      return arr.sort((a, b) => parseInt(a.subnum) - parseInt(b.subnum));
+    } catch (error) {
+      console.error('Failed to fetch course detail:', error);
       return [];
     }
   },
