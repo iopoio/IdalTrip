@@ -71,6 +71,7 @@ export default function HomePage() {
   const [departure, setDeparture] = useState('');
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [loadingDest, setLoadingDest] = useState(true);
+  const [showComingSoon, setShowComingSoon] = useState(false);
 
   useEffect(() => {
     const month = String(new Date().getMonth() + 1);
@@ -301,7 +302,7 @@ export default function HomePage() {
               {destinations.slice(1).map((dest) => (
                 <button
                   key={dest.id}
-                  onClick={() => handleDestinationClick(dest)}
+                  onClick={() => setShowComingSoon(true)}
                   className="relative rounded-[24px] overflow-hidden aspect-[3/4] group text-left"
                 >
                   {dest.imageUrl ? (
@@ -338,6 +339,32 @@ export default function HomePage() {
           )}
         </section>
       </main>
+
+      {/* 준비중 팝업 */}
+      {showComingSoon && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
+          onClick={() => setShowComingSoon(false)}
+        >
+          <div
+            className="bg-surface rounded-[28px] px-8 py-8 mx-6 text-center shadow-2xl border border-outline-variant/10 max-w-xs w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="text-4xl mb-4">🚧</div>
+            <h3 className="font-headline text-lg font-bold text-on-surface mb-2">준비 중입니다</h3>
+            <p className="text-sm text-secondary leading-relaxed mb-6">
+              더 많은 여행지를 준비하고 있어요.
+              <br />조금만 기다려 주세요!
+            </p>
+            <button
+              onClick={() => setShowComingSoon(false)}
+              className="w-full bg-primary text-on-primary py-3 rounded-full font-bold text-sm"
+            >
+              확인
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="px-6 py-12 border-t border-outline-variant/10 bg-surface-container-low text-center">
