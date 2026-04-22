@@ -87,26 +87,11 @@ export interface PlaceDetail {
   kidsfacility?: string;
 }
 
-// 카카오 장소 검색 결과
-export interface KakaoPlace {
-  id: string;
-  place_name: string;
-  category_name: string;
-  address_name: string;
-  road_address_name: string;
-  x: string;  // 경도
-  y: string;  // 위도
-  phone?: string;
-  place_url?: string;
-  distance?: string;
-}
 
-// 장소 (PlaceWithDetail): Place + detail + kakao rating
+
+// 장소 (PlaceWithDetail): Place + detail
 export interface PlaceWithDetail extends Place {
   detail?: PlaceDetail;
-  kakaoRating?: number;
-  kakaoReviews?: number;
-  isKakaoSource?: boolean;
   dist?: string;
 }
 

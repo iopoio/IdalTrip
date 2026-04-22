@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Share2, Sparkles, Check } from 'lucide-react';
 import { tourApi, REGION_AREA_CODES } from '../services/tourApi';
 import type { CourseSubItem } from '../services/tourApi';
-import { kakaoMapService } from '../services/kakaoMap';
+
 import { geminiService } from '../services/gemini';
 import type { Place, PlaceWithDetail, CourseResponse } from '../types';
 import { toHttps } from '../utils/imageUrl';
@@ -66,16 +66,7 @@ function getAvailableTime(departure: string, region: string): string {
   return '약 8시간 (예상)';
 }
 
-// 지역별 중심 좌표 (카카오 맛집 검색용)
-const REGION_CENTER: Record<string, { lat: number; lng: number }> = {
-  '서울/경기': { lat: 37.5665, lng: 126.9780 },
-  '강원': { lat: 37.8228, lng: 128.1555 },
-  '충청': { lat: 36.6358, lng: 127.4913 },
-  '전라': { lat: 35.8160, lng: 127.1089 },
-  '경상': { lat: 35.8714, lng: 128.6014 },
-  '제주': { lat: 33.4996, lng: 126.5312 },
-  '전체': { lat: 36.5, lng: 127.5 },
-};
+
 
 function festivalToPlace(f: Festival): Place {
   return {
@@ -278,7 +269,6 @@ export default function PlaceSelectionPage() {
     setError(null);
 
     try {
-      const center = REGION_CENTER[region] ?? REGION_CENTER['전체'];
       const areaCode = REGION_AREA_CODES[region]?.[0];
 
       const results = await Promise.allSettled([
@@ -286,7 +276,7 @@ export default function PlaceSelectionPage() {
         tourApi.fetchPlacesByRegion(region, '12'),
         tourApi.fetchPlacesByRegion(region, '14'),
         tourApi.fetchPlacesByRegion(region, '28'),
-        kakaoMapService.searchRestaurants(`${region} 맛집`, center.lat, center.lng, 30000),
+        tourApi.fetchPlacesByKeyword(`${region} 맛집`, '39'),
         tourApi.fetchPlacesByRegion(region, '39'),
         areaCode ? tourApi.fetchRecommendedCourses(areaCode) : Promise.resolve([]),
       ]);
@@ -296,22 +286,12 @@ export default function PlaceSelectionPage() {
       const attractions: Place[] = results[1].status === 'fulfilled' ? results[1].value : [];
       const culture: Place[] = results[2].status === 'fulfilled' ? results[2].value : [];
       const leisure: Place[] = results[3].status === 'fulfilled' ? results[3].value : [];
-      const kakaoResult = results[4].status === 'fulfilled' ? results[4].value : [];
+      const keywordFood: Place[] = results[4].status === 'fulfilled' ? results[4].value : [];
       const tourFood: Place[] = results[5].status === 'fulfilled' ? results[5].value : [];
       const courses: Place[] = results[6].status === 'fulfilled' ? results[6].value : [];
 
-      const kakaoFood: Place[] =
-        kakaoResult.length > 0
-          ? kakaoResult.map((k) => ({
-              contentid: `kakao_${k.id}`,
-              title: k.place_name,
-              addr1: k.road_address_name || k.address_name,
-              firstimage: '',
-              mapx: k.x,
-              mapy: k.y,
-              contenttypeid: '39',
-            }))
-          : tourFood.slice(0, 3);
+      const searchFood: Place[] =
+        keywordFood.length > 0 ? keywordFood : tourFood.slice(0, 3);
 
       // 관광공사 코스 서브아이템 + 장소 상세정보 fetch
       let subItems: CourseSubItem[] = [];
@@ -335,7 +315,7 @@ export default function PlaceSelectionPage() {
       const cat12 = pick(attractions, 2);
       const cat14 = pick(culture, 2);
       const cat28 = pick(leisure, 2);
-      const cat39 = pick(kakaoFood, 2);
+      const cat39 = pick(searchFood, 2);
       const shortfall = (2 - cat12.length) + (2 - cat14.length) + (2 - cat28.length) + (2 - cat39.length);
       const extra12 = pick(attractions.slice(2), shortfall);
       const additionalPlaces: Place[] = [...cat12, ...cat14, ...cat28, ...cat39, ...extra12];

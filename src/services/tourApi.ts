@@ -112,6 +112,28 @@ export const tourApi = {
     }
   },
 
+  fetchPlacesByKeyword: async (keyword: string, contentTypeId?: string): Promise<Place[]> => {
+    try {
+      const response = await axios.get(`${BASE_URL}/searchKeyword2`, {
+        params: {
+          serviceKey: API_KEY,
+          _type: 'json',
+          MobileOS: 'ETC',
+          MobileApp: '이달여행',
+          keyword: keyword,
+          contentTypeId: contentTypeId,
+          arrange: 'A',
+          numOfRows: 20
+        }
+      });
+
+      return extractItems<Place>(response.data, 'fetchPlacesByKeyword') ?? [];
+    } catch (error) {
+      console.error('Failed to fetch places by keyword:', error);
+      return [];
+    }
+  },
+
   fetchFestivalsByRegionAndDate: async (region: string, date: string): Promise<Festival[]> => {
     // date: 'YYYY-MM-DD' 형식
     const areaCodes = REGION_AREA_CODES[region] || [];

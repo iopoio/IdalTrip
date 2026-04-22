@@ -39,7 +39,7 @@ const TYPE_LABEL: Record<PlaceType, string> = {
 
 const openKakaoNavi = (item: CourseItem) => {
   window.open(
-    `https://map.kakao.com/link/to/${encodeURIComponent(item.place_name)},${item.lat},${item.lng}`,
+    `https://map.kakao.com/link/map/${encodeURIComponent(item.place_name)},${item.lat},${item.lng}`,
     '_blank'
   );
 };
