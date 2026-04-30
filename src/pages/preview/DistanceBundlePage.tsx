@@ -8,6 +8,7 @@ type Festival = {
   region: string;
   emoji: string;
   gradient: string;
+  thumb: string;
   distanceKm: number;
   roundTripMin: number;
   stayMin: number;
@@ -24,6 +25,7 @@ const MOCK_FESTIVALS: Festival[] = [
     region: '서울 송파구',
     emoji: '🌷',
     gradient: 'from-pink-300 via-rose-400 to-orange-300',
+    thumb: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=600&q=75&auto=format&fit=crop',
     distanceKm: 12,
     roundTripMin: 60,
     stayMin: 240,
@@ -38,6 +40,7 @@ const MOCK_FESTIVALS: Festival[] = [
     region: '경기 가평',
     emoji: '🌸',
     gradient: 'from-emerald-300 via-teal-400 to-cyan-300',
+    thumb: 'https://images.unsplash.com/photo-1496062031456-07b8f162a322?w=600&q=75&auto=format&fit=crop',
     distanceKm: 68,
     roundTripMin: 180,
     stayMin: 240,
@@ -52,6 +55,7 @@ const MOCK_FESTIVALS: Festival[] = [
     region: '경기 여주',
     emoji: '🏺',
     gradient: 'from-amber-300 via-orange-400 to-red-300',
+    thumb: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=600&q=75&auto=format&fit=crop',
     distanceKm: 82,
     roundTripMin: 200,
     stayMin: 180,
@@ -66,6 +70,7 @@ const MOCK_FESTIVALS: Festival[] = [
     region: '경남 창원',
     emoji: '🌸',
     gradient: 'from-pink-200 via-rose-300 to-pink-400',
+    thumb: 'https://images.unsplash.com/photo-1522383225653-ed111181a951?w=600&q=75&auto=format&fit=crop',
     distanceKm: 380,
     roundTripMin: 600,
     stayMin: 360,
@@ -80,6 +85,7 @@ const MOCK_FESTIVALS: Festival[] = [
     region: '전남 광양',
     emoji: '🌼',
     gradient: 'from-yellow-200 via-orange-300 to-pink-300',
+    thumb: 'https://images.unsplash.com/photo-1457269449834-928af64c684d?w=600&q=75&auto=format&fit=crop',
     distanceKm: 360,
     roundTripMin: 580,
     stayMin: 300,
@@ -180,13 +186,23 @@ export default function DistanceBundlePage() {
             className="bg-white rounded-2xl shadow-sm overflow-hidden text-left active:scale-[0.99] transition-transform"
           >
             {/* 썸네일 + 배지 */}
-            <div className={`relative h-36 bg-gradient-to-br ${f.gradient} flex items-center justify-center overflow-hidden`}>
-              {/* 큰 이모지 배경 */}
-              <span className="text-[6rem] opacity-90 drop-shadow-md select-none" aria-hidden>
-                {f.emoji}
-              </span>
+            <div className={`relative h-36 bg-gradient-to-br ${f.gradient} overflow-hidden`}>
+              {/* 사진 — 실패 시 Picsum 시드 사진으로 자동 교체 */}
+              <img
+                src={f.thumb}
+                alt={f.title}
+                loading="lazy"
+                className="absolute inset-0 w-full h-full object-cover"
+                onError={(e) => {
+                  const img = e.target as HTMLImageElement;
+                  const fallback = `https://picsum.photos/seed/idaltrip-${f.id}/600/400`;
+                  if (!img.src.startsWith('https://picsum.photos')) {
+                    img.src = fallback;
+                  }
+                }}
+              />
               {/* 살짝 어둡게 (배지 가독성) */}
-              <div className="absolute inset-0 bg-black/5" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
               {f.daytrip && (
                 <div className="absolute top-3 left-3 px-2.5 py-1 bg-[#FF6B35] rounded-full">
                   <span className="text-[11px] font-bold text-white">
