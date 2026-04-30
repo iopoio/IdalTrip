@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import PlaceSelectionPage from './pages/PlaceSelectionPage';
 import CourseResultPage from './pages/CourseResultPage';
+import DistanceBundlePage from './pages/preview/DistanceBundlePage';
+import FestivalBundlePage from './pages/preview/FestivalBundlePage';
 import { tourApi } from './services/tourApi';
 import type { Festival } from './types';
 
@@ -149,6 +151,8 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/places" element={<PlaceSelectionPage />} />
             <Route path="/course/result" element={<CourseResultPage />} />
+            <Route path="/preview/distance-bundle" element={<DistanceBundlePage />} />
+            <Route path="/preview/festival-bundle" element={<FestivalBundlePage />} />
           </Routes>
         </div>
       </div>

@@ -37,7 +37,17 @@ const TYPE_LABEL: Record<PlaceType, string> = {
   stay: '숙박',
 };
 
+const hasValidCoords = (item: CourseItem) =>
+  typeof item.lat === 'number' && typeof item.lng === 'number' && item.lat !== 0 && item.lng !== 0;
+
 const openKakaoNavi = (item: CourseItem) => {
+  if (!hasValidCoords(item)) {
+    window.open(
+      `https://map.kakao.com/link/search/${encodeURIComponent(item.place_name)}`,
+      '_blank'
+    );
+    return;
+  }
   window.open(
     `https://map.kakao.com/link/map/${encodeURIComponent(item.place_name)},${item.lat},${item.lng}`,
     '_blank'
