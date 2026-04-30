@@ -6,7 +6,8 @@ type Festival = {
   id: string;
   title: string;
   region: string;
-  thumb: string;
+  emoji: string;
+  gradient: string;
   distanceKm: number;
   roundTripMin: number;
   stayMin: number;
@@ -21,7 +22,8 @@ const MOCK_FESTIVALS: Festival[] = [
     id: 'f1',
     title: '서울 튤립축제',
     region: '서울 송파구',
-    thumb: 'https://images.unsplash.com/photo-1520637836862-4d197d17c55a?w=400&q=70',
+    emoji: '🌷',
+    gradient: 'from-pink-300 via-rose-400 to-orange-300',
     distanceKm: 12,
     roundTripMin: 60,
     stayMin: 240,
@@ -34,7 +36,8 @@ const MOCK_FESTIVALS: Festival[] = [
     id: 'f2',
     title: '가평 자라섬 봄꽃축제',
     region: '경기 가평',
-    thumb: 'https://images.unsplash.com/photo-1496062031456-07b8f162a322?w=400&q=70',
+    emoji: '🌸',
+    gradient: 'from-emerald-300 via-teal-400 to-cyan-300',
     distanceKm: 68,
     roundTripMin: 180,
     stayMin: 240,
@@ -47,7 +50,8 @@ const MOCK_FESTIVALS: Festival[] = [
     id: 'f3',
     title: '여주 도자기 축제',
     region: '경기 여주',
-    thumb: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=400&q=70',
+    emoji: '🏺',
+    gradient: 'from-amber-300 via-orange-400 to-red-300',
     distanceKm: 82,
     roundTripMin: 200,
     stayMin: 180,
@@ -60,7 +64,8 @@ const MOCK_FESTIVALS: Festival[] = [
     id: 'f4',
     title: '진해 군항제 벚꽃축제',
     region: '경남 창원',
-    thumb: 'https://images.unsplash.com/photo-1522383225653-ed111181a951?w=400&q=70',
+    emoji: '🌸',
+    gradient: 'from-pink-200 via-rose-300 to-pink-400',
     distanceKm: 380,
     roundTripMin: 600,
     stayMin: 360,
@@ -73,7 +78,8 @@ const MOCK_FESTIVALS: Festival[] = [
     id: 'f5',
     title: '광양 매화축제',
     region: '전남 광양',
-    thumb: 'https://images.unsplash.com/photo-1457269449834-928af64c684d?w=400&q=70',
+    emoji: '🌼',
+    gradient: 'from-yellow-200 via-orange-300 to-pink-300',
     distanceKm: 360,
     roundTripMin: 580,
     stayMin: 300,
@@ -174,15 +180,13 @@ export default function DistanceBundlePage() {
             className="bg-white rounded-2xl shadow-sm overflow-hidden text-left active:scale-[0.99] transition-transform"
           >
             {/* 썸네일 + 배지 */}
-            <div className="relative h-36 bg-gray-200">
-              <img
-                src={f.thumb}
-                alt={f.title}
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.opacity = '0';
-                }}
-              />
+            <div className={`relative h-36 bg-gradient-to-br ${f.gradient} flex items-center justify-center overflow-hidden`}>
+              {/* 큰 이모지 배경 */}
+              <span className="text-[6rem] opacity-90 drop-shadow-md select-none" aria-hidden>
+                {f.emoji}
+              </span>
+              {/* 살짝 어둡게 (배지 가독성) */}
+              <div className="absolute inset-0 bg-black/5" />
               {f.daytrip && (
                 <div className="absolute top-3 left-3 px-2.5 py-1 bg-[#FF6B35] rounded-full">
                   <span className="text-[11px] font-bold text-white">
