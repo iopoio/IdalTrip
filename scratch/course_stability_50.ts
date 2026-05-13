@@ -15,7 +15,7 @@ if (!TOUR_API_KEY || !GEMINI_API_KEY) {
 }
 
 const TOUR_BASE_URL = 'https://apis.data.go.kr/B551011/KorService2';
-const GEMINI_MODELS = ['gemini-3-flash-preview', 'gemini-3.1-flash-lite-preview'];
+const GEMINI_MODELS = ['gemini-3-flash-preview', 'gemini-3.1-flash-lite'];
 
 const DAY_OF_WEEK: Record<number, string> = {
   0: '일요일', 1: '월요일', 2: '화요일', 3: '수요일',

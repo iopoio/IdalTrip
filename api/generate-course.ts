@@ -2,7 +2,8 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 // 2026-04 기준: gemini-2.5-flash 무료 한도 소진 → gemini-3 preview 사용
 // preview 모델은 capacity 부족 시 429 발생 → 폴백 리스트로 순차 시도
-const MODELS = ['gemini-3-flash-preview', 'gemini-3.1-flash-lite-preview'];
+// 2026-05-13: gemini-3.1-flash-lite-preview → GA 전환 (5/25 preview 종료, 메일 공지)
+const MODELS = ['gemini-3-flash-preview', 'gemini-3.1-flash-lite'];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
